@@ -4,9 +4,11 @@ import static com.example.tarea1firebase.Registro.COLECCION;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,11 +26,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class Login extends AppCompatActivity {
-    private Button btnLogin, btnRegistrar, btnIniciarSesion;
+    private Button btnIniciarSesion;
     private FirebaseFirestore db;
     private StorageReference storageRef;
     private FirebaseStorage storage;
     private EditText etEmail, etPassword;
+    private TextView tvRegistrar;
     private Usuario user;
 
     @Override
@@ -41,10 +44,10 @@ public class Login extends AppCompatActivity {
         storageRef = storage.getReference();
 
         btnIniciarSesion = findViewById(R.id.btnIniciarSesion);
-        btnLogin = findViewById(R.id.btnLogin);
-        btnRegistrar = findViewById(R.id.btnRegistrar);
 
-        btnRegistrar.setOnClickListener(v -> {
+        tvRegistrar = findViewById(R.id.linkRegistrate);
+
+        tvRegistrar.setOnClickListener(v -> {
             //Cambio a activity de registro
             Intent intent = new Intent(Login.this, Registro.class);
             startActivity(intent);
