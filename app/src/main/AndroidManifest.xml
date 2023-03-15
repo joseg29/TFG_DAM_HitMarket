@@ -17,7 +17,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".InicioApp"
+            android:name=".PruebaFondo"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
@@ -27,6 +27,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".InicioApp"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+
+
         </activity>
         <activity
             android:name=".Login"
