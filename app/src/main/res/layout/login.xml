@@ -74,11 +74,11 @@
         android:layout_below="@id/etPassword"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-42dp"
-        android:layout_marginEnd="69dp"
+        android:layout_marginTop="-37dp"
+        android:layout_marginEnd="60dp"
         android:background="@android:color/transparent"
         android:contentDescription="mostrar_password"
-        android:src="@drawable/ojo_cerrado" />
+        android:src="@drawable/ojo_abierto" />
 
     <TextView
         android:id="@+id/linkForgetPassword"
@@ -117,7 +117,15 @@
         android:layout_centerVertical="true"
         android:fontFamily="@font/gotham_medium_1"
         android:text="¿No tienes cuenta? Regístrate"
-        android:textColor="@color/white"
         android:textAlignment="center"
+        android:textColor="@color/white"
         android:textSize="20sp" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/loginGoogle"
+        android:layout_width="314dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="false"
+        android:layout_marginTop="500dp" />
 </RelativeLayout>
