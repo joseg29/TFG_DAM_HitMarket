@@ -63,19 +63,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal"
+        android:gravity="center"
+        android:orientation="vertical"
         android:padding="10dp">
 
         <Button
             android:id="@+id/btnRegistrar"
+            android:layout_width="116dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight=".5"
+            android:background="@drawable/boton_redondo"
+            android:fontFamily="@font/gotham_bold_1"
+            android:text="Registrarte"></Button>
+
+        <Button
+            android:id="@+id/btnLogin"
             android:layout_width="349dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/boton_redondo"
             android:fontFamily="@font/gotham_bold_1"
-            android:onClick="crearUsuario"
-            android:text="Registrate" />
+            android:text="¿Ya tienes cuenta? Inicia sesión." />
+
+
     </LinearLayout>
 
 </LinearLayout>

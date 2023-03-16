@@ -33,7 +33,7 @@ public class Registro extends AppCompatActivity {
     private FirebaseStorage storage;
     private EditText etEmail, etNombre, etContrasena;
     private Usuario user;
-    private Button btnRegistrar;
+    private Button btnLogin, btnRegistrar;
     private FirebaseAuth mAuth;
 
     @Override
@@ -45,21 +45,27 @@ public class Registro extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
         storageRef = FirebaseStorage.getInstance().getReference();
+        btnLogin = findViewById(R.id.btnLogin);
         btnRegistrar = findViewById(R.id.btnRegistrar);
 
-        btnRegistrar.setOnClickListener(v -> {
+        btnLogin.setOnClickListener(v -> {
             //Cambio a activity de login
             Intent intent = new Intent(Registro.this, Login.class);
             startActivity(intent);
             finish();
         });
 
+        btnRegistrar.setOnClickListener(v -> {
+            crearUsuario();
+        });
+
+
         mAuth = FirebaseAuth.getInstance();
 
     }
 
 
-    public void crearUsuario(View v) {
+    public void crearUsuario() {
         etNombre = findViewById(R.id.etNombre);
         etEmail = findViewById(R.id.etID);
         etContrasena = findViewById(R.id.etContrasena);

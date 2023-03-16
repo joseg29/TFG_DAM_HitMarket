@@ -5,9 +5,11 @@ import static com.example.tarea1firebase.Registro.COLECCION;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
+
+import pl.droidsonroids.gif.GifDrawable;
+
 public class Login extends AppCompatActivity {
     private Button btnIniciarSesion;
     private FirebaseFirestore db;
@@ -33,6 +39,7 @@ public class Login extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private TextView tvRegistrar;
     private Usuario user;
+    private ImageView videoMarco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,16 @@ public class Login extends AppCompatActivity {
         btnIniciarSesion.setOnClickListener(v -> {
             validarLogin();
         });
+
+        videoMarco = findViewById(R.id.imVideo);
+        String uriPath = "android.resource://com.example.tarea1firebase/" + R.raw.humobackground;
+        Uri uri = Uri.parse(uriPath);
+        try {
+            GifDrawable gifDrawable = new GifDrawable(getResources(), R.raw.humobackground);
+            videoMarco.setImageDrawable(gifDrawable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void validarLogin() {
