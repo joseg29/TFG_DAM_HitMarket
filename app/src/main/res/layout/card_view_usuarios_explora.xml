@@ -1,40 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="30dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="229dp"
+        android:layout_width="355dp"
+        android:layout_height="231dp"
         android:layout_margin="20dp"
-        android:orientation="vertical"
-        android:background="@drawable/fondo_login"
-        >
+        android:background="@drawable/carta_redonda_usuario"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="185dp"
-            android:orientation="vertical"
-            android:background="@color/black">
+            android:orientation="vertical">
             <!--
             AÑADIR IMAGEN DEL USUARIO DE OFNDO
             -->
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/carta_redonda_usuario2"
+                android:elevation="2dp"
+                android:visibility="invisible" />
+
+            <ImageView
+
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="1dp"
+                android:scaleType="fitXY"
+                android:src="@tools:sample/avatars"
+                android:background="@drawable/corners_imagen_usuario_explora"
+                android:clipToOutline="true"/>
+
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="62dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="280dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="#FA0303"
+                android:elevation="2dp"
+                android:text="CORA" />
+
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="122dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="130dp"
+                android:elevation="2dp"
+                android:fontFamily="@font/gotham_bold"
+                android:gravity="center_vertical"
                 android:text="SAMU EL JEDI"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textColor="@color/white" />
-        </LinearLayout>
+                android:textColor="@color/white"
+                android:textSize="40sp" />
+
+        </RelativeLayout>
 
         <TextView
+
             android:id="@+id/textView3"
-            android:layout_width="199dp"
+            android:layout_width="202dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:text="TextView" />
+            android:fontFamily="@font/gotham_medium_1"
+            android:text="TRAP,RAP"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
         <!--
         AQUI HAY QUE AÑADIR ALGO SOBRE LAS VALOARCIONES
         -->
