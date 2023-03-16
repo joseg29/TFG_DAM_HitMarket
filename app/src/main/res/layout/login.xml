@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/principalLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal">
-
+    android:layout_gravity="center"
+    android:layout_marginTop="0dp"
+    android:gravity="center_horizontal|center_vertical">
 
     <ImageView
         android:id="@+id/imVideo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
         android:scaleType="fitXY" />
 
     <View
         android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="#86130527" />
+        android:background="#866E39BA" />
 
     <TextView
         android:id="@+id/lblEmail"
         android:layout_width="313dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="200dp"
-        android:layout_marginBottom="7dp"
         android:fontFamily="@font/gotham_bold_1"
         android:text="Email"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <EditText
@@ -39,24 +37,22 @@
         android:layout_height="50dp"
         android:layout_below="@id/lblEmail"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="7dp"
+        android:layout_marginTop="2dp"
         android:alpha=".8"
         android:background="@drawable/edit_text_redondo"
-        android:textAlignment="center"
-        android:textColor="#000000" />
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/lblPassword"
         android:layout_width="313dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/etEmail"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="7dp"
         android:fontFamily="@font/gotham_bold_1"
         android:text="Contraseña"
-        android:textAlignment="center"
-        android:textColor="#FFFFFFFF"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <EditText
@@ -64,26 +60,25 @@
         android:layout_width="313dp"
         android:layout_height="50dp"
         android:layout_below="@id/lblPassword"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
+        android:layout_centerInParent="true"
         android:alpha=".8"
         android:background="@drawable/edit_text_redondo"
-        android:ems="10"
-        android:inputType="textPassword|textVisiblePassword"
-        android:textAlignment="center"
-        android:textColor="#000000" />
+        android:inputType="textPassword"
+        android:textAlignment="center" />
+
 
     <ImageButton
         android:id="@+id/btnMostrarContrasena"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="130dp"
-        android:layout_marginTop="-25dp"
+        android:layout_below="@id/etPassword"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-42dp"
+        android:layout_marginEnd="69dp"
         android:background="@android:color/transparent"
-        android:contentDescription="@null"
-        android:src="@null" />
-
+        android:contentDescription="mostrar_password"
+        android:src="@drawable/ojo_cerrado" />
 
     <TextView
         android:id="@+id/linkForgetPassword"
@@ -91,39 +86,38 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/etPassword"
         android:layout_centerInParent="true"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="23dp"
         android:fontFamily="@font/gotham_medium_1"
         android:text="¿Olvidaste tu contraseña?"
-        android:textAlignment="center"
-        android:textColor="#FFFFFFFF"
-        android:textSize="14sp" />
+        android:textAlignment="textEnd"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btnIniciarSesion"
-        android:layout_width="322dp"
+        android:layout_width="313dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linkForgetPassword"
+        android:layout_below="@id/linkForgetPassword"
         android:layout_centerInParent="true"
-        android:layout_marginTop="18dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:alpha=".8"
         android:background="@drawable/boton_redondo"
         android:fontFamily="@font/gotham_bold_1"
-        android:text="Iniciar Sesión"
-        android:textColor="#000000"
-        android:textSize="16sp" />
+        android:text="Iniciar Sesión" />
 
     <TextView
         android:id="@+id/linkRegistrate"
         android:layout_width="314dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnIniciarSesion"
+        android:layout_below="@id/btnIniciarSesion"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:fontFamily="@font/gotham_medium_1"
         android:text="¿No tienes cuenta? Regístrate"
+        android:textColor="@color/white"
         android:textAlignment="center"
-        android:textColor="#FFFFFFFF"
         android:textSize="20sp" />
-
-
 </RelativeLayout>

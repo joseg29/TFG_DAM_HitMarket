@@ -2,13 +2,13 @@ package com.example.tarea1firebase;
 
 import static com.example.tarea1firebase.Registro.COLECCION;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +40,8 @@ public class Login extends AppCompatActivity {
     private TextView tvRegistrar;
     private Usuario user;
     private ImageView videoMarco;
+    private ImageButton btnMostrarContrasena;
+    private boolean mostrarContrasena = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,22 @@ public class Login extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        btnMostrarContrasena = findViewById(R.id.btnMostrarContrasena);
+        etPassword = findViewById(R.id.etPassword);
+
+        btnMostrarContrasena.setOnClickListener(view -> {
+            mostrarContrasena = !mostrarContrasena;
+            int cursorPosition = etPassword.getSelectionStart();
+            if (mostrarContrasena) {
+                // Si se permite mostrar la contraseña, se cambia el inputType del EditText
+                etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnMostrarContrasena.setImageResource(R.drawable.ojo_cerrado);
+            } else {
+                etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnMostrarContrasena.setImageResource(R.drawable.ojo_abierto);
+            }
+            etPassword.setSelection(cursorPosition);
+        });
     }
 
     public void validarLogin() {
