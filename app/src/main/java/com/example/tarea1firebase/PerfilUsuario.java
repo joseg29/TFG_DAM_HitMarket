@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tarea1firebase.Explora.VistaExplora;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -48,13 +49,19 @@ public class PerfilUsuario extends AppCompatActivity {
     private TextView lblUsername, lblDescripcion, lblEmail;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube;
-    private Button btnCerrarSesion;
+    private Button btnCerrarSesion, btnTemporal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.perfil_usuario);
-
+//ESTO ES PARA PASAR DE ACTIVITY PARA VER LOS USUARIOS//
+        btnTemporal = findViewById(R.id.btnCardviews);
+        btnTemporal.setOnClickListener(v -> {
+            Intent auxIntent = new Intent(PerfilUsuario.this, VistaExplora.class);
+            startActivity(auxIntent);
+        });
+//BTN TEMPORAL FIN//
         usuario = (Usuario) getIntent().getSerializableExtra("USUARIO");
 
         recyclerCanciones = findViewById(R.id.recyclerCanciones);

@@ -82,4 +82,10 @@
         android:backgroundTint="#DC1414"
         android:text="Cerrar Sesión" />
 
+    <Button
+        android:id="@+id/btnCardviews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="pasarActivity" />
+
 </LinearLayout>
