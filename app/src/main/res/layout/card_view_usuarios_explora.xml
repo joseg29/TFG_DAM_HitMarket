@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="229dp"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        android:background="@drawable/fondo_login"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="185dp"
+            android:orientation="vertical"
+            android:background="@color/black">
+            <!--
+            AÑADIR IMAGEN DEL USUARIO DE OFNDO
+            -->
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="122dp"
+                android:text="SAMU EL JEDI"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="199dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="TextView" />
+        <!--
+        AQUI HAY QUE AÑADIR ALGO SOBRE LAS VALOARCIONES
+        -->
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
