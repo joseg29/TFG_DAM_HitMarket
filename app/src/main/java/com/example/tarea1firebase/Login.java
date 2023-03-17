@@ -198,6 +198,7 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(Login.this, "Sesión iniciada", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Login.this, PerfilUsuario.class);
                         intent.putExtra("USUARIO", user);
+                        intent.putExtra("UidUsuario", user.getId());
                         startActivity(intent);
                         finish();
                     }
