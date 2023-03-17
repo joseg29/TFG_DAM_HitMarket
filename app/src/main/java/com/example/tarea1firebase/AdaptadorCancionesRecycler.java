@@ -2,6 +2,7 @@ package com.example.tarea1firebase;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
@@ -56,6 +59,11 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
                 holder.btnPlay.setImageResource(R.drawable.play);
                 holder.mediaPlayer.pause();
             }
+            Drawable playingDrawable = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_seekbar_progress_2);
+            Drawable thumb = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_thumb);
+            holder.seekBar.setProgressDrawable(playingDrawable);
+            holder.seekBar.setThumb(thumb);
+
             Handler mHandler = new Handler();
             ((Activity) holder.itemView.getContext()).runOnUiThread(new Runnable() {
                 @Override
@@ -111,6 +119,10 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
                 holder.btnPlay.setImageResource(R.drawable.play);
                 mp.seekTo(0);
                 holder.seekBar.setProgress(0);
+                Drawable playingDrawable = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_seekbar_progress);
+                Drawable thumb = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_thumb);
+                holder.seekBar.setProgressDrawable(playingDrawable);
+                holder.seekBar.setThumb(thumb);
             }
 
         });

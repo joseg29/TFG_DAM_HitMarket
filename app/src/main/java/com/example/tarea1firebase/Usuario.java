@@ -12,6 +12,26 @@ public class Usuario implements Serializable {
     private String email;
     private String contrasena;
     private String youtube;
+    private String spotify;
+    private String soundCloud;
+
+
+    public String getSpotify() {
+        return spotify;
+    }
+
+    public void setSpotify(String spotify) {
+        this.spotify = spotify;
+    }
+
+    public String getSoundCloud() {
+        return soundCloud;
+    }
+
+    public void setSoundCloud(String soundCloud) {
+        this.soundCloud = soundCloud;
+    }
+
 
     public String getYoutube() {
         return youtube;

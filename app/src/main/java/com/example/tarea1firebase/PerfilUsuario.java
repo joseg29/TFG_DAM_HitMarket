@@ -3,17 +3,22 @@ package com.example.tarea1firebase;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,15 +53,15 @@ public class PerfilUsuario extends AppCompatActivity {
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private TextView lblUsername, lblDescripcion, lblEmail;
     private Usuario usuario;
-    private ImageButton btnInstagram, btnTiktok, btnYoutube;
+    private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud;
     private Button btnCerrarSesion, btnTemporal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.perfil_usuario);
+        setContentView(R.layout.perfil_usuario_prueba);
 //ESTO ES PARA PASAR DE ACTIVITY PARA VER LOS USUARIOS//
-        btnTemporal = findViewById(R.id.btnCardviews);
+        btnTemporal = findViewById(R.id.btnExplorarUsuarios);
         btnTemporal.setOnClickListener(v -> {
             Intent auxIntent = new Intent(PerfilUsuario.this, VistaExplora.class);
             startActivity(auxIntent);
@@ -84,8 +89,9 @@ public class PerfilUsuario extends AppCompatActivity {
 
         btnInstagram = findViewById(R.id.btnInstagram);
         btnYoutube = findViewById(R.id.btnYoutube);
-
         btnTiktok = findViewById(R.id.btnTikTok);
+        btnSpotify = findViewById(R.id.btnSpotify);
+        btnSoundCloud = findViewById(R.id.btnSoundCloud);
 
 
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
@@ -118,6 +124,7 @@ public class PerfilUsuario extends AppCompatActivity {
         dialogoCargando.setMessage("Obteniendo datos de usuario");
         dialogoCargando.setCancelable(false);
         dialogoCargando.show();
+
         CollectionReference refUsuarios = FirebaseFirestore.getInstance().
 
                 collection(COLECCION);
@@ -137,9 +144,9 @@ public class PerfilUsuario extends AppCompatActivity {
                         List<String> canciones;
                         canciones = usuario.getArrayCanciones();
 
-                        lblDescripcion = findViewById(R.id.lblDescripcion);
-                        lblUsername = findViewById(R.id.lblNombreUser);
-                        lblEmail = findViewById(R.id.lblEmail);
+                        lblDescripcion = findViewById(R.id.tvDescripcion);
+                        lblUsername = findViewById(R.id.tvNombre);
+                        lblEmail = findViewById(R.id.tvCiudad);
 
                         lblUsername.setText(usuario.getNombre());
                         lblDescripcion.setText(usuario.getDescripcion());
@@ -147,6 +154,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
                         adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
                         recyclerCanciones.setAdapter(adaptadorCanciones);
+
                     } else {
                         Toast.makeText(getApplicationContext(), "Error al obtener datos", Toast.LENGTH_LONG);
                     }
@@ -248,6 +256,23 @@ public class PerfilUsuario extends AppCompatActivity {
             btnTiktok.setClickable(false);
             btnTiktok.setAlpha(0.2f);
         }
+
+        if (usuario.getSpotify() != null) {
+            btnSpotify.setClickable(true);
+            btnSpotify.setAlpha(1.0F);
+        } else {
+            btnSpotify.setClickable(false);
+            btnSpotify.setAlpha(0.2f);
+        }
+
+        if (usuario.getSoundCloud() != null) {
+            btnSoundCloud.setClickable(true);
+            btnSoundCloud.setAlpha(1.0F);
+        } else {
+            btnSoundCloud.setClickable(false);
+            btnSoundCloud.setAlpha(0.2f);
+        }
+
     }
 
     public void abrirYoutube() {
