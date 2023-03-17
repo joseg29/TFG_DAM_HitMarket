@@ -97,7 +97,10 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
 
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
-
+                    Drawable playingDrawable = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_seekbar_progress_2);
+                    Drawable thumb = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_thumb);
+                    holder.seekBar.setProgressDrawable(playingDrawable);
+                    holder.seekBar.setThumb(thumb);
                 }
 
                 @Override

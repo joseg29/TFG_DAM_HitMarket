@@ -26,7 +26,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/img" />
+                    android:src="@drawable/mandado" />
 
                 <View
                     android:id="@+id/overLayFoto"
@@ -232,6 +232,126 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="34sp"></TextView>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/tvGeneros"
+                    android:layout_marginTop="30dp">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imgGenero1"
+                                android:layout_width="130dp"
+                                android:layout_height="130dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/reggaeton" />
+
+                            <TextView
+                                android:id="@+id/tvGenero1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/gotham_bold"
+                                android:text="Reggaeton"
+                                android:textAlignment="center"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imgGenero2"
+                                android:layout_width="130dp"
+                                android:layout_height="130dp"
+                                android:layout_marginLeft="50dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/jazz" />
+
+                            <TextView
+                                android:id="@+id/tvGenero2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="50dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/gotham_bold"
+                                android:text="Jazz"
+                                android:textAlignment="center"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imgGenero3"
+                                android:layout_width="130dp"
+                                android:layout_height="130dp"
+                                android:background="#E279FF"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/hiphop" />
+
+                            <TextView
+                                android:id="@+id/tvGenero3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/gotham_bold"
+                                android:text="HipHop"
+                                android:textAlignment="center"
+                                android:textColor="@color/white" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imgGenero4"
+                                android:layout_width="130dp"
+                                android:layout_height="130dp"
+                                android:layout_marginLeft="50dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/pop"></ImageView>
+
+                            <TextView
+                                android:id="@+id/tvGenero4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="50dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/gotham_bold"
+                                android:text="Pop"
+                                android:textAlignment="center"
+                                android:textColor="@color/white" />
+
+                        </LinearLayout>
+
+                    </TableRow>
+
+                </TableLayout>
+
             </RelativeLayout>
 
             <Button
@@ -242,14 +362,16 @@
                 android:layout_marginTop="30dp"
                 android:backgroundTint="#DC1414"
                 android:fontFamily="@font/gotham_bold_1"
-                android:text="Cerrar Sesión" />
+                android:text="Cerrar Sesión"
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/btnExplorarUsuarios"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="pasarActivity" />
+                android:text="pasarActivity"
+                android:visibility="visible" />
         </LinearLayout>
 
     </ScrollView>

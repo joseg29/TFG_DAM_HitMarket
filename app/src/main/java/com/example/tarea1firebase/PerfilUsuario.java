@@ -3,22 +3,17 @@ package com.example.tarea1firebase;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +54,7 @@ public class PerfilUsuario extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.perfil_usuario_prueba);
+        setContentView(R.layout.perfil_usuario);
 //ESTO ES PARA PASAR DE ACTIVITY PARA VER LOS USUARIOS//
         btnTemporal = findViewById(R.id.btnExplorarUsuarios);
         btnTemporal.setOnClickListener(v -> {
