@@ -101,7 +101,7 @@
         android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:alpha=".8"
         android:background="@drawable/boton_redondo"
@@ -112,20 +112,29 @@
         android:id="@+id/linkRegistrate"
         android:layout_width="314dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnIniciarSesion"
+        android:layout_below="@id/btnGoogle"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/gotham_medium_1"
         android:text="¿No tienes cuenta? Regístrate"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp" />
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/loginGoogle"
-        android:layout_width="314dp"
+    <Button
+        android:id="@+id/btnGoogle"
+        android:layout_width="313dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="false"
-        android:layout_marginTop="500dp" />
+        android:layout_marginTop="10dp"
+        android:alpha=".8"
+        android:layout_below="@id/btnIniciarSesion"
+        android:background="@drawable/boton_google_redondo"
+        android:drawableStart="@drawable/google__g__logo"
+        android:drawablePadding="0dp"
+        android:padding="7dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Inicia sesión con Google" />
+
 </RelativeLayout>
