@@ -1,6 +1,8 @@
 package com.example.tarea1firebase;
 
 
+import static com.example.tarea1firebase.Registro.COLECCION;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,23 +48,21 @@ public class PerfilUsuario extends AppCompatActivity {
     private ProgressDialog dialogoCargando;
     private RecyclerView recyclerCanciones;
     private AdaptadorCancionesRecycler adaptadorCanciones;
-    private TextView lblUsername, lblDescripcion, lblEmail;
+    private TextView lblUsername, lblDescripcion, lblEmail, tvEditar;
     private Usuario usuario;
-    private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud;
+    private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
     private Button btnCerrarSesion, btnTemporal;
+    private String uid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.perfil_usuario);
-//ESTO ES PARA PASAR DE ACTIVITY PARA VER LOS USUARIOS//
-        btnTemporal = findViewById(R.id.btnExplorarUsuarios);
-        btnTemporal.setOnClickListener(v -> {
-            Intent auxIntent = new Intent(PerfilUsuario.this, VistaExplora.class);
-            startActivity(auxIntent);
-        });
-//BTN TEMPORAL FIN//
-        usuario = (Usuario) getIntent().getSerializableExtra("USUARIO");
+
+        db = FirebaseFirestore.getInstance();
+        uid = getIntent().getStringExtra("UidUsuario");
+        inicializarUsuario();
 
         recyclerCanciones = findViewById(R.id.recyclerCanciones);
         recyclerCanciones.setHasFixedSize(true);
@@ -74,7 +75,6 @@ public class PerfilUsuario extends AppCompatActivity {
         recyclerCanciones.setAdapter(adaptadorCanciones);
 
 
-        db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
@@ -86,8 +86,6 @@ public class PerfilUsuario extends AppCompatActivity {
         btnTiktok = findViewById(R.id.btnTikTok);
         btnSpotify = findViewById(R.id.btnSpotify);
         btnSoundCloud = findViewById(R.id.btnSoundCloud);
-
-
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
         btnCerrarSesion.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
@@ -95,6 +93,16 @@ public class PerfilUsuario extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        btnAñadirCancion = findViewById(R.id.btnSubirAudio);
+        tvEditar = findViewById(R.id.tvEditar);
+
+        if (!uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            btnAñadirCancion.setVisibility(View.GONE);
+            tvEditar.setVisibility(View.GONE);
+            btnCerrarSesion.setVisibility(View.GONE);
+        }
+
 
         btnInstagram.setOnClickListener(v -> {
             abrirInstagram();
@@ -106,10 +114,34 @@ public class PerfilUsuario extends AppCompatActivity {
             abrirYoutube();
         });
 
-        obtenerDatosUsuario();
-        setRedesSociales();
+//ESTO ES PARA PASAR DE ACTIVITY PARA VER LOS USUARIOS//
+        btnTemporal = findViewById(R.id.btnExplorarUsuarios);
+        btnTemporal.setOnClickListener(v -> {
+            Intent auxIntent = new Intent(PerfilUsuario.this, VistaExplora.class);
+            startActivity(auxIntent);
+        });
+//BTN TEMPORAL FIN//
     }
 
+    private void inicializarUsuario() {
+        db.collection(COLECCION).document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    usuario = documentSnapshot.toObject(Usuario.class);
+                    obtenerDatosUsuario();
+                    setRedesSociales();
+                } else {
+                    System.out.println("El documento no existe.");
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        });
+    }
 
     //Busca las canciones de un usuario en la base de datos y asigna los audios a los mediaPlayer
     public void obtenerDatosUsuario() {
@@ -156,6 +188,7 @@ public class PerfilUsuario extends AppCompatActivity {
                 dialogoCargando.dismiss();
             }
         });
+
     }
 
 
