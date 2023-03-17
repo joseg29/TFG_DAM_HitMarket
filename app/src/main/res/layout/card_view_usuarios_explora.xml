@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/transparent">
 
-    <LinearLayout
-        android:layout_width="355dp"
-        android:layout_height="231dp"
-        android:layout_margin="20dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_margin="15dp"
         android:background="@drawable/carta_redonda_usuario"
         android:orientation="vertical">
+
+        <View
+            android:id="@+id/viewSombra"
+            android:layout_width="match_parent"
+            android:layout_height="188dp"
+            android:background="@drawable/corners_imagen_usuario_explora" />
+
+        <TextView
+
+            android:id="@+id/textView3"
+            android:layout_width="202dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/gotham_medium_1"
+            android:layout_marginTop="190dp"
+            android:text="#TRAP/#RAP/"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -20,15 +39,6 @@
             AÑADIR IMAGEN DEL USUARIO DE OFNDO
             -->
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/carta_redonda_usuario2"
-                android:elevation="2dp"
-                android:visibility="invisible" />
-
-
             <ImageView
 
                 android:id="@+id/imageView"
@@ -36,19 +46,28 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/corners_imagen_usuario_explora"
                 android:clipToOutline="true"
-                android:elevation="1dp"
+                android:elevation="2dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/mandado" />
 
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/carta_redonda_usuario2"
+                android:backgroundTint="#23000000"
+                android:elevation="2dp" />
+
             <Button
                 android:id="@+id/button"
-                android:layout_width="62dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="280dp"
+                android:layout_width="44dp"
+                android:layout_height="38dp"
                 android:layout_marginTop="10dp"
-                android:backgroundTint="#FA0303"
-                android:elevation="2dp"
-                android:text="CORA" />
+                android:background="#00FFFFFF"
+                android:elevation="5dp"
+                android:foreground="@android:drawable/stat_notify_more"
+                android:foregroundTint="#FF0000"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/txtNombreUsu"
@@ -56,29 +75,22 @@
                 android:layout_height="60dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="130dp"
-                android:elevation="2dp"
+                android:elevation="10dp"
                 android:fontFamily="@font/gotham_bold"
                 android:gravity="center_vertical"
                 android:text="SAMU EL JEDI"
                 android:textColor="@color/white"
                 android:textSize="40sp" />
 
+
+
         </RelativeLayout>
 
-        <TextView
-
-            android:id="@+id/textView3"
-            android:layout_width="202dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/gotham_medium_1"
-            android:text="TRAP,RAP"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
         <!--
         AQUI HAY QUE AÑADIR ALGO SOBRE LAS VALOARCIONES
         -->
-    </LinearLayout>
+    </RelativeLayout>
+
+
 
 </androidx.cardview.widget.CardView>
