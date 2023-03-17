@@ -1,4 +1,4 @@
-package com.example.tarea1firebase.Explora;
+package com.example.tarea1firebase;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,15 +7,14 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tarea1firebase.R;
-
+import java.util.ArrayList;
 import java.util.List;
 
-public  class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsuariosRecycler.ViewHolder> {
-    private List<String> listaUrls;
+public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsuariosRecycler.ViewHolder> {
+    private List<Usuario> listaUsuarios;
 
-    public AdaptadorUsuariosRecycler(List<String> listaUsuarios) {
-        this.listaUrls = listaUsuarios;
+    public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
+        this.listaUsuarios = listaUsuarios;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -25,8 +24,6 @@ public  class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUs
         public ViewHolder(View v) {
             super(v);
             nombreUsu = v.findViewById(R.id.txtNombreUsu);
-
-
         }
     }
 
@@ -42,12 +39,12 @@ public  class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUs
     //será quien se encargue de establecer los objetos en el ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.nombreUsu.setText(listaUrls.get(position));
+        holder.nombreUsu.setText(listaUsuarios.get(position).getNombre());
     }
 
     //será quien devuelva la cantidad de items que se encuentra en la lista
     @Override
     public int getItemCount() {
-        return listaUrls.size();
+        return listaUsuarios.size();
     }
 }
