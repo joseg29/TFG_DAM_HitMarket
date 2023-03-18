@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,6 +36,8 @@ public class Registro extends AppCompatActivity {
     private Usuario user;
     private Button btnLogin, btnRegistrar;
     private FirebaseAuth mAuth;
+    private Bundle googleAccount;
+    private String nombre, email, id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,20 +65,33 @@ public class Registro extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-    }
-
-
-    public void crearUsuario() {
         etNombre = findViewById(R.id.etNombre);
         etEmail = findViewById(R.id.etID);
         etContrasena = findViewById(R.id.etContrasena);
 
+        googleAccount = null;
+        try {
+            googleAccount = getIntent().getBundleExtra("CUENTAGOOGLE");
+            if (googleAccount != null) {
+                nombre = googleAccount.getString("NOMBRE");
+                email = googleAccount.getString("EMAIL");
+                id = googleAccount.getString("ID");
+
+                etEmail.setText(email);
+                etNombre.setText(nombre);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    public void crearUsuario() {
         String nombreUsuario = etNombre.getText().toString();
         String emailUsuario = etEmail.getText().toString();
         String contrasenaUsuario = etContrasena.getText().toString();
 
         if (!emailUsuario.isEmpty() && !contrasenaUsuario.isEmpty()) {
-
             //Se crea el usuario en el authenticator de firebase
             mAuth.createUserWithEmailAndPassword(emailUsuario, contrasenaUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -88,7 +104,23 @@ public class Registro extends AppCompatActivity {
                         } catch (FirebaseAuthInvalidCredentialsException e) {
                             Toast.makeText(Registro.this, "Formato de email inválido.", Toast.LENGTH_LONG).show();
                         } catch (FirebaseAuthUserCollisionException e) {
-                            Toast.makeText(Registro.this, "Este email ya está registrado.", Toast.LENGTH_LONG).show();
+                            //Ya existe el email
+                            String idUsuario = id;
+                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, "MuchoTexto descr", Arrays.asList(), contrasenaUsuario, "joseg29_", "joseg29", "elrincondegiorgio");
+                            db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(Registro.this, PerfilUsuario.class);
+                                    intent.putExtra("UidUsuario", id);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                }
+                            });
                         } catch (Exception e) {
                             Toast.makeText(Registro.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -114,9 +146,10 @@ public class Registro extends AppCompatActivity {
                 }
 
             });
-
         } else {
-            Toast.makeText(Registro.this, "Hay algún campo vacío.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(Registro.this, PerfilUsuario.class);
+            intent.putExtra("UidUsuario", id);
+            startActivity(intent);
         }
     }
 

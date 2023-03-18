@@ -53,6 +53,8 @@ public class Login extends AppCompatActivity {
     private boolean mostrarContrasena = false;
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
+    private GoogleSignInAccount account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +83,6 @@ public class Login extends AppCompatActivity {
         });
 
         videoMarco = findViewById(R.id.imVideo);
-        String uriPath = "android.resource://com.example.tarea1firebase/" + R.raw.humobackground;
-        Uri uri = Uri.parse(uriPath);
         try {
             GifDrawable gifDrawable = new GifDrawable(getResources(), R.raw.humobackground);
             videoMarco.setImageDrawable(gifDrawable);
@@ -106,37 +106,43 @@ public class Login extends AppCompatActivity {
             etPassword.setSelection(cursorPosition);
         });
 
+        mAuth = FirebaseAuth.getInstance();
+
+        // Configurar Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web_cliente_id))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
         btnGoogleLogin = findViewById(R.id.btnGoogle);
         btnGoogleLogin.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            mStartForResult.launch(signInIntent);
+            startActivityForResult(signInIntent, RC_SIGN_IN);
         });
     }
 
-    private ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                // Resultado del inicio de sesión con Google
-                if (result.getResultCode() == RC_SIGN_IN) {
-                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                    try {
-                        // Autenticación con Firebase
-                        GoogleSignInAccount account = task.getResult(ApiException.class);
-                        firebaseAuthWithGoogle(account.getIdToken());
-                    } catch (ApiException e) {
-                        Toast.makeText(Login.this, "Error al iniciar sesión con Google", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Resultado devuelto por Google Sign-In
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Iniciar sesión con Firebase Authentication
+                account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                // Manejar errores de inicio de sesión
+                System.out.println("Failed google");
+                System.out.println(e.getMessage());// ...
+            }
+        }
+    }
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        FirebaseAuth.getInstance().signInWithCredential(credential)
+        mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Inicio de sesión exitoso
@@ -158,7 +164,7 @@ public class Login extends AppCompatActivity {
 
 
         if (!emailUsuario.isEmpty() && !claveUsuario.isEmpty()) {
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(emailUsuario, claveUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.signInWithEmailAndPassword(emailUsuario, claveUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -185,23 +191,37 @@ public class Login extends AppCompatActivity {
     }
 
     public void iniciarSesion() {
-        String idDocumento = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String idDocumento = mAuth.getCurrentUser().getUid();
 
         //Se hace un get de firestore database con el id como referencia de documento, para obtener el objeto Usuario y pasarlo a la siguiente activity
         db.collection(COLECCION).document(idDocumento).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        user = document.toObject(Usuario.class);
-                        Toast.makeText(Login.this, "Sesión iniciada", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Login.this, PerfilUsuario.class);
-                        intent.putExtra("USUARIO", user);
-                        intent.putExtra("UidUsuario", user.getId());
-                        startActivity(intent);
-                        finish();
-                    }
+                if (account != null) {
+                    Bundle userBundle = new Bundle();
+
+                    userBundle.putString("NOMBRE", account.getDisplayName());
+                    userBundle.putString("EMAIL", account.getEmail());
+                    userBundle.putString("ID", mAuth.getCurrentUser().getUid());
+                    db.collection(COLECCION).document(idDocumento).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Intent intent = new Intent(Login.this, VistaExplora.class);
+                                intent.putExtra("UidUsuario", idDocumento);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(Login.this, Registro.class);
+                                intent.putExtra("CUENTAGOOGLE", userBundle);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+                    });
+
+
                 }
             }
         });
