@@ -3,7 +3,6 @@ package com.example.tarea1firebase;
 import static com.example.tarea1firebase.Registro.COLECCION;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.Button;
@@ -13,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -54,7 +51,7 @@ public class Login extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
-    private GoogleSignInAccount account;
+    private GoogleSignInAccount googleAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +127,8 @@ public class Login extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Iniciar sesión con Firebase Authentication
-                account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account.getIdToken());
+                googleAccount = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(googleAccount.getIdToken());
             } catch (ApiException e) {
                 // Manejar errores de inicio de sesión
                 System.out.println("Failed google");
@@ -165,7 +162,6 @@ public class Login extends AppCompatActivity {
 
         if (!emailUsuario.isEmpty() && !claveUsuario.isEmpty()) {
             mAuth.signInWithEmailAndPassword(emailUsuario, claveUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (!task.isSuccessful()) {
@@ -197,11 +193,11 @@ public class Login extends AppCompatActivity {
         db.collection(COLECCION).document(idDocumento).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (account != null) {
+                if (googleAccount != null) {
                     Bundle userBundle = new Bundle();
 
-                    userBundle.putString("NOMBRE", account.getDisplayName());
-                    userBundle.putString("EMAIL", account.getEmail());
+                    userBundle.putString("NOMBRE", googleAccount.getDisplayName());
+                    userBundle.putString("EMAIL", googleAccount.getEmail());
                     userBundle.putString("ID", mAuth.getCurrentUser().getUid());
                     db.collection(COLECCION).document(idDocumento).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -222,6 +218,11 @@ public class Login extends AppCompatActivity {
                     });
 
 
+                } else {
+                    Intent intent = new Intent(Login.this, VistaExplora.class);
+                    intent.putExtra("UidUsuario", idDocumento);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });

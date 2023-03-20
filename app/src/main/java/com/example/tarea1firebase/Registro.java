@@ -119,37 +119,37 @@ public class Registro extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+                                    System.out.println("s<moomom");
                                 }
                             });
                         } catch (Exception e) {
                             Toast.makeText(Registro.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     } else {
+                        System.out.println("mlmosa");
                         // Se crea el usuario en collections (FIRESTORE), y se le pasa el id de authenticator como referencia de documento
                         String idUsuario = task.getResult().getUser().getUid();
+                        System.out.println(idUsuario);
                         user = new Usuario(idUsuario, emailUsuario, nombreUsuario, "MuchoTexto descr", Arrays.asList(), contrasenaUsuario, "joseg29_", "joseg29", "elrincondegiorgio");
                         db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(Registro.this, PerfilUsuario.class);
-                                intent.putExtra("USUARIO", user);
+                                intent.putExtra("UidUsuario", user.getId());
                                 startActivity(intent);
                                 finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                System.out.println("soasaom");
                             }
                         });
                     }
                 }
 
             });
-        } else {
-            Intent intent = new Intent(Registro.this, PerfilUsuario.class);
-            intent.putExtra("UidUsuario", id);
-            startActivity(intent);
         }
     }
 
