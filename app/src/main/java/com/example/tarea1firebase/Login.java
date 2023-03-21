@@ -2,6 +2,7 @@ package com.example.tarea1firebase;
 
 import static com.example.tarea1firebase.Registro.COLECCION;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -52,6 +53,7 @@ public class Login extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private GoogleSignInAccount googleAccount;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,9 +139,11 @@ public class Login extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Inicio de sesión exitoso
+                        progressDialog.dismiss();
                         iniciarSesion();
                     } else {
                         // Error en inicio de sesión
+                        progressDialog.dismiss();
                         Toast.makeText(Login.this, "Error al iniciar sesión con Google", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -152,6 +156,11 @@ public class Login extends AppCompatActivity {
 
         String emailUsuario = etEmail.getText().toString();
         String claveUsuario = etPassword.getText().toString();
+
+        progressDialog = new ProgressDialog(Login.this);
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
 
         if (!emailUsuario.isEmpty() && !claveUsuario.isEmpty()) {
@@ -171,6 +180,7 @@ public class Login extends AppCompatActivity {
                             Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     } else {
+                        progressDialog.dismiss();
                         iniciarSesion();
                     }
                 }

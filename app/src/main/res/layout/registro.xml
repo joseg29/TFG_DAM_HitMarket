@@ -165,6 +165,6 @@
         android:drawablePadding="0dp"
         android:fontFamily="@font/gotham_bold_1"
         android:padding="7dp"
-        android:text="Regístrate con Google" />
+        android:text="Continua con Google" />
 
 </RelativeLayout>
