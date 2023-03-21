@@ -63,8 +63,8 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="2dp"
         android:alpha=".8"
-        android:inputType="textEmailAddress"
         android:background="@drawable/edit_text_redondo"
+        android:inputType="textEmailAddress"
         android:textAlignment="center" />
 
     <TextView

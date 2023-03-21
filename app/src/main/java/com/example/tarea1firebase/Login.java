@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -139,8 +141,8 @@ public class Login extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Inicio de sesión exitoso
-                        progressDialog.dismiss();
                         iniciarSesion();
+                        progressDialog.dismiss();
                     } else {
                         // Error en inicio de sesión
                         progressDialog.dismiss();
@@ -171,9 +173,11 @@ public class Login extends AppCompatActivity {
                         try {
                             throw task.getException();
                         } catch (FirebaseAuthInvalidUserException e) {
+                            progressDialog.dismiss();
                             // El usuario no existe
                             Toast.makeText(Login.this, "Email o contraseña incorrecta", Toast.LENGTH_LONG).show();
                         } catch (FirebaseAuthInvalidCredentialsException e) {
+                            progressDialog.dismiss();
                             // Credenciales inválidas (correo electrónico incorrecto o contraseña incorrecta)
                             Toast.makeText(Login.this, "Email o contraseña incorrecta", Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
@@ -186,6 +190,7 @@ public class Login extends AppCompatActivity {
                 }
             });
         } else {
+            progressDialog.dismiss();
             Toast.makeText(Login.this, "Hay algún campo vacío.", Toast.LENGTH_LONG).show();
         }
     }
