@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsuariosRecycler.ViewHolder> {
     private List<Usuario> listaUsuarios;
@@ -51,7 +52,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     //será quien se encargue de establecer los objetos en el ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.nombreUsu.setText(listaUsuarios.get(position).getNombre());
+        holder.nombreUsu.setText(listaUsuarios.get(position).getNombre().toUpperCase(Locale.ROOT));
 
         holder.btnVerPerf.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), PerfilUsuario.class);

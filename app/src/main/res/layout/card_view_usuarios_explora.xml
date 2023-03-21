@@ -60,16 +60,32 @@
 
             <TextView
                 android:id="@+id/txtNombreUsu"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/txtUbicacion"
+                android:layout_alignParentBottom="false"
                 android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
                 android:elevation="10dp"
                 android:fontFamily="@font/gotham_bold"
                 android:gravity="center_vertical"
                 android:text="SAMU EL JEDI"
                 android:textColor="@color/white"
                 android:textSize="40sp" />
+
+            <TextView
+                android:id="@+id/txtUbicacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="5dp"
+                android:elevation="10dp"
+                android:fontFamily="@font/gotham_bold"
+                android:gravity="center_vertical"
+                android:text="MADRID"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/btnVerPerfil"
@@ -94,7 +110,7 @@
             <TextView
                 android:id="@+id/txtValoracion"
                 android:layout_width="wrap_content"
-                android:layout_height="33dp"
+                android:layout_height="match_parent"
                 android:fontFamily="@font/gotham_bold"
                 android:text="4,8"
                 android:textColor="@color/white"
