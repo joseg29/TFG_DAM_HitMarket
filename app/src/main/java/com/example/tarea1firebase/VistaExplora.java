@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class VistaExplora extends AppCompatActivity {
     private RecyclerView recyclerViewUsu;
@@ -71,15 +72,15 @@ public class VistaExplora extends AppCompatActivity {
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                List<Usuario> listaUsuarios = new ArrayList<>();
+                                ArrayList<Usuario> listaUsuarios = new ArrayList<>();
                                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                                     Usuario usuario = documentSnapshot.toObject(Usuario.class);
                                     listaUsuarios.add(usuario);
                                 }
-                                adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);
+                                adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
                                 recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
                             } else {
-                                Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                 return false;
