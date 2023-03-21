@@ -7,7 +7,17 @@
     android:background="@drawable/fondo_negro_blanco_descripcion_perfil">
 
 
-
+    <TextView
+        android:id="@+id/lblTitulo"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Crea una cuenta"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
     <TextView
         android:id="@+id/lblNombre"
         android:layout_width="313dp"
@@ -26,6 +36,7 @@
         android:layout_height="50dp"
         android:layout_below="@id/lblNombre"
         android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="2dp"
         android:alpha=".8"
         android:background="@drawable/edit_text_redondo"

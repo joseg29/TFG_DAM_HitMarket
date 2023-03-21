@@ -4,19 +4,44 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:layout_marginTop="0dp"
-    android:gravity="center_horizontal|center_vertical">
+    android:gravity="center_horizontal|center_vertical"
+    android:background="@drawable/fondo_negro_blanco_descripcion_perfil">
 
     <ImageView
-        android:id="@+id/imVideo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY" />
+        android:id="@+id/blueLogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo_marshmello"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"/>
 
-    <View
-        android:id="@+id/overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#866E39BA" />
+    <TextView
+        android:id="@+id/lblTituloLogo"
+        android:layout_width="314dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/blueLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:fontFamily="@font/gotham_medium_1"
+        android:text="HitMarket"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+
+
+    <TextView
+        android:id="@+id/lblTitulo"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-20dp"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Inicia sesión"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/lblEmail"
@@ -24,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="250dp"
         android:fontFamily="@font/gotham_bold_1"
         android:text="Email"
         android:textAlignment="viewStart"

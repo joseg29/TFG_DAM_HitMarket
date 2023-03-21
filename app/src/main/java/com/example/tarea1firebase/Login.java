@@ -79,13 +79,7 @@ public class Login extends AppCompatActivity {
             validarLogin();
         });
 
-        videoMarco = findViewById(R.id.imVideo);
-        try {
-            GifDrawable gifDrawable = new GifDrawable(getResources(), R.raw.humobackground);
-            videoMarco.setImageDrawable(gifDrawable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         btnMostrarContrasena = findViewById(R.id.btnMostrarContrasena);
         etPassword = findViewById(R.id.etPassword);
 
