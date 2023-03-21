@@ -1,42 +1,41 @@
 package com.example.tarea1firebase;
 
-import static com.example.tarea1firebase.Registro.COLECCION;
-
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsuariosRecycler.ViewHolder> {
     private List<Usuario> listaUsuarios;
+    private boolean isFavorite;
 
     public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
+        isFavorite = false;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nombreUsu;
-        private Button btnVer;
+        private Button btnFav, btnVerPerf;
 
 
         public ViewHolder(View v) {
             super(v);
             nombreUsu = v.findViewById(R.id.txtNombreUsu);
-            btnVer = v.findViewById(R.id.button);
+            btnFav = v.findViewById(R.id.btnCoraVacio);
+            btnVerPerf = v.findViewById(R.id.btnVerPerfil);
+
         }
     }
 
@@ -53,16 +52,50 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.nombreUsu.setText(listaUsuarios.get(position).getNombre());
-        holder.btnVer.setOnClickListener(v -> {
+
+        holder.btnVerPerf.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), PerfilUsuario.class);
             intent.putExtra("UidUsuario", listaUsuarios.get(position).getId());
             v.getContext().startActivity(intent);
         });
+
+        holder.btnFav.setOnClickListener(v -> {
+            TransitionDrawable transitionDrawableIda = new TransitionDrawable(new Drawable[]{
+                    ContextCompat.getDrawable(v.getContext(), R.drawable.corazon_favoritos_vacio),
+                    ContextCompat.getDrawable(v.getContext(), R.drawable.corazon_favoritos_relleno)
+            });
+            TransitionDrawable transitionDrawableVuelta = new TransitionDrawable(new Drawable[]{
+                    ContextCompat.getDrawable(v.getContext(), R.drawable.corazon_favoritos_relleno),
+                    ContextCompat.getDrawable(v.getContext(), R.drawable.corazon_favoritos_vacio)
+
+            });
+
+            if (isFavorite) {
+                transitionDrawableVuelta.setCrossFadeEnabled(true);
+                transitionDrawableVuelta.startTransition(300);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    holder.btnFav.setForeground(transitionDrawableVuelta);
+                }
+                isFavorite = false;
+            } else {
+                transitionDrawableIda.setCrossFadeEnabled(true);
+                transitionDrawableIda.startTransition(300);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    holder.btnFav.setForeground(transitionDrawableIda);
+                }
+                isFavorite = true;
+            }
+
+        });
     }
+
 
     //será quien devuelva la cantidad de items que se encuentra en la lista
     @Override
     public int getItemCount() {
         return listaUsuarios.size();
     }
+
+
 }

@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/transparent">
 
@@ -17,23 +17,24 @@
             android:id="@+id/viewSombra"
             android:layout_width="match_parent"
             android:layout_height="188dp"
-            android:background="@drawable/corners_imagen_usuario_explora" />
+            android:background="@drawable/sombra_carta_usuario_explora" />
 
         <TextView
 
             android:id="@+id/textView3"
             android:layout_width="202dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="@font/gotham_medium_1"
-            android:layout_marginTop="190dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="8dp"
             android:text="#TRAP/#RAP/"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="185dp"
+            android:foreground="@drawable/corners_imagen_usuario_explora"
             android:orientation="vertical">
             <!--
             AÑADIR IMAGEN DEL USUARIO DE OFNDO
@@ -42,11 +43,12 @@
             <ImageView
 
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/corners_imagen_usuario_explora"
                 android:clipToOutline="true"
                 android:elevation="2dp"
+                android:foreground="@drawable/corners_imagen_usuario_explora"
                 android:scaleType="fitXY"
                 android:src="@drawable/mandado" />
 
@@ -54,27 +56,17 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/carta_redonda_usuario2"
-                android:backgroundTint="#23000000"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/corners_imagen_usuario_explora"
+                android:backgroundTint="#4F000000"
                 android:elevation="2dp" />
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="44dp"
-                android:layout_height="38dp"
-                android:layout_marginTop="10dp"
-                android:background="#00FFFFFF"
-                android:elevation="5dp"
-                android:foreground="@android:drawable/stat_notify_more"
-                android:foregroundTint="#FF0000"
-                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
             <TextView
                 android:id="@+id/txtNombreUsu"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="130dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
                 android:elevation="10dp"
                 android:fontFamily="@font/gotham_bold"
                 android:gravity="center_vertical"
@@ -83,14 +75,87 @@
                 android:textSize="40sp" />
 
 
-
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="127dp"
+            android:layout_height="22dp"
+            android:layout_alignBottom="@id/textView3"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnEstrella"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:foreground="@drawable/estrella"
+                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/btnEstrella2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:foreground="@drawable/estrella"
+                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/btnEstrella3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:foreground="@drawable/estrella"
+                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/btnEstrella4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:foreground="@drawable/estrella"
+                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/btnEstrella5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:foreground="@drawable/estrella"
+                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnVerPerfil"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:elevation="10dp"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <Button
+            android:id="@+id/btnCoraVacio"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:background="#00FFFFFF"
+            android:elevation="20dp"
+            android:foreground="@drawable/corazon_favoritos_vacio"
+            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
         <!--
         AQUI HAY QUE AÑADIR ALGO SOBRE LAS VALOARCIONES
         -->
     </RelativeLayout>
-
 
 
 </androidx.cardview.widget.CardView>
