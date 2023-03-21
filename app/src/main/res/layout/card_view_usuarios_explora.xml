@@ -34,23 +34,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="185dp"
-            android:foreground="@drawable/corners_imagen_usuario_explora"
             android:orientation="vertical">
-            <!--
-            AÑADIR IMAGEN DEL USUARIO DE OFNDO
-            -->
 
-            <ImageView
+
+            <com.google.android.material.imageview.ShapeableImageView
 
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/corners_imagen_usuario_explora"
                 android:clipToOutline="true"
                 android:elevation="2dp"
-                android:foreground="@drawable/corners_imagen_usuario_explora"
                 android:scaleType="fitXY"
-                android:src="@drawable/mandado" />
+                android:src="@drawable/mandado"
+                app:shapeAppearanceOverlay="@style/RoundedSquare"/>
 
             <View
                 android:id="@+id/view"
