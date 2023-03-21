@@ -28,6 +28,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginBottom="8dp"
             android:text="#TRAP/#RAP/"
+            android:fontFamily="@font/gotham_bold"
             android:textColor="@color/white"
             android:textSize="15sp" />
 
@@ -70,71 +71,44 @@
                 android:textColor="@color/white"
                 android:textSize="40sp" />
 
+            <Button
+                android:id="@+id/btnVerPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.6"
+                android:background="@android:color/transparent"
+                android:elevation="10dp"
+                tools:ignore="SpeakableTextPresentCheck" />
+
 
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="127dp"
-            android:layout_height="22dp"
+            android:layout_width="43dp"
+            android:layout_height="19dp"
             android:layout_alignBottom="@id/textView3"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="8dp"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnEstrella"
+            <TextView
+                android:id="@+id/txtValoracion"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:foreground="@drawable/estrella"
-                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+                android:layout_height="33dp"
+                android:fontFamily="@font/gotham_bold"
+                android:text="4,8"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-            <Button
-                android:id="@+id/btnEstrella2"
+
+            <ImageView
+                android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:foreground="@drawable/estrella"
-                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-            <Button
-                android:id="@+id/btnEstrella3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:foreground="@drawable/estrella"
-                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-            <Button
-                android:id="@+id/btnEstrella4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:foreground="@drawable/estrella"
-                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-            <Button
-                android:id="@+id/btnEstrella5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:foreground="@drawable/estrella"
-                tools:ignore="TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,TouchTargetSizeCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
-
+                android:padding="2dp"
+                app:srcCompat="@drawable/estrella" />
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btnVerPerfil"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:elevation="10dp"
-            tools:ignore="SpeakableTextPresentCheck" />
 
         <Button
             android:id="@+id/btnCoraVacio"
