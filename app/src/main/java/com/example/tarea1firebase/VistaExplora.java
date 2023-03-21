@@ -30,7 +30,7 @@ public class VistaExplora extends AppCompatActivity {
     private FirebaseFirestore db;
     private Usuario user;
     private ArrayList<Usuario> listaUsuarios;
-    private SearchView searchView;
+    private SearchView barraBusqueda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class VistaExplora extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         });
 
-        SearchView barraBusqueda = findViewById(R.id.barraBusqueda);
+        barraBusqueda = findViewById(R.id.barraBusqueda);
         barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
