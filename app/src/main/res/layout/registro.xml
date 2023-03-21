@@ -1,93 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_login"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_gravity="center"
+    android:layout_marginTop="0dp"
+    android:background="@drawable/fondo_negro_blanco_descripcion_perfil">
+
+
 
     <TextView
         android:id="@+id/lblNombre"
-        android:layout_width="372dp"
+        android:layout_width="313dp"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
         android:fontFamily="@font/gotham_bold_1"
         android:text="Nombre"
-        android:textAlignment="textStart"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <EditText
         android:id="@+id/etNombre"
-        android:layout_width="372dp"
+        android:layout_width="313dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="10dp"
+        android:layout_below="@id/lblNombre"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="2dp"
+        android:alpha=".8"
         android:background="@drawable/edit_text_redondo"
-        android:ems="10"
-        android:inputType="textPersonName"
         android:textAlignment="center" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="372dp"
+        android:id="@+id/lblEmail"
+        android:layout_width="313dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
         android:fontFamily="@font/gotham_bold_1"
         android:text="Email"
-        android:textAlignment="textStart"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/etID"
-        android:layout_width="372dp"
+        android:id="@+id/etEmail"
+        android:layout_width="313dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="10dp"
+        android:layout_below="@id/lblEmail"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="2dp"
+        android:alpha=".8"
         android:background="@drawable/edit_text_redondo"
-        android:inputType="textPersonName"
         android:textAlignment="center" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="372dp"
+        android:id="@+id/lblPassword"
+        android:layout_width="313dp"
         android:layout_height="wrap_content"
+        android:layout_below="@id/etEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/gotham_bold_1"
         android:text="Contraseña"
-        android:textAlignment="textStart"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/etContrasena"
-        android:layout_width="372dp"
+        android:id="@+id/etPassword"
+        android:layout_width="313dp"
         android:layout_height="50dp"
+        android:layout_below="@id/lblPassword"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:alpha=".8"
         android:background="@drawable/edit_text_redondo"
+        android:inputType="textPassword"
         android:textAlignment="center" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <ImageButton
+        android:id="@+id/btnMostrarContrasena"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <Button
-            android:id="@+id/btnRegistrar"
-            android:layout_width="116dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight=".5"
-            android:background="@drawable/boton_redondo"
-            android:fontFamily="@font/gotham_bold_1"
-            android:text="Registrarte"></Button>
-
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="349dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/boton_redondo"
-            android:fontFamily="@font/gotham_bold_1"
-            android:text="¿Ya tienes cuenta? Inicia sesión." />
+        android:layout_below="@id/etPassword"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-37dp"
+        android:layout_marginEnd="60dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="mostrar_password"
+        android:src="@drawable/ojo_abierto" />
 
 
-    </LinearLayout>
+    <CheckBox
+        android:id="@+id/terminos_checkbox"
+        android:layout_width="271dp"
+        android:layout_height="47dp"
+        android:layout_below="@id/etPassword"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="8dp"
+        android:buttonTint="@color/checkbox_selector"
+        android:fontFamily="@font/gotham_medium_1"
+        android:text="Acepto los términos y servicios"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
-</LinearLayout>
+
+    <Button
+        android:id="@+id/btnRegistrate"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/terminos_checkbox"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:alpha=".8"
+        android:background="@drawable/boton_redondo"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Regístrate" />
+
+    <TextView
+        android:id="@+id/linkIniciaSesion"
+        android:layout_width="314dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnGoogleRegistro"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/gotham_medium_1"
+        android:text="¿Ya tienes cuenta? Inicia sesión"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnGoogleRegistro"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnRegistrate"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:alpha=".8"
+        android:background="@drawable/boton_google_redondo"
+        android:drawableStart="@drawable/google__g__logo"
+        android:drawablePadding="0dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:padding="7dp"
+        android:text="Regístrate con Google" />
+
+</RelativeLayout>

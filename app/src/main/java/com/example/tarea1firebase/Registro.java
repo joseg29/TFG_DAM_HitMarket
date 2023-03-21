@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,8 +34,9 @@ public class Registro extends AppCompatActivity {
     private StorageReference storageRef;
     private FirebaseStorage storage;
     private EditText etEmail, etNombre, etContrasena;
+    private TextView tvIniciarSesion;
     private Usuario user;
-    private Button btnLogin, btnRegistrar;
+    private Button btnRegistrar;
     private FirebaseAuth mAuth;
     private Bundle googleAccount;
     private String nombre, email, id;
@@ -48,10 +50,10 @@ public class Registro extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
         storageRef = FirebaseStorage.getInstance().getReference();
-        btnLogin = findViewById(R.id.btnLogin);
-        btnRegistrar = findViewById(R.id.btnRegistrar);
+        tvIniciarSesion = findViewById(R.id.linkIniciaSesion);
+        btnRegistrar = findViewById(R.id.btnRegistrate);
 
-        btnLogin.setOnClickListener(v -> {
+        tvIniciarSesion.setOnClickListener(v -> {
             //Cambio a activity de login
             Intent intent = new Intent(Registro.this, Login.class);
             startActivity(intent);
@@ -66,8 +68,8 @@ public class Registro extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         etNombre = findViewById(R.id.etNombre);
-        etEmail = findViewById(R.id.etID);
-        etContrasena = findViewById(R.id.etContrasena);
+        etEmail = findViewById(R.id.etEmail);
+        etContrasena = findViewById(R.id.etPassword);
 
         googleAccount = null;
         try {

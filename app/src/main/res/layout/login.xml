@@ -120,7 +120,7 @@
         android:text="¿No tienes cuenta? Regístrate"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btnGoogle"
