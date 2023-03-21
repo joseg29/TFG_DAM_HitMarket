@@ -2,9 +2,11 @@ package com.example.tarea1firebase;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class Registro extends AppCompatActivity {
     private StorageReference storageRef;
     private FirebaseStorage storage;
     private EditText etEmail, etNombre, etContrasena;
+    private ImageButton btnMostrarContrasena;
+    private boolean mostrarContrasena = false;
     private TextView tvIniciarSesion;
     private Usuario user;
     private Button btnRegistrar;
@@ -52,6 +56,8 @@ public class Registro extends AppCompatActivity {
         storageRef = FirebaseStorage.getInstance().getReference();
         tvIniciarSesion = findViewById(R.id.linkIniciaSesion);
         btnRegistrar = findViewById(R.id.btnRegistrate);
+        btnMostrarContrasena = findViewById(R.id.btnMostrarContrasena);
+        etContrasena = findViewById(R.id.etPassword);
 
         tvIniciarSesion.setOnClickListener(v -> {
             //Cambio a activity de login
@@ -85,6 +91,20 @@ public class Registro extends AppCompatActivity {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        btnMostrarContrasena.setOnClickListener(view -> {
+            mostrarContrasena = !mostrarContrasena;
+            int cursorPosition = etContrasena.getSelectionStart();
+            if (mostrarContrasena) {
+                // Si se permite mostrar la contraseña, se cambia el inputType del EditText
+                etContrasena.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnMostrarContrasena.setImageResource(R.drawable.ojo_cerrado);
+            } else {
+                etContrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnMostrarContrasena.setImageResource(R.drawable.ojo_abierto);
+            }
+            etContrasena.setSelection(cursorPosition);
+        });
     }
 
 
