@@ -17,6 +17,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="320dp"
+        android:alpha=".8"
         app:SpinKit_Color="@color/white" />
 
     <ImageView
@@ -35,7 +36,7 @@
         android:layout_below="@id/blueLogo"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:fontFamily="@font/gotham_medium_1"
+        android:fontFamily="@font/gotham_bold_1"
         android:text="HitMarket"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -76,6 +77,7 @@
         android:layout_marginTop="2dp"
         android:alpha=".8"
         android:background="@drawable/edit_text_redondo"
+        android:fontFamily="@font/gotham_medium"
         android:inputType="textEmailAddress"
         android:textAlignment="center" />
 
@@ -99,6 +101,7 @@
         android:layout_below="@id/lblPassword"
         android:layout_centerInParent="true"
         android:alpha=".8"
+        android:fontFamily="@font/gotham_medium"
         android:background="@drawable/edit_text_redondo"
         android:inputType="textPassword"
         android:textAlignment="center" />

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_marginTop="0dp"
+    android:background="@drawable/fondo_negro_blanco_descripcion_perfil">
+
+
+    <TextView
+        android:id="@+id/lblTitulo"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="110dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="¿Has olvidado tu contraseña?"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/lblSubTitulo"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:layout_below="@id/lblTitulo"
+        android:fontFamily="@font/gotham_medium"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:text="Introduce tu correo para continuar."
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/lblEmail"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Email"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="313dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/gotham_medium"
+        android:layout_below="@id/lblEmail"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="2dp"
+        android:alpha=".8"
+        android:background="@drawable/edit_text_redondo"
+        android:textAlignment="center" />
+
+
+    <Button
+        android:id="@+id/btnRecuperar"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etEmail"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
+        android:alpha=".8"
+        android:background="@drawable/boton_redondo"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Enviar" />
+
+    <TextView
+        android:id="@+id/linkIniciaSesion"
+        android:layout_width="314dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnRecuperar"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/gotham_medium_1"
+        android:text="Recibirás un correo con indicaciones para restablecer la contraseña."
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+
+</RelativeLayout>
