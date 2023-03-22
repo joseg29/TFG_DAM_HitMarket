@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -55,7 +59,7 @@ public class Login extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     private GoogleSignInAccount googleAccount;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,11 @@ public class Login extends AppCompatActivity {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
+
+        progressBar = findViewById(R.id.spin_kit);
+        Sprite doubleBounce = new FadingCircle();
+        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setIndeterminateDrawable(doubleBounce);
     }
 
     @Override
@@ -141,11 +150,11 @@ public class Login extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Inicio de sesión exitoso
+                        progressBar.setVisibility(View.VISIBLE);
                         iniciarSesion();
-                        progressDialog.dismiss();
                     } else {
                         // Error en inicio de sesión
-                        progressDialog.dismiss();
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(Login.this, "Error al iniciar sesión con Google", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -159,11 +168,6 @@ public class Login extends AppCompatActivity {
         String emailUsuario = etEmail.getText().toString();
         String claveUsuario = etPassword.getText().toString();
 
-        progressDialog = new ProgressDialog(Login.this);
-        progressDialog.setMessage("Cargando...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
 
         if (!emailUsuario.isEmpty() && !claveUsuario.isEmpty()) {
             mAuth.signInWithEmailAndPassword(emailUsuario, claveUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -173,24 +177,24 @@ public class Login extends AppCompatActivity {
                         try {
                             throw task.getException();
                         } catch (FirebaseAuthInvalidUserException e) {
-                            progressDialog.dismiss();
+                            progressBar.setVisibility(View.GONE);
                             // El usuario no existe
                             Toast.makeText(Login.this, "Email o contraseña incorrecta", Toast.LENGTH_LONG).show();
                         } catch (FirebaseAuthInvalidCredentialsException e) {
-                            progressDialog.dismiss();
+                            progressBar.setVisibility(View.GONE);
                             // Credenciales inválidas (correo electrónico incorrecto o contraseña incorrecta)
                             Toast.makeText(Login.this, "Email o contraseña incorrecta", Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
                             Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        progressDialog.dismiss();
+                        progressBar.setVisibility(View.VISIBLE);
                         iniciarSesion();
                     }
                 }
             });
         } else {
-            progressDialog.dismiss();
+            progressBar.setVisibility(View.GONE);
             Toast.makeText(Login.this, "Hay algún campo vacío.", Toast.LENGTH_LONG).show();
         }
     }
