@@ -11,13 +11,14 @@
         android:id="@+id/lblTitulo"
         android:layout_width="313dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/gotham_bold_1"
         android:text="Crea una cuenta"
         android:textAlignment="viewStart"
         android:textColor="@color/white"
         android:textSize="25sp" />
+
     <TextView
         android:id="@+id/lblNombre"
         android:layout_width="313dp"
@@ -40,6 +41,7 @@
         android:layout_marginTop="2dp"
         android:alpha=".8"
         android:background="@drawable/edit_text_redondo"
+        android:inputType="none"
         android:textAlignment="center" />
 
     <TextView
@@ -142,7 +144,7 @@
         android:id="@+id/linkIniciaSesion"
         android:layout_width="314dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnGoogleRegistro"
+        android:layout_below="@id/btnRegistrate"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="10dp"
@@ -151,20 +153,5 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/btnGoogleRegistro"
-        android:layout_width="313dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnRegistrate"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:alpha=".8"
-        android:background="@drawable/boton_google_redondo"
-        android:drawableStart="@drawable/google__g__logo"
-        android:drawablePadding="0dp"
-        android:fontFamily="@font/gotham_bold_1"
-        android:padding="7dp"
-        android:text="Continua con Google" />
 
 </RelativeLayout>

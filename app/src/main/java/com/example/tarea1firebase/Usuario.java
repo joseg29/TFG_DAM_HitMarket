@@ -77,7 +77,7 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String contrasena, String instagram, String tikTok, String youtube) {
+    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String instagram, String tikTok, String youtube) {
         this.id = id;
         this.nombre = name;
         this.descripcion = descripcion;

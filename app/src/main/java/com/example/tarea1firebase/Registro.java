@@ -38,7 +38,7 @@ public class Registro extends AppCompatActivity {
     private EditText etEmail, etNombre, etContrasena;
     private ImageButton btnMostrarContrasena;
     private boolean mostrarContrasena = false;
-    private TextView tvIniciarSesion;
+    private TextView tvIniciarSesion, lblContrasena;
     private Usuario user;
     private Button btnRegistrar;
     private FirebaseAuth mAuth;
@@ -58,6 +58,7 @@ public class Registro extends AppCompatActivity {
         btnRegistrar = findViewById(R.id.btnRegistrate);
         btnMostrarContrasena = findViewById(R.id.btnMostrarContrasena);
         etContrasena = findViewById(R.id.etPassword);
+        lblContrasena = findViewById(R.id.lblPassword);
 
         tvIniciarSesion.setOnClickListener(v -> {
             //Cambio a activity de login
@@ -78,6 +79,7 @@ public class Registro extends AppCompatActivity {
         etContrasena = findViewById(R.id.etPassword);
 
         googleAccount = null;
+        //Verificamos si se ha iniciado sesión con google o no.
         try {
             googleAccount = getIntent().getBundleExtra("CUENTAGOOGLE");
             if (googleAccount != null) {
@@ -87,6 +89,14 @@ public class Registro extends AppCompatActivity {
 
                 etEmail.setText(email);
                 etNombre.setText(nombre);
+
+                etEmail.setFocusable(false);
+                etNombre.setFocusable(false);
+                etNombre.setCursorVisible(false);
+                etEmail.setCursorVisible(false);
+                etContrasena.setVisibility(View.GONE);
+                lblContrasena.setVisibility(View.GONE);
+                btnMostrarContrasena.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -113,66 +123,70 @@ public class Registro extends AppCompatActivity {
         String emailUsuario = etEmail.getText().toString();
         String contrasenaUsuario = etContrasena.getText().toString();
 
-        if (!emailUsuario.isEmpty() && !contrasenaUsuario.isEmpty()) {
-            //Se crea el usuario en el authenticator de firebase
-            mAuth.createUserWithEmailAndPassword(emailUsuario, contrasenaUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful()) {
-                        try {
-                            throw task.getException();
-                        } catch (FirebaseAuthWeakPasswordException e) {
-                            Toast.makeText(Registro.this, "Clave débil. Mínimo 6 caracteres", Toast.LENGTH_LONG).show();
-                        } catch (FirebaseAuthInvalidCredentialsException e) {
-                            Toast.makeText(Registro.this, "Formato de email inválido.", Toast.LENGTH_LONG).show();
-                        } catch (FirebaseAuthUserCollisionException e) {
-                            //Ya existe el email
-                            String idUsuario = id;
-                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, "MuchoTexto descr", Arrays.asList(), contrasenaUsuario, "joseg29_", "joseg29", "elrincondegiorgio");
+        //Se crea el usuario en el authenticator de firebase
+        if (googleAccount != null) {
+            registrarConGoogle(emailUsuario, nombreUsuario);
+        } else {
+            if (!emailUsuario.isEmpty() && !contrasenaUsuario.isEmpty()) {
+                mAuth.createUserWithEmailAndPassword(emailUsuario, contrasenaUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthWeakPasswordException e) {
+                                Toast.makeText(Registro.this, "Clave débil. Mínimo 6 caracteres", Toast.LENGTH_LONG).show();
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                Toast.makeText(Registro.this, "Formato de email inválido.", Toast.LENGTH_LONG).show();
+                            } catch (FirebaseAuthUserCollisionException e) {
+                            } catch (Exception e) {
+                                Toast.makeText(Registro.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            // Se crea el usuario en collections (FIRESTORE), y se le pasa el id de authenticator como referencia de documento
+                            String idUsuario = task.getResult().getUser().getUid();
+                            System.out.println(idUsuario);
+                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, "MuchoTexto descr", Arrays.asList(), "joseg29_", "joseg29", "elrincondegiorgio");
                             db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(Registro.this, PerfilUsuario.class);
-                                    intent.putExtra("UidUsuario", id);
+                                    intent.putExtra("UidUsuario", user.getId());
                                     startActivity(intent);
                                     finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    System.out.println("s<moomom");
                                 }
                             });
-                        } catch (Exception e) {
-                            Toast.makeText(Registro.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
-                    } else {
-                        System.out.println("mlmosa");
-                        // Se crea el usuario en collections (FIRESTORE), y se le pasa el id de authenticator como referencia de documento
-                        String idUsuario = task.getResult().getUser().getUid();
-                        System.out.println(idUsuario);
-                        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, "MuchoTexto descr", Arrays.asList(), contrasenaUsuario, "joseg29_", "joseg29", "elrincondegiorgio");
-                        db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(Registro.this, PerfilUsuario.class);
-                                intent.putExtra("UidUsuario", user.getId());
-                                startActivity(intent);
-                                finish();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                System.out.println("soasaom");
-                            }
-                        });
                     }
-                }
 
-            });
+                });
+            }
         }
+    }
+
+    private void registrarConGoogle(String emailUsuario, String nombreUsuario) {
+        //Ya existe el email
+        String idUsuario = id;
+        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, "MuchoTexto descr", Arrays.asList(), "joseg29_", "joseg29", "elrincondegiorgio");
+        db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Registro.this, PerfilUsuario.class);
+                intent.putExtra("UidUsuario", id);
+                startActivity(intent);
+                finish();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        });
     }
 
 }
