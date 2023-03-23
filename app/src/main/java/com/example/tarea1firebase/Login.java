@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity {
     private StorageReference storageRef;
     private FirebaseStorage storage;
     private EditText etEmail, etPassword;
-    private TextView tvRegistrar;
+    private TextView tvRegistrar, tvForgetPassword;
     private Usuario user;
     private ImageView videoMarco;
     private ImageButton btnMostrarContrasena;
@@ -132,6 +132,13 @@ public class Login extends AppCompatActivity {
         btnGoogleLogin.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
+
+        tvForgetPassword = findViewById(R.id.tvForgetPassword);
+        tvForgetPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(Login.this, RecuperarContrasena.class);
+            startActivity(intent);
+            finish();
         });
     }
 

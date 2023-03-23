@@ -37,7 +37,6 @@
         android:layout_height="50dp"
         android:layout_below="@id/lblNombre"
         android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="2dp"
         android:alpha=".8"
         android:background="@drawable/edit_text_redondo"
@@ -110,12 +109,10 @@
 
     <CheckBox
         android:id="@+id/terminos_checkbox"
-        android:layout_width="271dp"
+        android:layout_width="313dp"
         android:layout_height="47dp"
         android:layout_below="@id/etPassword"
-        android:layout_alignParentStart="true"
         android:layout_centerInParent="true"
-        android:layout_marginStart="49dp"
         android:layout_marginTop="8dp"
         android:buttonTint="@color/checkbox_selector"
         android:fontFamily="@font/gotham_medium_1"
