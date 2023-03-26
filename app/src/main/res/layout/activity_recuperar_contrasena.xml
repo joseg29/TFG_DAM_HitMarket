@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -24,12 +25,12 @@
         android:id="@+id/lblSubTitulo"
         android:layout_width="313dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
         android:layout_below="@id/lblTitulo"
-        android:fontFamily="@font/gotham_medium"
         android:layout_centerHorizontal="true"
-        android:textAlignment="center"
+        android:layout_margin="4dp"
+        android:fontFamily="@font/gotham_medium"
         android:text="Introduce tu correo para continuar."
+        android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="16sp" />
 
@@ -87,6 +88,16 @@
         android:textAlignment="textStart"
         android:textColor="@color/white"
         android:textSize="16sp" />
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit_2"
+        style="@style/SpinKitView.Large.Circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:elevation="100dp"
+        app:SpinKit_Color="@color/black" />
 
 
 </RelativeLayout>

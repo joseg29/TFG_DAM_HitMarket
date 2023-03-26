@@ -100,7 +100,6 @@ public class Login extends AppCompatActivity {
         });
 
         btnIniciarSesion.setOnClickListener(v -> {
-            progressBar.setVisibility(View.VISIBLE);
             validarLogin();
         });
 
@@ -203,12 +202,13 @@ public class Login extends AppCompatActivity {
                             Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     } else {
+                        progressBar.setVisibility(View.VISIBLE);
                         iniciarSesion();
                     }
-                    progressBar.setVisibility(View.GONE);
                 }
             });
         } else {
+            progressBar.setVisibility(View.GONE);
             Toast.makeText(Login.this, "Hay algún campo vacío.", Toast.LENGTH_LONG).show();
         }
     }
