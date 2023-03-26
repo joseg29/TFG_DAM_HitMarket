@@ -10,7 +10,6 @@ public class Usuario implements Serializable {
     private String instagram;
     private String tiktTok;
     private String email;
-    private String contrasena;
     private String youtube;
     private String spotify;
     private String soundCloud;
@@ -40,16 +39,6 @@ public class Usuario implements Serializable {
     public void setYoutube(String youtube) {
         this.youtube = youtube;
     }
-
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
 
     public String getEmail() {
         return email;
@@ -84,7 +73,6 @@ public class Usuario implements Serializable {
         this.arrayCanciones = canciones;
         this.instagram = instagram;
         this.email = email;
-        this.contrasena = contrasena;
         this.tiktTok = tikTok;
         this.youtube = youtube;
     }
@@ -125,12 +113,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "name='" + nombre + '\'' +
-                ", id='" + id + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", arrayCanciones=" + arrayCanciones +
-                '}';
+        return "Usuario{" + "name='" + nombre + '\'' + ", id='" + id + '\'' + ", descripcion='" + descripcion + '\'' + ", arrayCanciones=" + arrayCanciones + '}';
     }
 
 }

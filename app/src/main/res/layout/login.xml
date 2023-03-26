@@ -1,174 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:layout_marginTop="0dp"
-    android:gravity="center_horizontal|center_vertical">
+    android:background="#A63434"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imVideo"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY" />
-
-    <View
-        android:id="@+id/overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#866E39BA" />
-
-    <ImageView
-        android:id="@+id/blueLogo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:src="@drawable/logo_marshmello" />
-
-
-    <TextView
-        android:id="@+id/lblTituloLogo"
-        android:layout_width="314dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/blueLogo"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:fontFamily="@font/gotham_medium_1"
-        android:text="HitMarket"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/lblEmail"
-        android:layout_width="313dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lblTituloLogo"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/gotham_bold_1"
-        android:text="Email"
-        android:textAlignment="viewStart"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-
-    <EditText
-        android:id="@+id/etEmail"
-        android:layout_width="313dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/lblEmail"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="2dp"
-        android:alpha=".8"
-        android:background="@drawable/edit_text_redondo"
-        android:inputType="textEmailAddress"
-        android:textAlignment="center" />
-
-    <TextView
-        android:id="@+id/lblPassword"
-        android:layout_width="313dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/etEmail"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/gotham_bold_1"
-        android:text="Contraseña"
-        android:textAlignment="viewStart"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="313dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/lblPassword"
-        android:layout_centerHorizontal="true"
-        android:alpha=".8"
-        android:background="@drawable/edit_text_redondo"
-        android:inputType="textPassword"
-        android:textAlignment="center" />
-
-    <ImageButton
-        android:id="@+id/btnMostrarContrasena"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/etPassword"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="-37dp"
-        android:layout_marginEnd="60dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="mostrar_password"
-        android:src="@drawable/ojo_abierto" />
-
-    <TextView
-        android:id="@+id/tvForgetPassword"
-        android:layout_width="313dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/etPassword"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="23dp"
-        android:fontFamily="@font/gotham_medium_1"
-        android:text="¿Olvidaste tu contraseña?"
-        android:textAlignment="textEnd"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/btnIniciarSesion"
-        android:layout_width="313dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvForgetPassword"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
-        android:alpha=".8"
-        android:background="@drawable/boton_redondo"
-        android:fontFamily="@font/gotham_bold_1"
-        android:text="Iniciar Sesión" />
-
-    <TextView
-        android:id="@+id/linkRegistrate"
-        android:layout_width="314dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnGoogle"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/gotham_medium_1"
-        android:text="¿No tienes cuenta? Regístrate"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/btnGoogle"
-        android:layout_width="313dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnIniciarSesion"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:alpha=".8"
-        android:background="@drawable/boton_google_redondo"
-        android:drawableStart="@drawable/google__g__logo"
-        android:drawablePadding="0dp"
-        android:fontFamily="@font/gotham_bold_1"
-        android:padding="7dp"
-        android:text="Inicia sesión con Google" />
-
-
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/spin_kit"
-        style="@style/SpinKitView.Large.Circle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:elevation="100dp"
-        app:SpinKit_Color="@color/black" />
+        android:layout_marginTop="0dp"
+        android:background="@color/black">
 
-</RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imVideo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
+        <View
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#866E39BA" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/blueLogo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/logo_marshmello" />
+
+
+            <TextView
+                android:id="@+id/lblTituloLogo"
+                android:layout_width="314dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/blueLogo"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@font/gotham_medium_1"
+                android:text="HitMarket"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/lblTitulo"
+                android:layout_width="313dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/blueLogo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Inicia sesión"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/lblEmail"
+                android:layout_width="313dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lblTitulo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Email"
+                android:textAlignment="viewStart"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="313dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/lblEmail"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:alpha=".8"
+                android:background="@drawable/edit_text_redondo"
+                android:inputType="textEmailAddress"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/lblPassword"
+                android:layout_width="313dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etEmail"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Contraseña"
+                android:textAlignment="viewStart"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="313dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/lblPassword"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:alpha=".8"
+                android:background="@drawable/edit_text_redondo"
+                android:inputType="textPassword"
+                android:textAlignment="center" />
+
+            <ImageButton
+                android:id="@+id/btnMostrarContrasena"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etPassword"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-37dp"
+                android:layout_marginEnd="60dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="mostrar_password"
+                android:src="@drawable/ojo_abierto" />
+
+            <TextView
+                android:id="@+id/tvForgetPassword"
+                android:layout_width="313dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etPassword"
+                android:layout_marginTop="23dp"
+                android:fontFamily="@font/gotham_medium_1"
+                android:text="¿Olvidaste tu contraseña?"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnIniciarSesion"
+                android:layout_width="313dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvForgetPassword"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:alpha=".8"
+                android:background="@drawable/boton_redondo"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Iniciar Sesión" />
+
+            <TextView
+                android:id="@+id/linkRegistrate"
+                android:layout_width="314dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnGoogle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/gotham_medium_1"
+                android:text="¿No tienes cuenta? Regístrate"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnGoogle"
+                android:layout_width="313dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnIniciarSesion"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:alpha=".8"
+                android:background="@drawable/boton_google_redondo"
+                android:drawableStart="@drawable/google__g__logo"
+                android:drawablePadding="0dp"
+                android:fontFamily="@font/gotham_bold_1"
+                android:padding="7dp"
+                android:text="Inicia sesión con Google" />
+
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/spin_kit"
+                style="@style/SpinKitView.Large.Circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:elevation="100dp"
+                app:SpinKit_Color="@color/black" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</LinearLayout>

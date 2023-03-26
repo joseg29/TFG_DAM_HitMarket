@@ -7,12 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,7 +31,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.Arrays;
+
+import pl.droidsonroids.gif.GifDrawable;
 
 public class Registro extends AppCompatActivity {
     private FirebaseFirestore db;
@@ -44,11 +51,28 @@ public class Registro extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Bundle googleAccount;
     private String nombre, email, id;
+    private ProgressBar progressBar;
+    private ImageView videoMarco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro);
+
+        //Fondo animado
+        videoMarco = findViewById(R.id.imVideo);
+        try {
+            GifDrawable gifDrawable = new GifDrawable(getResources(), R.raw.humobackground);
+            videoMarco.setImageDrawable(gifDrawable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Icono de carga
+        progressBar = findViewById(R.id.spin_kit);
+        Sprite doubleBounce = new FadingCircle();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.GONE);
 
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -124,6 +148,8 @@ public class Registro extends AppCompatActivity {
         String contrasenaUsuario = etContrasena.getText().toString();
 
         //Se crea el usuario en el authenticator de firebase
+        progressBar.setVisibility(View.VISIBLE);
+
         if (googleAccount != null) {
             registrarConGoogle(emailUsuario, nombreUsuario);
         } else {
@@ -151,7 +177,7 @@ public class Registro extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(Registro.this, PerfilUsuario.class);
+                                    Intent intent = new Intent(Registro.this, VistaExplora.class);
                                     intent.putExtra("UidUsuario", user.getId());
                                     startActivity(intent);
                                     finish();
@@ -167,6 +193,7 @@ public class Registro extends AppCompatActivity {
                 });
             }
         }
+        progressBar.setVisibility(View.GONE);
     }
 
     private void registrarConGoogle(String emailUsuario, String nombreUsuario) {
@@ -177,7 +204,7 @@ public class Registro extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Registro.this, PerfilUsuario.class);
+                Intent intent = new Intent(Registro.this, VistaExplora.class);
                 intent.putExtra("UidUsuario", id);
                 startActivity(intent);
                 finish();
