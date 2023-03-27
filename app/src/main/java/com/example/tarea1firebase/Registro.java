@@ -165,14 +165,14 @@ public class Registro extends AppCompatActivity {
                             } catch (FirebaseAuthInvalidCredentialsException e) {
                                 Toast.makeText(Registro.this, "Formato de email inválido.", Toast.LENGTH_LONG).show();
                             } catch (FirebaseAuthUserCollisionException e) {
+                                Toast.makeText(Registro.this, "Este correo ya está en uso.", Toast.LENGTH_LONG).show();
                             } catch (Exception e) {
                                 Toast.makeText(Registro.this, e.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         } else {
                             // Se crea el usuario en collections (FIRESTORE), y se le pasa el id de authenticator como referencia de documento
                             String idUsuario = task.getResult().getUser().getUid();
-                            System.out.println(idUsuario);
-                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, "MuchoTexto descr", Arrays.asList(), "joseg29_", "joseg29", "elrincondegiorgio");
+                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, Arrays.asList(), "", "", "", "", "");
                             db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -199,7 +199,7 @@ public class Registro extends AppCompatActivity {
     private void registrarConGoogle(String emailUsuario, String nombreUsuario) {
         //Ya existe el email
         String idUsuario = id;
-        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, "MuchoTexto descr", Arrays.asList(), "joseg29_", "joseg29", "elrincondegiorgio");
+        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, Arrays.asList(), "", "", "", "", "");
         db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

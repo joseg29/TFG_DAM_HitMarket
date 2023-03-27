@@ -59,13 +59,14 @@
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
-                <TextView
+                <Button
                     android:id="@+id/tvEditar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="20dp"
                     android:layout_marginRight="20dp"
+                    android:background="@android:color/transparent"
                     android:fontFamily="@font/gotham_medium_1"
                     android:text="Editar >"
                     android:textColor="@color/white"
@@ -365,13 +366,6 @@
                 android:text="Cerrar Sesión"
                 android:visibility="visible" />
 
-            <Button
-                android:id="@+id/btnExplorarUsuarios"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="pasarActivity"
-                android:visibility="visible" />
         </LinearLayout>
 
     </ScrollView>

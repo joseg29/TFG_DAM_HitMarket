@@ -48,18 +48,19 @@ public class PerfilUsuario extends AppCompatActivity {
     private ProgressDialog dialogoCargando;
     private RecyclerView recyclerCanciones;
     private AdaptadorCancionesRecycler adaptadorCanciones;
-    private TextView lblUsername, lblDescripcion, lblEmail, tvEditar;
+    private TextView lblUsername, lblDescripcion, lblEmail;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
-    private Button btnCerrarSesion, btnTemporal;
+    private Button btnCerrarSesion, btnTemporal, tvEditar;
     private String uid;
-
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.perfil_usuario);
 
+        mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         uid = getIntent().getStringExtra("UidUsuario");
         inicializarUsuario();
@@ -88,7 +89,7 @@ public class PerfilUsuario extends AppCompatActivity {
         btnSoundCloud = findViewById(R.id.btnSoundCloud);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
         btnCerrarSesion.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
+            mAuth.signOut();
             Intent intent = new Intent(PerfilUsuario.this, Login.class);
             startActivity(intent);
             finish();
@@ -97,11 +98,31 @@ public class PerfilUsuario extends AppCompatActivity {
         btnAñadirCancion = findViewById(R.id.btnSubirAudio);
         tvEditar = findViewById(R.id.tvEditar);
 
-        if (!uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+        if (!uid.equals(mAuth.getCurrentUser().getUid())) {
             btnAñadirCancion.setVisibility(View.GONE);
             tvEditar.setVisibility(View.GONE);
             btnCerrarSesion.setVisibility(View.GONE);
         }
+
+        tvEditar.setOnClickListener(v -> {
+            Intent intent = new Intent(PerfilUsuario.this, EditarPerfil.class);
+            db.collection(COLECCION).document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        usuario = documentSnapshot.toObject(Usuario.class);
+                        intent.putExtra("UsuarioAEditar", usuario);
+                        intent.putExtra("UidUsuario", mAuth.getCurrentUser().getUid());
+                        startActivity(intent);
+                    } else {
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                }
+            });
+        });
 
 
         btnInstagram.setOnClickListener(v -> {
@@ -114,13 +135,13 @@ public class PerfilUsuario extends AppCompatActivity {
             abrirYoutube();
         });
 
-//ESTO ES PARA PASAR DE ACTIVITY PARA VER LOS USUARIOS//
-        btnTemporal = findViewById(R.id.btnExplorarUsuarios);
-        btnTemporal.setOnClickListener(v -> {
-            Intent auxIntent = new Intent(PerfilUsuario.this, VistaExplora.class);
-            startActivity(auxIntent);
-        });
-//BTN TEMPORAL FIN//
+        /**btnSoundCloud.setOnClickListener(v -> {
+         abrirSoundCloud();
+         });
+
+         btnSpotify.setOnClickListener(v -> {
+         abrirSpotify();
+         });**/
     }
 
     private void inicializarUsuario() {
@@ -132,13 +153,11 @@ public class PerfilUsuario extends AppCompatActivity {
                     obtenerDatosUsuario();
                     setRedesSociales();
                 } else {
-                    System.out.println("El documento no existe.");
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                System.out.println("Error: " + e.getMessage());
             }
         });
     }
@@ -265,7 +284,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
     public void setRedesSociales() {
         //Revisa si tiene instagram
-        if (usuario.getInstagram() != null) {
+        if (usuario.getInstagram() != "") {
             //Si tiene, pone el botón para que se pueda clickar y opacidad al 100%
             btnInstagram.setClickable(true);
             btnInstagram.setAlpha(1.0F);
@@ -275,8 +294,18 @@ public class PerfilUsuario extends AppCompatActivity {
             btnInstagram.setAlpha(0.2f);
         }
 
+        if (usuario.getYoutube() != "") {
+            //Si tiene, pone el botón para que se pueda clickar y opacidad al 100%
+            btnYoutube.setClickable(true);
+            btnYoutube.setAlpha(1.0F);
+        } else {
+            //Lo desactiva y opacidad al 20%
+            btnYoutube.setClickable(false);
+            btnYoutube.setAlpha(0.2f);
+        }
+
         //Exactamente lo mismo con TikTok
-        if (usuario.getTiktTok() != null) {
+        if (usuario.getTiktTok() != "") {
             btnTiktok.setClickable(true);
             btnTiktok.setAlpha(1.0F);
         } else {
@@ -284,7 +313,7 @@ public class PerfilUsuario extends AppCompatActivity {
             btnTiktok.setAlpha(0.2f);
         }
 
-        if (usuario.getSpotify() != null) {
+        if (usuario.getSpotify() != "") {
             btnSpotify.setClickable(true);
             btnSpotify.setAlpha(1.0F);
         } else {
@@ -292,7 +321,7 @@ public class PerfilUsuario extends AppCompatActivity {
             btnSpotify.setAlpha(0.2f);
         }
 
-        if (usuario.getSoundCloud() != null) {
+        if (usuario.getSoundCloud() != "") {
             btnSoundCloud.setClickable(true);
             btnSoundCloud.setAlpha(1.0F);
         } else {
@@ -332,7 +361,7 @@ public class PerfilUsuario extends AppCompatActivity {
     }
 
     public void abrirTikTok() {
-        String username = "joseg29_";
+        String username = usuario.getTiktTok();
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tiktok.com/@" + username));
         intent.setPackage("com.zhiliaoapp.musically");
         if (intent.resolveActivity(getPackageManager()) != null) {

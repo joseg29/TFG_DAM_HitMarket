@@ -14,6 +14,18 @@ public class Usuario implements Serializable {
     private String spotify;
     private String soundCloud;
 
+    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud) {
+        this.id = id;
+        this.nombre = name;
+        this.descripcion = descripcion;
+        this.arrayCanciones = canciones;
+        this.instagram = instagram;
+        this.email = email;
+        this.tiktTok = tikTok;
+        this.spotify = spotify;
+        this.soundCloud = soundCloud;
+        this.youtube = youtube;
+    }
 
     public String getSpotify() {
         return spotify;
@@ -65,18 +77,6 @@ public class Usuario implements Serializable {
 
     public Usuario() {
     }
-
-    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String instagram, String tikTok, String youtube) {
-        this.id = id;
-        this.nombre = name;
-        this.descripcion = descripcion;
-        this.arrayCanciones = canciones;
-        this.instagram = instagram;
-        this.email = email;
-        this.tiktTok = tikTok;
-        this.youtube = youtube;
-    }
-
 
     public void setNombre(String nombre) {
         this.nombre = nombre;

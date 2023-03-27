@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".EditarPerfil">
+
+
+    <TextView
+        android:id="@+id/lblNombreEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Nombre" />
+
+
+    <EditText
+        android:id="@+id/etNombreEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblNombreEditar"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+
+    <TextView
+        android:id="@+id/lblDescripcionEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etNombreEditar"
+        android:layout_centerHorizontal="true"
+        android:text="Descripcion" />
+
+    <EditText
+        android:id="@+id/etDescripcionEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblDescripcionEditar"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <LinearLayout
+        android:id="@+id/layoutBotonMostrarRedes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/etDescripcionEditar"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="Redes sociales">
+
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/btnMostrarRedesEditables"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etDescripcionEditar"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/flecha_abajo"
+            android:text="Botón" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layoutRedesEditables"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layoutBotonMostrarRedes"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lblInstagramEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instagram" />
+
+        <EditText
+            android:id="@+id/etInstagramEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/lblYoutubeEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Youtube" />
+
+        <EditText
+            android:id="@+id/etYoutubeEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/lblTikTokEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Youtube" />
+
+        <EditText
+            android:id="@+id/etTiktokEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/lblSpotifyEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spotify" />
+
+        <EditText
+            android:id="@+id/etSpotifyEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/lblSoundCloudEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SoundCloud" />
+
+        <EditText
+            android:id="@+id/etSoundCloudEditar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnGuardarEditarPerfil"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/boton_redondo"
+        android:backgroundTint="@color/purple_200"
+        android:text="Guardar" />
+</LinearLayout>
