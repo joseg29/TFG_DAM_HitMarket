@@ -19,6 +19,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -91,6 +94,13 @@ public class PerfilUsuario extends AppCompatActivity {
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
         btnCerrarSesion.setOnClickListener(v -> {
             mAuth.signOut();
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            try {
+                mGoogleSignInClient.signOut();
+            } catch (Exception e) {
+
+            }
             Intent intent = new Intent(PerfilUsuario.this, Login.class);
             startActivity(intent);
             finish();
@@ -282,10 +292,15 @@ public class PerfilUsuario extends AppCompatActivity {
                                 });
                             }
                         });
-
-
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        dialogoCargando.dismiss();
+                        Toast.makeText(getApplicationContext(), "No se ha podido subir la canción", Toast.LENGTH_SHORT).show();
                     }
                 });
+                ;
             }
         }
     }
