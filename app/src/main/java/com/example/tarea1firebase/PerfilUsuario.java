@@ -51,7 +51,7 @@ public class PerfilUsuario extends AppCompatActivity {
     private TextView lblUsername, lblDescripcion, lblEmail;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
-    private Button btnCerrarSesion, btnTemporal, tvEditar;
+    private Button btnCerrarSesion, btnChat, tvEditar;
     private String uid;
     private FirebaseAuth mAuth;
 
@@ -82,6 +82,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
         storageRef = FirebaseStorage.getInstance().getReference();
 
+        btnChat = findViewById(R.id.btnChat);
         btnInstagram = findViewById(R.id.btnInstagram);
         btnYoutube = findViewById(R.id.btnYoutube);
         btnTiktok = findViewById(R.id.btnTikTok);
@@ -102,6 +103,7 @@ public class PerfilUsuario extends AppCompatActivity {
             btnAñadirCancion.setVisibility(View.GONE);
             tvEditar.setVisibility(View.GONE);
             btnCerrarSesion.setVisibility(View.GONE);
+            btnChat.setVisibility(View.VISIBLE);
         }
 
         tvEditar.setOnClickListener(v -> {
@@ -124,6 +126,13 @@ public class PerfilUsuario extends AppCompatActivity {
             });
         });
 
+
+        btnChat.setOnClickListener(v -> {
+            Intent intent = new Intent(PerfilUsuario.this, ChatVentana.class);
+            intent.putExtra("UidUsuarioEmisor", mAuth.getCurrentUser().getUid());
+            intent.putExtra("UidUsuarioReceptor", uid);
+            startActivity(intent);
+        });
 
         btnInstagram.setOnClickListener(v -> {
             abrirInstagram();

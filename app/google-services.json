@@ -2,7 +2,8 @@
   "project_info": {
     "project_number": "888840880080",
     "project_id": "tarea-d7eb7",
-    "storage_bucket": "tarea-d7eb7.appspot.com"
+    "storage_bucket": "tarea-d7eb7.appspot.com",
+    "firebase_url": "https://tarea-d7eb7-default-rtdb.europe-west1.firebasedatabase.app"
   },
   "client": [
     {

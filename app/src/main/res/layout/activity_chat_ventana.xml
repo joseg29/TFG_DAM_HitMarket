@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    tools:context=".ChatVentana">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerMensajesChat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#77A56D" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="bottom"
+
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etMensaje"
+            android:layout_width="300dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#CACACA" />
+
+        <Button
+            android:id="@+id/btnEnviarMensaje"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="#06AC1B"
+            android:enabled="false"
+            android:text="Enviar" />
+
+    </LinearLayout>
+
+</LinearLayout>
