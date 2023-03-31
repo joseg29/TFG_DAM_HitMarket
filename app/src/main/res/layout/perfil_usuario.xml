@@ -132,6 +132,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/estrella" />
                 </LinearLayout>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -362,6 +363,13 @@
                     </TableRow>
 
                 </TableLayout>
+
+                <Button
+                    android:id="@+id/btnChatsRecientes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button"
+                    android:visibility="visible" />
 
             </RelativeLayout>
 

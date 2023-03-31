@@ -1,6 +1,7 @@
 package com.example.tarea1firebase;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Usuario implements Serializable {
@@ -13,8 +14,10 @@ public class Usuario implements Serializable {
     private String youtube;
     private String spotify;
     private String soundCloud;
+    private List<Usuario> chatsRecientes;
+    private List<String> arrayCanciones;
 
-    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud) {
+    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<Usuario> chatsRecientes) {
         this.id = id;
         this.nombre = name;
         this.descripcion = descripcion;
@@ -25,6 +28,7 @@ public class Usuario implements Serializable {
         this.spotify = spotify;
         this.soundCloud = soundCloud;
         this.youtube = youtube;
+        this.chatsRecientes = chatsRecientes;
     }
 
     public String getSpotify() {
@@ -71,9 +75,6 @@ public class Usuario implements Serializable {
     public String getDescripcion() {
         return descripcion;
     }
-
-
-    private List<String> arrayCanciones;
 
     public Usuario() {
     }
