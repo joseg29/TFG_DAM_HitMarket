@@ -1,6 +1,7 @@
 package com.example.tarea1firebase;
 
-import androidx.annotation.Nullable;
+import static com.example.tarea1firebase.PerfilUsuario.COLECCION;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,17 +11,20 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.units.qual.A;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,40 +37,47 @@ public class ChatVentana extends AppCompatActivity {
     private Button btnEnviarMensaje;
     private EditText etMensaje;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private RecyclerView recyclerCanciones;
+    private RecyclerView recyclerMensajes;
     private AdaptadorMensajesChat adaptadorCanciones;
     private DatabaseReference chatRef;
     private String chatKey;
     private ArrayList<Mensaje> listaMensajes;
-    private String usuario1Uid, usuario2Uid;
+    private String usuarioActualUid, usuario2Uid;
     private DatabaseReference mensajesRef;
+    private FirebaseFirestore db;
+    private Usuario otroUsuarioReceptor;
+    private TextView lblNombreContacto;
+    private ImageView fotoPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_ventana);
         FirebaseApp.initializeApp(this);
+        db = FirebaseFirestore.getInstance();
 
-        recyclerCanciones = findViewById(R.id.recyclerMensajesChat);
-        recyclerCanciones.setHasFixedSize(true);
+        recyclerMensajes = findViewById(R.id.recyclerMensajesChat);
+        recyclerMensajes.setHasFixedSize(true);
 
-        recyclerCanciones.setLayoutManager(new LinearLayoutManager(this));
+        recyclerMensajes.setLayoutManager(new LinearLayoutManager(this));
         ArrayList<Mensaje> arrayPrueba = new ArrayList<>();
 
         adaptadorCanciones = new AdaptadorMensajesChat(arrayPrueba);
-        recyclerCanciones.setAdapter(adaptadorCanciones);
+        recyclerMensajes.setAdapter(adaptadorCanciones);
 
         btnEnviarMensaje = findViewById(R.id.btnEnviarMensaje);
         etMensaje = findViewById(R.id.etMensaje);
+        fotoPerfil = findViewById(R.id.fotoPerfilChat);
+        lblNombreContacto = findViewById(R.id.lblNombreContacto);
 
-        usuario1Uid = getIntent().getStringExtra("UidUsuarioEmisor");
+        usuarioActualUid = getIntent().getStringExtra("UsuarioActual");
         usuario2Uid = getIntent().getStringExtra("UidUsuarioReceptor");
         inicializarChat();
 
         mensajesRef = database.getReference("chats").child(chatRef.getKey()).child("mensajes");
 
         btnEnviarMensaje.setOnClickListener(v -> {
-            crearChat(usuario1Uid, usuario2Uid);
+            crearChat(usuarioActualUid, usuario2Uid);
         });
         obtenerMensajes();
     }
@@ -76,10 +87,10 @@ public class ChatVentana extends AppCompatActivity {
         chatRef = database.getReference("chats");
 
         // Crea una clave única para el chat a partir de los UIDs de los usuarios
-        if (usuario1Uid.compareTo(usuario2Uid) < 0) {
-            chatKey = usuario1Uid + "_" + usuario2Uid;
+        if (usuarioActualUid.compareTo(usuario2Uid) < 0) {
+            chatKey = usuarioActualUid + "_" + usuario2Uid;
         } else {
-            chatKey = usuario2Uid + "_" + usuario1Uid;
+            chatKey = usuario2Uid + "_" + usuarioActualUid;
         }
         chatRef = chatRef.child(chatKey);
         etMensaje.addTextChangedListener(new TextWatcher() {
@@ -104,6 +115,15 @@ public class ChatVentana extends AppCompatActivity {
 
             }
         });
+        db.collection(COLECCION).document(usuario2Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    otroUsuarioReceptor = documentSnapshot.toObject(Usuario.class);
+                    lblNombreContacto.setText(otroUsuarioReceptor.getNombre());
+                }
+            }
+        });
     }
 
     private void crearChat(String usuario1Uid, String usuario2Uid) {
@@ -119,16 +139,12 @@ public class ChatVentana extends AppCompatActivity {
 
                     // Crea la entrada en la base de datos para el chat
                     chatRef.setValue(chatInfo);
-                }
 
-                // Crea una referencia a la subcolección "mensajes" del chat
-                DatabaseReference mensajesRef = chatRef.child("mensajes");
+                }
 
                 // Envia un mensaje de prueba
                 enviarMensaje(chatRef.getKey(), usuario1Uid, etMensaje.getText().toString());
                 etMensaje.setText("");
-
-                // Escucha los nuevos mensajes en la subcolección "mensajes"
             }
 
             @Override
@@ -166,7 +182,7 @@ public class ChatVentana extends AppCompatActivity {
                     listaMensajes.add(msj);
                 }
                 adaptadorCanciones = new AdaptadorMensajesChat(listaMensajes);
-                recyclerCanciones.setAdapter(adaptadorCanciones);
+                recyclerMensajes.setAdapter(adaptadorCanciones);
             }
 
             @Override

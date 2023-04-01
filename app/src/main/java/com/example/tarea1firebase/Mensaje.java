@@ -1,12 +1,12 @@
 package com.example.tarea1firebase;
 
-import java.util.Date;
-
 public class Mensaje {
     private String remitente, texto, fechaYHora;
 
+
     public Mensaje() {
     }
+
 
     public Mensaje(String remitente, String texto, String fechaYHora) {
         this.remitente = remitente;

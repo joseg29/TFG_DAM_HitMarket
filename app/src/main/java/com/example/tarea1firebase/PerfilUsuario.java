@@ -147,7 +147,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
         btnChat.setOnClickListener(v -> {
             Intent intent = new Intent(PerfilUsuario.this, ChatVentana.class);
-            intent.putExtra("UidUsuarioEmisor", mAuth.getCurrentUser().getUid());
+            intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
             intent.putExtra("UidUsuarioReceptor", uid);
             startActivity(intent);
         });
