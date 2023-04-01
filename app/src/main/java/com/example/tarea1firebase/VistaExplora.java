@@ -103,6 +103,29 @@ public class VistaExplora extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.menu_noticias:
+                System.out.println("polla ogrda");
+                return true;
+            case R.id.menu_explora:
+                // Acción para el elemento "Explora"
+                return true;
+            case R.id.menu_mensajes:
+                // Acción para el elemento "Mensajes"
+                return true;
+            case R.id.menu_perfil:
+                // Acción para el elemento "Tu"
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 
 
 
