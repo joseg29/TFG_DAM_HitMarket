@@ -10,13 +10,15 @@
     tools:context=".EditarPerfil">
 
 
-    <ImageView
-        android:id="@+id/imageView2"
+    <ImageButton
+        android:id="@+id/btnCambiarFotoPerfil"
         android:layout_width="113dp"
         android:layout_height="113dp"
         android:layout_marginBottom="5dp"
         android:alpha=".8"
-        android:background="@drawable/usuario" />
+        android:background="@drawable/usuario"
+        android:clickable="true"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/lblCambiarFotoPerfil"
