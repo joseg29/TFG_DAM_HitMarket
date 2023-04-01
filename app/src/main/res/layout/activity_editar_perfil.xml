@@ -4,59 +4,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".EditarPerfil">
 
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="113dp"
+        android:layout_height="113dp"
+        android:layout_marginBottom="5dp"
+        android:alpha=".8"
+        android:background="@drawable/usuario" />
+
+    <TextView
+        android:id="@+id/lblCambiarFotoPerfil"
+        android:layout_width="213dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Cambiar foto de perfil"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
     <TextView
         android:id="@+id/lblNombreEditar"
-        android:layout_width="wrap_content"
+        android:layout_width="313dp"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Nombre" />
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Nombre"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
 
     <EditText
         android:id="@+id/etNombreEditar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lblNombreEditar"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:layout_width="313dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:alpha=".8"
+        android:background="@drawable/edit_text_redondo"
+        android:inputType="textPersonName"
+        android:textAlignment="center" />
 
 
     <TextView
         android:id="@+id/lblDescripcionEditar"
-        android:layout_width="wrap_content"
+        android:layout_width="313dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/etNombreEditar"
-        android:layout_centerHorizontal="true"
-        android:text="Descripcion" />
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Descripcion"
+        android:textAlignment="viewStart"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/etDescripcionEditar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lblDescripcionEditar"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:layout_width="313dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="5dp"
+        android:alpha=".8"
+        android:background="@drawable/descripcion_editar_perfil"
+        android:inputType="textMultiLine"
+        android:lines="10"
+        android:maxLines="5"
+        android:scrollbars="vertical" />
 
     <LinearLayout
         android:id="@+id/layoutBotonMostrarRedes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/etDescripcionEditar"
+        android:layout_width="313dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:alpha=".8"
+        android:background="@drawable/edit_text_redondo"
         android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
+            android:fontFamily="@font/gotham_bold_1"
             android:text="Redes sociales">
 
         </TextView>
@@ -65,9 +98,8 @@
             android:id="@+id/btnMostrarRedesEditables"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etDescripcionEditar"
-            android:layout_centerInParent="true"
             android:background="@android:color/transparent"
+            android:contentDescription="TODO"
             android:src="@drawable/flecha_abajo"
             android:text="Botón" />
 
@@ -78,84 +110,125 @@
         android:id="@+id/layoutRedesEditables"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/layoutBotonMostrarRedes"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
 
         <TextView
             android:id="@+id/lblInstagramEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:text="Instagram" />
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/gotham_bold_1"
+            android:text="Instagram"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/etInstagramEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:layout_marginTop="5dp"
+            android:alpha=".8"
+            android:background="@drawable/edit_text_redondo"
+            android:drawableStart="@drawable/logo_instagram_editar_perfil"
+            android:inputType="textPersonName"
+            android:padding="5dp"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/lblYoutubeEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:text="Youtube" />
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/gotham_bold_1"
+            android:text="Youtube"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/etYoutubeEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:layout_marginTop="5dp"
+            android:alpha=".8"
+            android:background="@drawable/edit_text_redondo"
+            android:drawableStart="@drawable/logo_youtube_editar_perfil"
+            android:inputType="textPersonName"
+            android:padding="5dp"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/lblTikTokEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:text="Youtube" />
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/gotham_bold_1"
+            android:text="TikTok"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/etTiktokEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:layout_marginTop="5dp"
+            android:alpha=".8"
+            android:background="@drawable/edit_text_redondo"
+            android:drawableStart="@drawable/logo_tiktok_editar_perfil"
+            android:inputType="textPersonName"
+            android:padding="5dp"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/lblSpotifyEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:text="Spotify" />
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/gotham_bold_1"
+            android:text="Spotify"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/etSpotifyEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:layout_marginTop="5dp"
+            android:alpha=".8"
+            android:background="@drawable/edit_text_redondo"
+            android:drawableStart="@drawable/logo_spotify_editar_perfil"
+            android:inputType="textPersonName"
+            android:padding="5dp"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/lblSoundCloudEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:text="SoundCloud" />
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/gotham_bold_1"
+            android:text="SoundCloud"
+            android:textAlignment="center" />
 
         <EditText
             android:id="@+id/etSoundCloudEditar"
-            android:layout_width="wrap_content"
+            android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:layout_marginTop="5dp"
+            android:alpha=".8"
+            android:background="@drawable/edit_text_redondo"
+            android:drawableStart="@drawable/logo_soundcloud_editar_perfil"
+            android:inputType="textPersonName"
+            android:padding="5dp"
+            android:textAlignment="center" />
 
 
     </LinearLayout>
 
     <Button
         android:id="@+id/btnGuardarEditarPerfil"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="313dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:alpha=".8"
         android:background="@drawable/boton_redondo"
-        android:backgroundTint="@color/purple_200"
+        android:fontFamily="@font/gotham_bold_1"
         android:text="Guardar" />
 </LinearLayout>
