@@ -31,7 +31,6 @@ import java.util.Objects;
 public class VistaExplora extends AppCompatActivity {
 
 
-
     private RecyclerView recyclerViewUsu;
     private AdaptadorUsuariosRecycler adaptadorUsuariosRecycler;
     private FirebaseFirestore db;
@@ -44,7 +43,6 @@ public class VistaExplora extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_explora);
         db = FirebaseFirestore.getInstance();
-
 
 
         recyclerViewUsu = findViewById(R.id.recyclerUsuarios);
@@ -94,7 +92,29 @@ public class VistaExplora extends AppCompatActivity {
                 return false;
             }
         });
-
+        BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
+        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.menu_noticias:
+                        System.out.println("polla ogrda");
+                        return true;
+                    case R.id.menu_explora:
+                        System.out.println("polla gogrda");
+                        return true;
+                    case R.id.menu_mensajes:
+                        System.out.println("as ogrda");
+                        return true;
+                    case R.id.menu_perfil:
+                        System.out.println("assaas ogrda");
+                        return true;
+                    default:
+                }
+                return onOptionsItemSelected(item);
+            }
+        });
     }
 
     @Override
@@ -102,31 +122,5 @@ public class VistaExplora extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.bottom_navigation, menu);
         return true;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menu_noticias:
-                System.out.println("polla ogrda");
-                return true;
-            case R.id.menu_explora:
-                // Acción para el elemento "Explora"
-                return true;
-            case R.id.menu_mensajes:
-                // Acción para el elemento "Mensajes"
-                return true;
-            case R.id.menu_perfil:
-                // Acción para el elemento "Tu"
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-
-
-
 
 }
