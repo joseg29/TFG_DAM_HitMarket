@@ -10,4 +10,10 @@
     <color name="yellow">#FFFF00</color>
     <color name="rosa">#CBFF00B8</color>
     <color name="azul">#C900D1FF</color>
+
+    <color name="green_dark">#062925</color>
+    <color name="green_normal">#044a42</color>
+    <color name="green_light">#3a9188</color>
+    <color name="green_light2">#b8e1dd</color>
+
 </resources>

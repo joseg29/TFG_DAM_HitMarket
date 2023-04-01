@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_noticias"
+        android:icon="@drawable/icon_menu_noticias"
+        android:title="Noticias"/>
+    <item
+        android:id="@+id/menu_explora"
+        android:icon="@drawable/icon_menu_explora"
+        android:title="Explora"/>
+    <item
+        android:id="@+id/menu_mensajes"
+        android:icon="@drawable/icon_menu_mensajes"
+        android:title="Mensajes"/>
+    <item
+        android:id="@+id/menu_perfil"
+        android:icon="@drawable/icon_menu_perfil"
+        android:title="Tu"/>
+</menu>
