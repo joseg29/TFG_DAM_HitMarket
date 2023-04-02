@@ -45,6 +45,7 @@ public class EditarPerfil extends AppCompatActivity {
     private ImageButton btnCambiarFotoPerfil;
     private Uri mImageUri;
     private StorageReference mStorageRef;
+    private String urlImagenPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,9 @@ public class EditarPerfil extends AppCompatActivity {
             usuarioEditando.setYoutube(etYoutube.getText().toString());
             usuarioEditando.setSoundCloud(etSoundCloud.getText().toString());
             usuarioEditando.setTiktTok(etTikTok.getText().toString());
+            if (urlImagenPerfil != null) {
+                usuarioEditando.setFotoPerfil(urlImagenPerfil);
+            }
 
             CollectionReference refUsuarios = FirebaseFirestore.getInstance().
 
@@ -180,6 +184,13 @@ public class EditarPerfil extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Toast.makeText(EditarPerfil.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
+                            Task<Uri> uriImagenPerfil = taskSnapshot.getStorage().getDownloadUrl();
+                            uriImagenPerfil.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    urlImagenPerfil = uri.toString();
+                                }
+                            });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

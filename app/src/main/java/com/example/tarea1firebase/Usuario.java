@@ -14,10 +14,11 @@ public class Usuario implements Serializable {
     private String youtube;
     private String spotify;
     private String soundCloud;
+    private String fotoPerfil;
     private List<Usuario> chatsRecientes;
     private List<String> arrayCanciones;
 
-    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<Usuario> chatsRecientes) {
+    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<Usuario> chatsRecientes, String fotoPerfil) {
         this.id = id;
         this.nombre = name;
         this.descripcion = descripcion;
@@ -29,6 +30,7 @@ public class Usuario implements Serializable {
         this.soundCloud = soundCloud;
         this.youtube = youtube;
         this.chatsRecientes = chatsRecientes;
+        this.fotoPerfil = fotoPerfil;
     }
 
     public String getSpotify() {
@@ -115,6 +117,14 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "Usuario{" + "name='" + nombre + '\'' + ", id='" + id + '\'' + ", descripcion='" + descripcion + '\'' + ", arrayCanciones=" + arrayCanciones + '}';
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 
 }

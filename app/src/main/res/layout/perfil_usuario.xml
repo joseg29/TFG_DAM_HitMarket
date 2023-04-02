@@ -22,7 +22,7 @@
                 android:background="#EC9F9F">
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/imgFotoPerfil"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"

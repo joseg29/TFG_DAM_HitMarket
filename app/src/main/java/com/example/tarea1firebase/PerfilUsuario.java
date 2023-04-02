@@ -16,9 +16,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -57,6 +59,7 @@ public class PerfilUsuario extends AppCompatActivity {
     private Button btnCerrarSesion, btnChat, tvEditar, btnChatsRecientes;
     private String uid;
     private FirebaseAuth mAuth;
+    private ImageView imgFotoPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,8 @@ public class PerfilUsuario extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         uid = getIntent().getStringExtra("UidUsuario");
+        imgFotoPerfil = findViewById(R.id.imgFotoPerfil);
+
         inicializarUsuario();
 
         recyclerCanciones = findViewById(R.id.recyclerCanciones);
@@ -114,6 +119,7 @@ public class PerfilUsuario extends AppCompatActivity {
         });
 
         btnAñadirCancion = findViewById(R.id.btnSubirAudio);
+
         tvEditar = findViewById(R.id.tvEditar);
 
         if (!uid.equals(mAuth.getCurrentUser().getUid())) {
@@ -227,8 +233,13 @@ public class PerfilUsuario extends AppCompatActivity {
                         adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
                         recyclerCanciones.setAdapter(adaptadorCanciones);
 
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Error al obtener datos", Toast.LENGTH_LONG);
+                        //Establecer foto de perfil
+                        if (!usuario.getFotoPerfil().equals("")) {
+                            try {
+                                Glide.with(PerfilUsuario.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
+                            } catch (Exception e) {
+                            }
+                        }
                     }
                 }
                 dialogoCargando.dismiss();

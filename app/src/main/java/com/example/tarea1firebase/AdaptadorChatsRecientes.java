@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +35,7 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nombreUsuario, ultimoMensaje;
         private CardView cardViewChatReciente;
+        private ImageView imgPerfil;
 
 
         public ViewHolder(View v) {
@@ -40,6 +43,7 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
             cardViewChatReciente = v.findViewById(R.id.cardViewChatReciente);
             nombreUsuario = v.findViewById(R.id.lblNombreChat);
             ultimoMensaje = v.findViewById(R.id.lblPreviewUltimoMensajeChat);
+            imgPerfil = v.findViewById(R.id.imgPerfilChat);
         }
     }
 
@@ -61,7 +65,12 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
         otroUsuarioChateando = listaChats.get(position).getId();
 
         holder.nombreUsuario.setText(listaChats.get(position).getNombre());
-
+        if (!listaChats.get(position).getFotoPerfil().equals("")) {
+            try {
+                Glide.with(holder.itemView.getContext()).load(listaChats.get(position).getFotoPerfil()).into(holder.imgPerfil);
+            } catch (Exception e) {
+            }
+        }
         String chatKey;
 
         if (usuarioActualUid.compareTo(otroUsuarioChateando) < 0) {
@@ -81,7 +90,6 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
                     String remitenteUid = mensajeSnapshot.child("remitente").getValue(String.class);
                     String timestamp = mensajeSnapshot.child("fechaYHora").getValue(String.class);
                     Mensaje msj = new Mensaje(remitenteUid, mensaje, timestamp);
-
                     listaMensajes.add(msj);
                 }
                 holder.ultimoMensaje.setText(listaMensajes.get(0).getTexto());
@@ -94,7 +102,6 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
             }
         });
         holder.cardViewChatReciente.setOnClickListener(v ->
-
         {
             Intent intent = new Intent(holder.itemView.getContext(), ChatVentana.class);
             intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());

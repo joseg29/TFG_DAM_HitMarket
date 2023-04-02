@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -121,6 +122,12 @@ public class ChatVentana extends AppCompatActivity {
                 if (documentSnapshot.exists()) {
                     otroUsuarioReceptor = documentSnapshot.toObject(Usuario.class);
                     lblNombreContacto.setText(otroUsuarioReceptor.getNombre());
+                    if (!otroUsuarioReceptor.getFotoPerfil().equals("")) {
+                        try {
+                            Glide.with(ChatVentana.this).load(otroUsuarioReceptor.getFotoPerfil()).into(fotoPerfil);
+                        } catch (Exception e) {
+                        }
+                    }
                 }
             }
         });
