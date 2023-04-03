@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#1E1E1E"
     android:gravity="center_horizontal"
     android:orientation="vertical">
@@ -14,8 +14,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="15dp"
-        android:fontFamily="@font/gotham_medium"
         android:background="@drawable/fondo_boton_play"
+        android:fontFamily="@font/gotham_medium"
         android:gravity="start">
 
     </SearchView>
@@ -31,17 +31,23 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
+        style="@style/BottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:elevation="8dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         app:labelVisibilityMode="selected"
-        app:menu="@menu/bottom_navigation"
-        style="@style/BottomNavigation"
-        >
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+        app:menu="@menu/bottom_navigation" />
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.Circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:elevation="100dp"
+        app:SpinKit_Color="@color/black" />
 </RelativeLayout>

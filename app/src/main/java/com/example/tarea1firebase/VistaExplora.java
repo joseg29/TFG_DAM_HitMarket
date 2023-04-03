@@ -7,22 +7,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +36,7 @@ public class VistaExplora extends AppCompatActivity {
     private Usuario user;
     private ArrayList<Usuario> listaUsuarios;
     private SearchView barraBusqueda;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,10 @@ public class VistaExplora extends AppCompatActivity {
         recyclerViewUsu.setHasFixedSize(true);
         recyclerViewUsu.setLayoutManager(new LinearLayoutManager(this));
 
+        progressBar = findViewById(R.id.spin_kit);
+        Sprite doubleBounce = new FadingCircle();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.GONE);
 
         db.collection(COLECCION).get().addOnSuccessListener(documentSnapshots -> {
             List<Usuario> listaUsuarios = new ArrayList<>();
@@ -65,6 +69,8 @@ public class VistaExplora extends AppCompatActivity {
 
         barraBusqueda = findViewById(R.id.barraBusqueda);
         barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -72,26 +78,62 @@ public class VistaExplora extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                db.collection(COLECCION)
-                        .whereGreaterThanOrEqualTo("nombre", newText)
-                        .whereLessThanOrEqualTo("nombre", newText + "\uf8ff")
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                ArrayList<Usuario> listaUsuarios = new ArrayList<>();
-                                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                    Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                                    listaUsuarios.add(usuario);
+
+                listaUsuarios.clear();
+                String[] palabras = newText.toLowerCase().split(" ");
+
+                if (palabras.length == 1) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    // Búsqueda de una sola palabra
+                    db.collection(COLECCION)
+                            .whereGreaterThanOrEqualTo("nombre", palabras[0])
+                            .whereLessThanOrEqualTo("nombre", palabras[0] + "\uf8ff")
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                progressBar.setVisibility(View.GONE);
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                                        listaUsuarios.add(usuario);
+                                    }
+                                    adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
+                                    recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                 }
-                                adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
-                                recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
-                            } else {
-                                Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            });
+                } else if (palabras.length >= 2) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    // Búsqueda de dos o más palabras
+                    db.collection(COLECCION)
+                            .whereGreaterThanOrEqualTo("nombre", palabras[0])
+                            .whereLessThanOrEqualTo("nombre", palabras[0] + "\uf8ff")
+                            .whereGreaterThanOrEqualTo("nombre", palabras[1])
+                            .whereLessThanOrEqualTo("nombre", palabras[1] + "\uf8ff")
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                progressBar.setVisibility(View.GONE);
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                                        listaUsuarios.add(usuario);
+                                    }
+                                    adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
+                                    recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    // No hay palabras en la búsqueda, no se hace nada
+                    adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
+                    recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
+                }
                 return false;
             }
         });
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @Override
