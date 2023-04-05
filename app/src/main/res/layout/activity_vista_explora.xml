@@ -29,17 +29,6 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        style="@style/BottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:elevation="8dp"
-        app:labelVisibilityMode="selected"
-        app:menu="@menu/bottom_navigation" />
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spin_kit"

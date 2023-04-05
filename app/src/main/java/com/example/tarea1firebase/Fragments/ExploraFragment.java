@@ -1,36 +1,33 @@
-package com.example.tarea1firebase;
+package com.example.tarea1firebase.Fragments;
 
 import static com.example.tarea1firebase.Registro.COLECCION;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
+import com.example.tarea1firebase.AdaptadorUsuariosRecycler;
+import com.example.tarea1firebase.R;
+import com.example.tarea1firebase.Usuario;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-public class VistaExplora extends AppCompatActivity {
-
+public class ExploraFragment extends Fragment {
 
     private RecyclerView recyclerViewUsu;
     private AdaptadorUsuariosRecycler adaptadorUsuariosRecycler;
@@ -40,18 +37,32 @@ public class VistaExplora extends AppCompatActivity {
     private SearchView barraBusqueda;
     private ProgressBar progressBar;
 
+    public ExploraFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vista_explora);
         db = FirebaseFirestore.getInstance();
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.activity_vista_explora, container, false);
+    }
 
-        recyclerViewUsu = findViewById(R.id.recyclerUsuarios);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        recyclerViewUsu = view.findViewById(R.id.recyclerUsuarios);
         recyclerViewUsu.setHasFixedSize(true);
-        recyclerViewUsu.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewUsu.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        progressBar = findViewById(R.id.spin_kit);
+        progressBar = view.findViewById(R.id.spin_kit);
         Sprite doubleBounce = new FadingCircle();
         progressBar.setIndeterminateDrawable(doubleBounce);
         progressBar.setVisibility(View.GONE);
@@ -66,10 +77,9 @@ public class VistaExplora extends AppCompatActivity {
             adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);
             recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
         }).addOnFailureListener(e -> {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         });
-
-        barraBusqueda = findViewById(R.id.barraBusqueda);
+        barraBusqueda = view.findViewById(R.id.barraBusqueda);
         barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             ArrayList<Usuario> listaUsuarios = new ArrayList<>();
 
@@ -101,7 +111,7 @@ public class VistaExplora extends AppCompatActivity {
                                     adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
                                     recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
                                 } else {
-                                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                 } else if (palabras.length >= 2) {
@@ -109,7 +119,7 @@ public class VistaExplora extends AppCompatActivity {
                     // Búsqueda de dos o más palabras
                     db.collection(COLECCION)
                             .whereGreaterThanOrEqualTo("nombre", palabras[0])
-                            .whereLessThanOrEqualTo("nombre", palabras[0] + "\uf8ff")
+.whereLessThanOrEqualTo("nombre", palabras[0] + "\uf8ff")
                             .whereGreaterThanOrEqualTo("nombre", palabras[1])
                             .whereLessThanOrEqualTo("nombre", palabras[1] + "\uf8ff")
                             .get()
@@ -123,7 +133,7 @@ public class VistaExplora extends AppCompatActivity {
                                     adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
                                     recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
                                 } else {
-                                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                 } else {
@@ -139,3 +149,4 @@ public class VistaExplora extends AppCompatActivity {
 
     }
 }
+

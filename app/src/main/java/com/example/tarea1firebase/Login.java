@@ -233,7 +233,7 @@ public class Login extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             //Si el documento existe, es porque ya el usuario se ha registrado anteriormente con los campos que faltaban.
                             if (document.exists()) {
-                                Intent intent = new Intent(Login.this, VistaExplora.class);
+                                Intent intent = new Intent(Login.this, MarcoMenu.class);
                                 intent.putExtra("UidUsuario", idDocumento);
                                 startActivity(intent);
                                 finish();
@@ -250,7 +250,7 @@ public class Login extends AppCompatActivity {
                 }
                 //Si 'googleAccount' es null, quiere decir que inicio sesíon con usuario y contraseña, y se envía a la siguiente activity.
                 else {
-                    Intent intent = new Intent(Login.this, VistaExplora.class);
+                    Intent intent = new Intent(Login.this, MarcoMenu.class);
                     intent.putExtra("UidUsuario", idDocumento);
                     startActivity(intent);
                     finish();
