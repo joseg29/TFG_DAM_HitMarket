@@ -1,5 +1,6 @@
 package com.example.tarea1firebase;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -19,12 +20,27 @@ import java.util.Locale;
 
 public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsuariosRecycler.ViewHolder> {
     private List<Usuario> listaUsuarios;
+    private List<Usuario> listaUsuariosFiltrados;
     private boolean isFavorite;
 
     public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
+        this.listaUsuariosFiltrados = new ArrayList<>(listaUsuarios);
         isFavorite = false;
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void filtrar(String query) {
+        listaUsuarios.clear();
+        for (Usuario usuario : listaUsuariosFiltrados) {
+            if (usuario.getNombre().toLowerCase().contains(query.toLowerCase()) ||
+                    usuario.getNombre().toLowerCase().startsWith(query.toLowerCase())) {
+                listaUsuarios.add(usuario);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nombreUsu;
