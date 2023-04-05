@@ -177,7 +177,7 @@ public class Registro extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(Registro.this, VistaExplora.class);
+                                    Intent intent = new Intent(Registro.this, MarcoMenu.class);
                                     intent.putExtra("UidUsuario", user.getId());
                                     startActivity(intent);
                                     finish();

@@ -60,7 +60,7 @@ public class InicioApp extends AppCompatActivity {
                         if (document.exists()) {
                             user = document.toObject(Usuario.class);
                             Toast.makeText(InicioApp.this, "Sesión iniciada", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(InicioApp.this, VistaExplora.class);
+                            Intent intent = new Intent(InicioApp.this, MarcoMenu.class);
                             intent.putExtra("USUARIO", user.getId());
                             startActivity(intent);
                             finish();
