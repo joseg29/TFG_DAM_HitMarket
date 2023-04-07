@@ -53,7 +53,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginBottom="0dp"
                     android:fontFamily="@font/gotham_bold_1"
-                    android:text="Samu El Jedi"
                     android:textColor="@color/white"
                     android:textSize="34sp" />
 
@@ -65,7 +64,6 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/gotham_bold_1"
-                    android:text="Ciudad"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
@@ -147,7 +145,6 @@
                     android:fillColor="@android:color/white"
                     android:fontFamily="@font/gotham_medium_1"
                     android:padding="10dp"
-                    android:text="Lorem ipsum Lorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsumLorem ipsum"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -363,13 +360,6 @@
                     </TableRow>
 
                 </TableLayout>
-
-                <Button
-                    android:id="@+id/btnChatsRecientes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Button"
-                    android:visibility="visible" />
 
             </RelativeLayout>
 

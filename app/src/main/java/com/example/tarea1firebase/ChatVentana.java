@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -146,7 +147,10 @@ public class ChatVentana extends AppCompatActivity {
 
                     // Crea la entrada en la base de datos para el chat
                     chatRef.setValue(chatInfo);
-
+                    db.collection(Registro.COLECCION).document(usuario1Uid).update("chatsRecientes", FieldValue.arrayUnion(usuario2Uid)).addOnSuccessListener(documentReference -> {
+                    });
+                    db.collection(Registro.COLECCION).document(usuario2Uid).update("chatsRecientes", FieldValue.arrayUnion(usuario1Uid)).addOnSuccessListener(documentReference -> {
+                    });
                 }
 
                 // Envia un mensaje de prueba

@@ -17,8 +17,27 @@ public class Usuario implements Serializable {
     private String fotoPerfil;
     private List<Usuario> chatsRecientes;
     private List<String> arrayCanciones;
+    private List<String> listaFavoritos;
 
-    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<Usuario> chatsRecientes, String fotoPerfil) {
+    public List<String> getListaFavoritos() {
+        return listaFavoritos;
+    }
+
+    public void setListaFavoritos(List<String> listaFavoritos) {
+        this.listaFavoritos = listaFavoritos;
+    }
+
+
+    public List<Usuario> getChatsRecientes() {
+        return chatsRecientes;
+    }
+
+    public void setChatsRecientes(List<Usuario> chatsRecientes) {
+        this.chatsRecientes = chatsRecientes;
+    }
+
+
+    public Usuario(String id, String email, String name, String descripcion, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<Usuario> chatsRecientes, String fotoPerfil, List<String> listaFavoritos) {
         this.id = id;
         this.nombre = name;
         this.descripcion = descripcion;
@@ -31,6 +50,7 @@ public class Usuario implements Serializable {
         this.youtube = youtube;
         this.chatsRecientes = chatsRecientes;
         this.fotoPerfil = fotoPerfil;
+        this.listaFavoritos = listaFavoritos;
     }
 
     public String getSpotify() {

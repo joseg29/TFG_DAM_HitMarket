@@ -56,7 +56,7 @@ public class PerfilUsuario extends AppCompatActivity {
     private TextView lblUsername, lblDescripcion, lblEmail;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
-    private Button btnCerrarSesion, btnChat, tvEditar, btnChatsRecientes;
+    private Button btnCerrarSesion, btnChat, tvEditar;
     private String uid;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil;
@@ -89,7 +89,6 @@ public class PerfilUsuario extends AppCompatActivity {
 
         storageRef = FirebaseStorage.getInstance().getReference();
 
-        btnChatsRecientes = findViewById(R.id.btnChatsRecientes);
         btnChat = findViewById(R.id.btnChat);
         btnInstagram = findViewById(R.id.btnInstagram);
         btnYoutube = findViewById(R.id.btnYoutube);
@@ -97,12 +96,6 @@ public class PerfilUsuario extends AppCompatActivity {
         btnSpotify = findViewById(R.id.btnSpotify);
         btnSoundCloud = findViewById(R.id.btnSoundCloud);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
-
-        btnChatsRecientes.setOnClickListener(v -> {
-            Intent intent = new Intent(PerfilUsuario.this, ChatsRecientes.class);
-            startActivity(intent);
-            finish();
-        });
 
         btnCerrarSesion.setOnClickListener(v -> {
             mAuth.signOut();
@@ -127,7 +120,6 @@ public class PerfilUsuario extends AppCompatActivity {
             tvEditar.setVisibility(View.GONE);
             btnCerrarSesion.setVisibility(View.GONE);
             btnChat.setVisibility(View.VISIBLE);
-            btnChatsRecientes.setVisibility(View.GONE);
         }
 
         tvEditar.setOnClickListener(v -> {
@@ -140,6 +132,7 @@ public class PerfilUsuario extends AppCompatActivity {
                         intent.putExtra("UsuarioAEditar", usuario);
                         intent.putExtra("UidUsuario", mAuth.getCurrentUser().getUid());
                         startActivity(intent);
+                        finish();
                     } else {
                     }
                 }

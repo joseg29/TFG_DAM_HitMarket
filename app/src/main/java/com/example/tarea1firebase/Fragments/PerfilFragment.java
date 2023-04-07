@@ -67,7 +67,7 @@ public class PerfilFragment extends Fragment {
     private TextView lblUsername, lblDescripcion, lblEmail;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
-    private Button btnCerrarSesion, btnChat, tvEditar, btnChatsRecientes;
+    private Button btnCerrarSesion, btnChat, tvEditar;
     private String uid;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil;
@@ -123,7 +123,6 @@ public class PerfilFragment extends Fragment {
 
         storageRef = FirebaseStorage.getInstance().getReference();
 
-        btnChatsRecientes = view.findViewById(R.id.btnChatsRecientes);
         btnChat = view.findViewById(R.id.btnChat);
         btnInstagram = view.findViewById(R.id.btnInstagram);
         btnYoutube = view.findViewById(R.id.btnYoutube);
@@ -131,12 +130,6 @@ public class PerfilFragment extends Fragment {
         btnSpotify = view.findViewById(R.id.btnSpotify);
         btnSoundCloud = view.findViewById(R.id.btnSoundCloud);
         btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
-
-        btnChatsRecientes.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), ChatsRecientes.class);
-            startActivity(intent);
-
-        });
 
         btnCerrarSesion.setOnClickListener(v -> {
             mAuth.signOut();
@@ -172,7 +165,6 @@ public class PerfilFragment extends Fragment {
             tvEditar.setVisibility(View.GONE);
             btnCerrarSesion.setVisibility(View.GONE);
             btnChat.setVisibility(View.VISIBLE);
-            btnChatsRecientes.setVisibility(View.GONE);
         }
 
         tvEditar.setOnClickListener(v ->
