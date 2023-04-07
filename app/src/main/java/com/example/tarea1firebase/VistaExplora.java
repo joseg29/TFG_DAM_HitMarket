@@ -59,8 +59,8 @@ public class VistaExplora extends AppCompatActivity {
         db.collection(COLECCION).get().addOnSuccessListener(documentSnapshots -> {
             listaUsuarios = new ArrayList<>();
             for (DocumentSnapshot documentSnapshot : documentSnapshots.getDocuments()) {
-                Usuario saludo = documentSnapshot.toObject(Usuario.class);
-                listaUsuarios.add(saludo);
+                Usuario user = documentSnapshot.toObject(Usuario.class);
+                listaUsuarios.add(user);
             }
 
             adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);

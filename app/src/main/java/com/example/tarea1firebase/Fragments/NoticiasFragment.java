@@ -24,6 +24,7 @@ import com.example.tarea1firebase.Usuario;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -80,34 +81,33 @@ public class NoticiasFragment extends Fragment {
         adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);
         recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
 
-        db.collection(COLECCION).get().addOnSuccessListener(documentSnapshots -> {
-            listaUsuarios = new ArrayList<>();
-            System.out.println("paso 1");
-            System.out.println(listaUsuarios);
-            for (DocumentSnapshot documentSnapshot : documentSnapshots.getDocuments()) {
-                Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                db.collection(COLECCION).document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot document = task.getResult();
 
-                        //Obtenemos el usuario de la base de datos con todos sus campos
-                        Usuario usuarioActual = document.toObject(Usuario.class);
-                        List<String> favoritos;
-                        favoritos = usuarioActual.getListaFavoritos();
-                        System.out.println(usuarioActual.getId());
-                        if (favoritos != null) {
-                            for (int i = 0; i < favoritos.size(); i++) {
+        db.collection(COLECCION).document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                Usuario usuarioActual = document.toObject(Usuario.class);
+                List<String> favoritos;
+                favoritos = usuarioActual.getListaFavoritos();
+                listaUsuarios = new ArrayList<>();
+                for (int i = 0; i < favoritos.size(); i++) {
+                    db.collection(COLECCION).document(favoritos.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Usuario usuario = documentSnapshot.toObject(Usuario.class);
+                            //Obtenemos el usuario de la base de datos con todos sus campos
+                            if (favoritos != null) {
                                 if (favoritos.contains(usuario.getId())) {
-                                    System.out.println(usuario.getNombre());
                                     listaUsuarios.add(usuario);
                                 }
+                                adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);
+                                recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
                             }
                         }
-                        adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);
-                        recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
-                    }
-                });
+                    });
+
+                }
+
             }
         });
 
