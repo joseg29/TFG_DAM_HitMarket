@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tarea1firebase.Fragments.PerfilFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,7 +41,7 @@ public class EditarPerfil extends AppCompatActivity {
     public final static String COLECCION = "Usuarios";
     private LinearLayout layoutRedesEditable;
     private ImageButton btnMostrarRedes;
-    private Button btnGuardarCambios;
+    private Button btnGuardarCambios, btnCancelarCambios;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageButton btnCambiarFotoPerfil;
     private Uri mImageUri;
@@ -64,6 +65,7 @@ public class EditarPerfil extends AppCompatActivity {
 
 
         btnGuardarCambios = findViewById(R.id.btnGuardarEditarPerfil);
+        btnCancelarCambios = findViewById(R.id.btnCancelarEditarPerfil);
 
         uid = getIntent().getStringExtra("UidUsuario");
         usuarioEditando = (Usuario) getIntent().getSerializableExtra("UsuarioAEditar");
@@ -84,6 +86,14 @@ public class EditarPerfil extends AppCompatActivity {
                     btnMostrarRedes.setImageResource(R.drawable.flecha_arriba);
                 }
             }
+        });
+
+        btnCancelarCambios.setOnClickListener(v -> {
+            Toast.makeText(EditarPerfil.this, "Cambios descartados.", Toast.LENGTH_LONG);
+            Intent intent = new Intent(EditarPerfil.this, MarcoMenu.class);
+            intent.putExtra("abrir_perfil", true);
+            startActivity(intent);
+            finish();
         });
 
         btnGuardarCambios.setOnClickListener(v -> {
@@ -107,8 +117,8 @@ public class EditarPerfil extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(EditarPerfil.this, "Cambios guardados.", Toast.LENGTH_LONG);
-                            Intent intent = new Intent(EditarPerfil.this, PerfilUsuario.class);
-                            intent.putExtra("UidUsuario", uid);
+                            Intent intent = new Intent(EditarPerfil.this, MarcoMenu.class);
+                            intent.putExtra("abrir_perfil", true);
                             startActivity(intent);
                             finish();
                         }

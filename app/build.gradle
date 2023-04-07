@@ -6,8 +6,8 @@ plugins {
 android {
     namespace 'com.example.tarea1firebase'
     compileSdk 33
-    
-    buildFeatures{
+
+    buildFeatures {
         viewBinding true
     }
     defaultConfig {

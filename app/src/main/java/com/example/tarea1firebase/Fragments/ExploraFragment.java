@@ -81,8 +81,6 @@ public class ExploraFragment extends Fragment {
         });
         barraBusqueda = view.findViewById(R.id.barraBusqueda);
         barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            ArrayList<Usuario> listaUsuarios = new ArrayList<>();
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -90,58 +88,7 @@ public class ExploraFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                listaUsuarios.clear();
-                String[] palabras = newText.toLowerCase().split(" ");
-
-                if (palabras.length == 1) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    // Búsqueda de una sola palabra
-                    db.collection(COLECCION)
-                            .whereGreaterThanOrEqualTo("nombre", palabras[0])
-                            .whereLessThanOrEqualTo("nombre", palabras[0] + "\uf8ff")
-                            .get()
-                            .addOnCompleteListener(task -> {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                                        listaUsuarios.add(usuario);
-                                    }
-                                    adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
-                                    recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
-                                } else {
-                                    Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                } else if (palabras.length >= 2) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    // Búsqueda de dos o más palabras
-                    db.collection(COLECCION)
-                            .whereGreaterThanOrEqualTo("nombre", palabras[0])
-.whereLessThanOrEqualTo("nombre", palabras[0] + "\uf8ff")
-                            .whereGreaterThanOrEqualTo("nombre", palabras[1])
-                            .whereLessThanOrEqualTo("nombre", palabras[1] + "\uf8ff")
-                            .get()
-                            .addOnCompleteListener(task -> {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                                        listaUsuarios.add(usuario);
-                                    }
-                                    adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
-                                    recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
-                                } else {
-                                    Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    // No hay palabras en la búsqueda, no se hace nada
-                    adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
-                    recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
-                }
+                adaptadorUsuariosRecycler.filter(newText);
                 return false;
             }
         });

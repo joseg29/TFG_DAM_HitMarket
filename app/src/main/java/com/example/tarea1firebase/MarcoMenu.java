@@ -23,11 +23,16 @@ public class MarcoMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMarcoMenuBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new NoticiasFragment());
+        // Verificar si se debe abrir el fragmento de perfil
+        boolean abrirPerfil = getIntent().getBooleanExtra("abrir_perfil", false);
+        if (abrirPerfil) {
+            replaceFragment(new PerfilFragment());
+        } else {
+            replaceFragment(new NoticiasFragment());
+        }
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
-    binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-
-            switch (item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.menu_noticias:
                     replaceFragment(new NoticiasFragment());
                     break;
@@ -43,12 +48,13 @@ public class MarcoMenu extends AppCompatActivity {
 
             }
 
-             return true;
-            });
+            return true;
+        });
 
 
     }
-    private void replaceFragment(Fragment fragment){
+
+    private void replaceFragment(Fragment fragment) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
