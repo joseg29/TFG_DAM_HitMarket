@@ -19,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class VistaExplora extends AppCompatActivity {
+public class VistaExplora extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
 
     private RecyclerView recyclerViewUsu;
@@ -60,19 +60,18 @@ public class VistaExplora extends AppCompatActivity {
         });
 
         barraBusqueda = findViewById(R.id.barraBusqueda);
-        barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+        barraBusqueda.setOnQueryTextListener(this);
 
-            @Override
-            public boolean onQueryTextChange(String query) {
-                adaptadorUsuariosRecycler.filtrar(query);
-                return true;
-            }
-        });
+    }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
 
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adaptadorUsuariosRecycler.filtrar(newText, progressBar);
+        return false;
     }
 }

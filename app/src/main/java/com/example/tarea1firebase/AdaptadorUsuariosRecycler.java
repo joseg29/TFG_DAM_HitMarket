@@ -11,15 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,28 +30,38 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsuariosRecycler.ViewHolder> {
     private List<Usuario> listaUsuarios;
+    private List<Usuario> listaUsuariosFiltrados;
     private FirebaseAuth mAuth;
     private String usuarioActualUid;
     private FirebaseFirestore db;
     private List<String> favoritos;
+    private ProgressBar progressBar;
+
 
     public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
+        this.listaUsuariosFiltrados = new ArrayList<>();
+        listaUsuariosFiltrados.addAll(listaUsuarios);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nombreUsu;
         private Button btnFav, btnVerPerf;
         private boolean isFavorite;
+        private ProgressBar progressBar;
+
 
         public ViewHolder(View v) {
             super(v);
             nombreUsu = v.findViewById(R.id.txtNombreUsu);
             btnFav = v.findViewById(R.id.btnCoraVacio);
             btnVerPerf = v.findViewById(R.id.btnVerPerfil);
+            progressBar = v.findViewById(R.id.spin_kit);
+            progressBar.setVisibility(View.VISIBLE);
         }
     }
 
@@ -59,6 +70,8 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_usuarios_explora, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
+        Sprite doubleBounce = new FadingCircle();
+        viewHolder.progressBar.setIndeterminateDrawable(doubleBounce);
         return viewHolder;
     }
 
@@ -70,10 +83,12 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         mAuth = FirebaseAuth.getInstance();
         usuarioActualUid = mAuth.getCurrentUser().getUid();
         holder.isFavorite = false;
+        holder.progressBar.setVisibility(View.VISIBLE);
 
         db.collection(COLECCION).document(usuarioActualUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                holder.progressBar.setVisibility(View.GONE);
                 DocumentSnapshot document = task.getResult();
 
                 //Obtenemos el usuario de la base de datos con todos sus campos
@@ -128,6 +143,30 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         });
     }
 
+    public void filtrar(@NonNull String texto, ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        if (texto.length() == 0) {
+            listaUsuarios.clear();
+            listaUsuarios.addAll(listaUsuariosFiltrados);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                List<Usuario> collect = listaUsuariosFiltrados.stream().filter(usuario ->
+                                usuario.getNombre().toLowerCase().contains(texto.toLowerCase()))
+                        .collect(Collectors.toList());
+                listaUsuarios.clear();
+                listaUsuarios.addAll(collect);
+            } else {
+                for (Usuario usuario : listaUsuariosFiltrados) {
+                    if (usuario.getNombre().toLowerCase().contains(texto)) {
+                        listaUsuarios.add(usuario);
+                    }
+                }
+            }
+        }
+        progressBar.setVisibility(View.GONE);
+        notifyDataSetChanged();
+    }
+
 
     //será quien devuelva la cantidad de items que se encuentra en la lista
     @Override
@@ -135,5 +174,5 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         return listaUsuarios.size();
     }
 
-
 }
+
