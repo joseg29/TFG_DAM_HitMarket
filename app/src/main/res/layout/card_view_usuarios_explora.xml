@@ -27,8 +27,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="8dp"
-            android:text="#TRAP/#RAP/"
             android:fontFamily="@font/gotham_bold"
+            android:text="#TRAP/#RAP/"
             android:textColor="@color/white"
             android:textSize="15sp" />
 
@@ -47,7 +47,7 @@
                 android:elevation="2dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/mandado"
-                app:shapeAppearanceOverlay="@style/RoundedSquare"/>
+                app:shapeAppearanceOverlay="@style/RoundedSquare" />
 
             <View
                 android:id="@+id/view"
@@ -137,6 +137,16 @@
             android:elevation="20dp"
             android:foreground="@drawable/corazon_favoritos_vacio"
             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.Large.Circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:elevation="100dp"
+            app:SpinKit_Color="@color/black" />
 
         <!--
         AQUI HAY QUE AÑADIR ALGO SOBRE LAS VALOARCIONES

@@ -2,34 +2,24 @@ package com.example.tarea1firebase;
 
 import static com.example.tarea1firebase.Registro.COLECCION;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
-public class VistaExplora extends AppCompatActivity {
+public class VistaExplora extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
 
     private RecyclerView recyclerViewUsu;
@@ -70,72 +60,18 @@ public class VistaExplora extends AppCompatActivity {
         });
 
         barraBusqueda = findViewById(R.id.barraBusqueda);
-        barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+        barraBusqueda.setOnQueryTextListener(this);
 
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
 
-                listaUsuarios.clear();
-                String[] palabras = newText.toLowerCase().split(" ");
-
-                if (palabras.length == 1) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    // Búsqueda de una sola palabra
-                    db.collection(COLECCION)
-                            .whereGreaterThanOrEqualTo("nombre", palabras[0])
-                            .whereLessThanOrEqualTo("nombre", palabras[0] + "\uf8ff")
-                            .get()
-                            .addOnCompleteListener(task -> {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                                        listaUsuarios.add(usuario);
-                                    }
-                                    adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
-                                    recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
-                                } else {
-                                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                } else if (palabras.length >= 2) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    // Búsqueda de dos o más palabras
-                    db.collection(COLECCION)
-                            .whereGreaterThanOrEqualTo("nombre", palabras[0])
-                            .whereLessThanOrEqualTo("nombre", palabras[0] + "\uf8ff")
-                            .whereGreaterThanOrEqualTo("nombre", palabras[1])
-                            .whereLessThanOrEqualTo("nombre", palabras[1] + "\uf8ff")
-                            .get()
-                            .addOnCompleteListener(task -> {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                                        listaUsuarios.add(usuario);
-                                    }
-                                    adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
-                                    recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
-                                } else {
-                                    Toast.makeText(getApplicationContext(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    // No hay palabras en la búsqueda, no se hace nada
-                    adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(listaUsuarios);
-                    recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
-                }
-                return false;
-            }
-        });
-
-
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        adaptadorUsuariosRecycler.filtrar(newText, progressBar);
+        return false;
     }
 }
