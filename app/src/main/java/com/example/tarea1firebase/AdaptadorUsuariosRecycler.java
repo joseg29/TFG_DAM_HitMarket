@@ -41,7 +41,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     private List<String> favoritos;
     private ProgressBar progressBar;
 
-
+//mmm
     public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
         this.listaUsuariosFiltrados = new ArrayList<>();
