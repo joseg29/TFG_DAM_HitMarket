@@ -147,13 +147,11 @@ public class ChatVentana extends AppCompatActivity {
 
                     // Crea la entrada en la base de datos para el chat
                     chatRef.setValue(chatInfo);
-                    db.collection(Registro.COLECCION).document(usuario1Uid).update("chatsRecientes", FieldValue.arrayUnion(usuario2Uid)).addOnSuccessListener(documentReference -> {
+                    db.collection(Registro.COLECCION).document(usuario1Uid).update("chatsRecientes", FieldValue.arrayUnion(chatKey)).addOnSuccessListener(documentReference -> {
                     });
-                    db.collection(Registro.COLECCION).document(usuario2Uid).update("chatsRecientes", FieldValue.arrayUnion(usuario1Uid)).addOnSuccessListener(documentReference -> {
+                    db.collection(Registro.COLECCION).document(usuario2Uid).update("chatsRecientes", FieldValue.arrayUnion(chatKey)).addOnSuccessListener(documentReference -> {
                     });
                 }
-
-                // Envia un mensaje de prueba
                 enviarMensaje(chatRef.getKey(), usuario1Uid, etMensaje.getText().toString());
                 etMensaje.setText("");
             }

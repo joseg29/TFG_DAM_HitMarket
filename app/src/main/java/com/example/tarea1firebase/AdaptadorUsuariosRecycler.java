@@ -2,6 +2,7 @@ package com.example.tarea1firebase;
 
 import static com.example.tarea1firebase.Registro.COLECCION;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -31,7 +32,6 @@ import java.util.Locale;
 
 public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsuariosRecycler.ViewHolder> {
     private List<Usuario> listaUsuarios;
-    private boolean isFavorite;
     private FirebaseAuth mAuth;
     private String usuarioActualUid;
     private FirebaseFirestore db;
@@ -39,12 +39,12 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
 
     public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
-        isFavorite = false;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nombreUsu;
         private Button btnFav, btnVerPerf;
+        private boolean isFavorite;
 
         public ViewHolder(View v) {
             super(v);
@@ -65,10 +65,11 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
 
     //será quien se encargue de establecer los objetos en el ViewHolder
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         usuarioActualUid = mAuth.getCurrentUser().getUid();
+        holder.isFavorite = false;
 
         db.collection(COLECCION).document(usuarioActualUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -79,11 +80,13 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
                 Usuario usuario = document.toObject(Usuario.class);
 
                 favoritos = usuario.getListaFavoritos();
-                if (favoritos.contains(listaUsuarios.get(holder.getAdapterPosition()).getId())) {
-                    isFavorite = true;
+                if (favoritos.contains(listaUsuarios.get(position).getId())) {
+                    holder.isFavorite = true;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         holder.btnFav.setForeground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.corazon_favoritos_relleno));
                     }
+                } else {
+                    holder.isFavorite = false;
                 }
             }
         });
@@ -102,7 +105,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
 
             });
 
-            if (isFavorite) {
+            if (holder.isFavorite) {
                 transitionDrawableVuelta.setCrossFadeEnabled(true);
                 transitionDrawableVuelta.startTransition(300);
 
@@ -110,7 +113,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
                     holder.btnFav.setForeground(transitionDrawableVuelta);
                 }
                 db.collection(COLECCION).document(usuarioActualUid).update("listaFavoritos", FieldValue.arrayRemove(listaUsuarios.get(position).getId())).addOnSuccessListener(documentReference -> {
-                    isFavorite = false;
+                    holder.isFavorite = false;
                 });
             } else {
                 transitionDrawableIda.setCrossFadeEnabled(true);
@@ -119,7 +122,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
                     holder.btnFav.setForeground(transitionDrawableIda);
                 }
                 db.collection(COLECCION).document(usuarioActualUid).update("listaFavoritos", FieldValue.arrayUnion(listaUsuarios.get(position).getId())).addOnSuccessListener(documentReference -> {
-                    isFavorite = true;
+                    holder.isFavorite = true;
                 });
             }
         });
