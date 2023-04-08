@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,20 +88,26 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         db.collection(COLECCION).document(usuarioActualUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                holder.progressBar.setVisibility(View.GONE);
+                new Handler().postDelayed(() -> holder.progressBar.setVisibility(View.GONE), 900);
+
                 DocumentSnapshot document = task.getResult();
 
                 //Obtenemos el usuario de la base de datos con todos sus campos
                 Usuario usuario = document.toObject(Usuario.class);
 
                 favoritos = usuario.getListaFavoritos();
-                if (favoritos.contains(listaUsuariosFiltrados.get(position).getId())) {
-                    holder.isFavorite = true;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        holder.btnFav.setForeground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.corazon_favoritos_relleno));
+                if (listaUsuariosFiltrados.size() > position) {
+                    if (favoritos.contains(listaUsuariosFiltrados.get(position).getId())) {
+                        holder.isFavorite = true;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            holder.btnFav.setForeground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.corazon_favoritos_relleno));
+                        }
+                    } else {
+                        holder.isFavorite = false;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            holder.btnFav.setForeground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.corazon_favoritos_vacio));
+                        }
                     }
-                } else {
-                    holder.isFavorite = false;
                 }
             }
         });
@@ -149,19 +156,20 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         return listaUsuariosFiltrados.size();
     }
 
-    public void filter(String query) {
+    public void filter(String query, ProgressBar progressBar) {
         listaUsuariosFiltrados.clear();
+        progressBar.setVisibility(View.VISIBLE);
         if (query.isEmpty()) {
             listaUsuariosFiltrados.addAll(listaUsuarios);
         } else {
             for (Usuario user : listaUsuarios) {
                 if (user.getNombre().toLowerCase().contains(query.toLowerCase())) {
                     listaUsuariosFiltrados.add(user);
-                } else {
                 }
             }
         }
         notifyDataSetChanged();
+        new Handler().postDelayed(() -> progressBar.setVisibility(View.GONE), 900);
     }
 
 }

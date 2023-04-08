@@ -88,7 +88,7 @@ public class ExploraFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adaptadorUsuariosRecycler.filter(newText);
+                adaptadorUsuariosRecycler.filter(newText, progressBar);
                 return false;
             }
         });
