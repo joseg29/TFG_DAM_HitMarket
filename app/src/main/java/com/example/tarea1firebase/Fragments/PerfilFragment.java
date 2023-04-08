@@ -178,6 +178,7 @@ public class PerfilFragment extends Fragment {
                         usuario = documentSnapshot.toObject(Usuario.class);
                         intent.putExtra("UsuarioAEditar", usuario);
                         intent.putExtra("UidUsuario", mAuth.getCurrentUser().getUid());
+                        getActivity().finish();
                         startActivity(intent);
                     } else {
                     }

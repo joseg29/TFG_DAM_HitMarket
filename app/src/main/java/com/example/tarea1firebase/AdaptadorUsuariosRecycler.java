@@ -41,7 +41,6 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     private List<String> favoritos;
     private ProgressBar progressBar;
 
-//mmm
     public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
         this.listaUsuariosFiltrados = new ArrayList<>();
@@ -95,7 +94,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
                 Usuario usuario = document.toObject(Usuario.class);
 
                 favoritos = usuario.getListaFavoritos();
-                if (favoritos.contains(listaUsuarios.get(position).getId())) {
+                if (favoritos.contains(listaUsuariosFiltrados.get(position).getId())) {
                     holder.isFavorite = true;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         holder.btnFav.setForeground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.corazon_favoritos_relleno));
@@ -106,11 +105,11 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
             }
         });
 
-        holder.nombreUsu.setText(listaUsuarios.get(position).getNombre().toUpperCase(Locale.ROOT));
+        holder.nombreUsu.setText(listaUsuariosFiltrados.get(position).getNombre().toUpperCase(Locale.ROOT));
 
         holder.btnVerPerf.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), PerfilUsuario.class);
-            intent.putExtra("UidUsuario", listaUsuarios.get(position).getId());
+            intent.putExtra("UidUsuario", listaUsuariosFiltrados.get(position).getId());
             v.getContext().startActivity(intent);
         });
 
@@ -127,7 +126,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     holder.btnFav.setForeground(transitionDrawableVuelta);
                 }
-                db.collection(COLECCION).document(usuarioActualUid).update("listaFavoritos", FieldValue.arrayRemove(listaUsuarios.get(position).getId())).addOnSuccessListener(documentReference -> {
+                db.collection(COLECCION).document(usuarioActualUid).update("listaFavoritos", FieldValue.arrayRemove(listaUsuariosFiltrados.get(position).getId())).addOnSuccessListener(documentReference -> {
                     holder.isFavorite = false;
                 });
             } else {
@@ -136,42 +135,33 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     holder.btnFav.setForeground(transitionDrawableIda);
                 }
-                db.collection(COLECCION).document(usuarioActualUid).update("listaFavoritos", FieldValue.arrayUnion(listaUsuarios.get(position).getId())).addOnSuccessListener(documentReference -> {
+                db.collection(COLECCION).document(usuarioActualUid).update("listaFavoritos", FieldValue.arrayUnion(listaUsuariosFiltrados.get(position).getId())).addOnSuccessListener(documentReference -> {
                     holder.isFavorite = true;
                 });
             }
         });
     }
 
-    public void filtrar(@NonNull String texto, ProgressBar progressBar) {
-        progressBar.setVisibility(View.VISIBLE);
-        if (texto.length() == 0) {
-            listaUsuarios.clear();
-            listaUsuarios.addAll(listaUsuariosFiltrados);
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                List<Usuario> collect = listaUsuariosFiltrados.stream().filter(usuario ->
-                                usuario.getNombre().toLowerCase().contains(texto.toLowerCase()))
-                        .collect(Collectors.toList());
-                listaUsuarios.clear();
-                listaUsuarios.addAll(collect);
-            } else {
-                for (Usuario usuario : listaUsuariosFiltrados) {
-                    if (usuario.getNombre().toLowerCase().contains(texto)) {
-                        listaUsuarios.add(usuario);
-                    }
-                }
-            }
-        }
-        progressBar.setVisibility(View.GONE);
-        notifyDataSetChanged();
-    }
-
 
     //será quien devuelva la cantidad de items que se encuentra en la lista
     @Override
     public int getItemCount() {
-        return listaUsuarios.size();
+        return listaUsuariosFiltrados.size();
+    }
+
+    public void filter(String query) {
+        listaUsuariosFiltrados.clear();
+        if (query.isEmpty()) {
+            listaUsuariosFiltrados.addAll(listaUsuarios);
+        } else {
+            for (Usuario user : listaUsuarios) {
+                if (user.getNombre().toLowerCase().contains(query.toLowerCase())) {
+                    listaUsuariosFiltrados.add(user);
+                } else {
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
 }

@@ -224,13 +224,32 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnGuardarEditarPerfil"
-        android:layout_width="313dp"
-        android:layout_height="50dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:alpha=".8"
-        android:background="@drawable/boton_redondo"
-        android:fontFamily="@font/gotham_bold_1"
-        android:text="Guardar" />
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnCancelarEditarPerfil"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:alpha=".8"
+            android:background="@drawable/boton_redondo"
+            android:backgroundTint="@color/purple_200"
+            android:fontFamily="@font/gotham_bold_1"
+            android:text="Cancelar" />
+
+        <Button
+            android:id="@+id/btnGuardarEditarPerfil"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:alpha=".8"
+            android:background="@drawable/boton_redondo"
+            android:fontFamily="@font/gotham_bold_1"
+            android:text="Guardar" />
+
+
+    </LinearLayout>
+
 </LinearLayout>

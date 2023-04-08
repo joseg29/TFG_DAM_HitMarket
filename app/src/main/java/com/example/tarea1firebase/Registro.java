@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tarea1firebase.Fragments.ExploraFragment;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -204,7 +205,7 @@ public class Registro extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Registro.this, VistaExplora.class);
+                Intent intent = new Intent(Registro.this, ExploraFragment.class);
                 intent.putExtra("UidUsuario", id);
                 startActivity(intent);
                 finish();
