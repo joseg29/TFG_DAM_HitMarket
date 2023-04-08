@@ -23,12 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChatsRecientes.ViewHolder> {
-    private List<Usuario> listaChats;
+    private List<Chat> listaChats;
     private FirebaseAuth mAuth;
-    private String usuarioActualUid, otroUsuarioChateando;
-    private ArrayList<Mensaje> listaMensajes;
+    private String usuarioActualUid;
+    private Usuario otroUser;
+    private Mensaje ultimoMsj;
 
-    public AdaptadorChatsRecientes(ArrayList<Usuario> listaUsuarios) {
+    public AdaptadorChatsRecientes(ArrayList<Chat> listaUsuarios) {
         this.listaChats = listaUsuarios;
     }
 
@@ -62,37 +63,36 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
     public void onBindViewHolder(ViewHolder holder, int position) {
         mAuth = FirebaseAuth.getInstance();
         usuarioActualUid = mAuth.getCurrentUser().getUid();
-        otroUsuarioChateando = listaChats.get(position).getId();
+        if (listaChats.get(position).getUsuario1().getId().equals(mAuth.getCurrentUser().getUid())) {
+            otroUser = listaChats.get(position).getUsuario2();
+        } else if (listaChats.get(position).getUsuario2().getId().equals(mAuth.getCurrentUser().getUid())) {
+            otroUser = listaChats.get(position).getUsuario1();
+        }
 
-        holder.nombreUsuario.setText(listaChats.get(position).getNombre());
-        if (!listaChats.get(position).getFotoPerfil().equals("")) {
+
+        holder.nombreUsuario.setText(otroUser.getNombre());
+        if (!otroUser.getFotoPerfil().equals("")) {
             try {
-                Glide.with(holder.itemView.getContext()).load(listaChats.get(position).getFotoPerfil()).into(holder.imgPerfil);
+                Glide.with(holder.itemView.getContext()).load(otroUser.getFotoPerfil()).into(holder.imgPerfil);
             } catch (Exception e) {
             }
         }
         String chatKey;
 
-        if (usuarioActualUid.compareTo(otroUsuarioChateando) < 0) {
-            chatKey = usuarioActualUid + "_" + otroUsuarioChateando;
+        if (usuarioActualUid.compareTo(otroUser.getId()) < 0) {
+            chatKey = usuarioActualUid + "_" + otroUser.getId();
         } else {
-            chatKey = otroUsuarioChateando + "_" + usuarioActualUid;
+            chatKey = otroUser.getId() + "_" + usuarioActualUid;
         }
 
-        FirebaseDatabase.getInstance().getReference("chats").child(chatKey).child("mensajes").limitToLast(1).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("chats").child(chatKey).child("listaMensajes").limitToLast(1).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listaMensajes = new ArrayList<>();
                 // Itera sobre los hijos de la referencia a los mensajes
                 for (DataSnapshot mensajeSnapshot : snapshot.getChildren()) {
-                    // Obtiene los datos del mensaje y haz lo que necesites con ellos
-                    String mensaje = mensajeSnapshot.child("texto").getValue(String.class);
-                    String remitenteUid = mensajeSnapshot.child("remitente").getValue(String.class);
-                    String timestamp = mensajeSnapshot.child("fechaYHora").getValue(String.class);
-                    Mensaje msj = new Mensaje(remitenteUid, mensaje, timestamp);
-                    listaMensajes.add(msj);
+                    ultimoMsj = mensajeSnapshot.getValue(Mensaje.class);
                 }
-                holder.ultimoMensaje.setText(listaMensajes.get(0).getTexto());
+                holder.ultimoMensaje.setText(ultimoMsj.getTexto());
             }
 
 
@@ -105,7 +105,7 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
         {
             Intent intent = new Intent(holder.itemView.getContext(), ChatVentana.class);
             intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
-            intent.putExtra("UidUsuarioReceptor", listaChats.get(position).getId());
+            intent.putExtra("UidUsuarioReceptor", otroUser.getId());
             holder.itemView.getContext().startActivity(intent);
         });
     }

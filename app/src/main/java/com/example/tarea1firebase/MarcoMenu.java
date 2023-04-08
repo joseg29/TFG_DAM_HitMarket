@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tarea1firebase.Fragments.ExploraFragment;
-import com.example.tarea1firebase.Fragments.MensajesFragment;
+import com.example.tarea1firebase.Fragments.ChatsRecientesFragment;
 import com.example.tarea1firebase.Fragments.NoticiasFragment;
 import com.example.tarea1firebase.Fragments.PerfilFragment;
 import com.example.tarea1firebase.databinding.ActivityMarcoMenuBinding;
@@ -40,7 +40,7 @@ public class MarcoMenu extends AppCompatActivity {
                     replaceFragment(new ExploraFragment());
                     break;
                 case R.id.menu_mensajes:
-                    replaceFragment(new MensajesFragment());
+                    replaceFragment(new ChatsRecientesFragment());
                     break;
                 case R.id.menu_perfil:
                     replaceFragment(new PerfilFragment());

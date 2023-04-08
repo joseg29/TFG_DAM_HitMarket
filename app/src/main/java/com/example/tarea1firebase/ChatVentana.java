@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.units.qual.A;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,11 +46,13 @@ public class ChatVentana extends AppCompatActivity {
     private String chatKey;
     private ArrayList<Mensaje> listaMensajes;
     private String usuarioActualUid, usuario2Uid;
-    private DatabaseReference mensajesRef;
+    private DatabaseReference mensajesRef, fechaUltimoMensajeRef;
     private FirebaseFirestore db;
     private Usuario otroUsuarioReceptor;
     private TextView lblNombreContacto;
     private ImageView fotoPerfil;
+    private Chat chat;
+    private Usuario usuario1, usuario2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class ChatVentana extends AppCompatActivity {
         setContentView(R.layout.activity_chat_ventana);
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
+
 
         recyclerMensajes = findViewById(R.id.recyclerMensajesChat);
         recyclerMensajes.setHasFixedSize(true);
@@ -74,9 +78,11 @@ public class ChatVentana extends AppCompatActivity {
 
         usuarioActualUid = getIntent().getStringExtra("UsuarioActual");
         usuario2Uid = getIntent().getStringExtra("UidUsuarioReceptor");
+        inicializarUsuariosChat();
         inicializarChat();
 
         mensajesRef = database.getReference("chats").child(chatRef.getKey()).child("mensajes");
+        fechaUltimoMensajeRef = database.getReference("chats").child(chatRef.getKey()).child("fechaUltimoMensaje");
 
         btnEnviarMensaje.setOnClickListener(v -> {
             crearChat(usuarioActualUid, usuario2Uid);
@@ -95,6 +101,7 @@ public class ChatVentana extends AppCompatActivity {
             chatKey = usuario2Uid + "_" + usuarioActualUid;
         }
         chatRef = chatRef.child(chatKey);
+
         etMensaje.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -139,14 +146,12 @@ public class ChatVentana extends AppCompatActivity {
         chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    // Crea un mapa con la información del chat
-                    Map<String, Object> chatInfo = new HashMap<>();
-                    chatInfo.put("usuario1", usuario1Uid);
-                    chatInfo.put("usuario2", usuario2Uid);
+                if (snapshot.exists()) {
+                    chat = snapshot.getValue(Chat.class);
+                } else {
+                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "");
+                    chatRef.setValue(chat);
 
-                    // Crea la entrada en la base de datos para el chat
-                    chatRef.setValue(chatInfo);
                     db.collection(Registro.COLECCION).document(usuario1Uid).update("chatsRecientes", FieldValue.arrayUnion(chatKey)).addOnSuccessListener(documentReference -> {
                     });
                     db.collection(Registro.COLECCION).document(usuario2Uid).update("chatsRecientes", FieldValue.arrayUnion(chatKey)).addOnSuccessListener(documentReference -> {
@@ -170,25 +175,31 @@ public class ChatVentana extends AppCompatActivity {
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
         String strDate = formatter.format(date);
 
-        // Crea un mapa con la información del mensaje
         Mensaje msj = new Mensaje(remitente, texto, strDate);
-        // Crea la entrada en la base de datos para el mensaje
-        mensajesRef.push().setValue(msj);
+
+        chat.añadirMensaje(msj);
+        chat.setFechaUltimoMsj(msj.getFechaYHora());
+
+        chatRef.setValue(chat);
     }
 
     private void obtenerMensajes() {
-        FirebaseDatabase.getInstance().getReference("chats").child(chatKey).child("mensajes").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("chats").child(chatKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    chat = snapshot.getValue(Chat.class);
+                } else {
+                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "");
+                }
                 listaMensajes = new ArrayList<>();
-                // Itera sobre los hijos de la referencia a los mensajes
-                for (DataSnapshot mensajeSnapshot : snapshot.getChildren()) {
-                    // Obtiene los datos del mensaje y haz lo que necesites con ellos
-                    String mensaje = mensajeSnapshot.child("texto").getValue(String.class);
-                    String remitenteUid = mensajeSnapshot.child("remitente").getValue(String.class);
-                    String timestamp = mensajeSnapshot.child("fechaYHora").getValue(String.class);
-                    Mensaje msj = new Mensaje(remitenteUid, mensaje, timestamp);
-                    listaMensajes.add(msj);
+
+                // Iterar a través de la lista de mensajes en el chat
+                for (DataSnapshot mensajeSnapshot : snapshot.child("listaMensajes").getChildren()) {
+                    // Obtener los datos del mensaje
+                    Mensaje mensaje = mensajeSnapshot.getValue(Mensaje.class);
+                    // Agregar el mensaje al ArrayList
+                    listaMensajes.add(mensaje);
                 }
                 adaptadorCanciones = new AdaptadorMensajesChat(listaMensajes);
                 recyclerMensajes.setAdapter(adaptadorCanciones);
@@ -197,6 +208,25 @@ public class ChatVentana extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Maneja el error
+            }
+        });
+    }
+
+    public void inicializarUsuariosChat() {
+        db.collection(COLECCION).document(usuarioActualUid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    usuario1 = documentSnapshot.toObject(Usuario.class);
+                }
+            }
+        });
+        db.collection(COLECCION).document(usuario2Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    usuario2 = documentSnapshot.toObject(Usuario.class);
+                }
             }
         });
     }

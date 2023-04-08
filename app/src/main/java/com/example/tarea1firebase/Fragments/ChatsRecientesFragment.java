@@ -12,11 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tarea1firebase.AdaptadorChatsRecientes;
-import com.example.tarea1firebase.Mensaje;
+import com.example.tarea1firebase.Chat;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,20 +27,21 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class MensajesFragment extends Fragment {
-    private RecyclerView recyclerCanciones;
-    private AdaptadorChatsRecientes adaptadorCanciones;
+public class ChatsRecientesFragment extends Fragment {
+    private RecyclerView recyclerMensajes;
+    private AdaptadorChatsRecientes adaptadorMensajes;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db;
     public final static String COLECCION = "Usuarios";
-    private ArrayList<Usuario> usuariosChatsRecientes;
+    private ArrayList<Chat> listaChatsRecientes;
     private String chatKey;
+    private Chat chat;
 
-    public MensajesFragment() {
+    public ChatsRecientesFragment() {
         // Required empty public constructor
     }
 
@@ -62,18 +62,17 @@ public class MensajesFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         db = FirebaseFirestore.getInstance();
-        usuariosChatsRecientes = new ArrayList<>();
+        listaChatsRecientes = new ArrayList<>();
 
-        recyclerCanciones = view.findViewById(R.id.recyclerChatsRecientes);
-        recyclerCanciones.setHasFixedSize(true);
+        recyclerMensajes = view.findViewById(R.id.recyclerChatsRecientes);
+        recyclerMensajes.setHasFixedSize(true);
 
-        recyclerCanciones.setLayoutManager(new LinearLayoutManager(getContext()));
-        ArrayList<Usuario> arrayPrueba = new ArrayList<>();
+        recyclerMensajes.setLayoutManager(new LinearLayoutManager(getContext()));
+        ArrayList<Chat> arrayPrueba = new ArrayList<>();
 
-        adaptadorCanciones = new AdaptadorChatsRecientes(arrayPrueba);
-        recyclerCanciones.setAdapter(adaptadorCanciones);
+        adaptadorMensajes = new AdaptadorChatsRecientes(arrayPrueba);
+        recyclerMensajes.setAdapter(adaptadorMensajes);
 // Obtén la referencia de la base de datos
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -90,7 +89,7 @@ public class MensajesFragment extends Fragment {
                 List<String> chats;
                 chats = usuarioActual.getChatsRecientes();
 
-                usuariosChatsRecientes = new ArrayList<>();
+                listaChatsRecientes = new ArrayList<>();
                 for (int i = 0; i < chats.size(); i++) {
                     if (userId.compareTo(chats.get(i)) < 0) {
                         chatKey = userId + "_" + chats.get(i);
@@ -100,35 +99,12 @@ public class MensajesFragment extends Fragment {
                     FirebaseDatabase.getInstance().getReference("chats").child(chats.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String usuario1 = snapshot.child("usuario1").getValue(String.class);
-                            String usuario2 = snapshot.child("usuario2").getValue(String.class);
+                            chat = snapshot.getValue(Chat.class);
+                            listaChatsRecientes.add(chat);
 
-                            System.out.println(usuario1 + " - " + usuario2);
-                            if (usuario1.equals(userId)) {
-                                db.collection(COLECCION).document(usuario2).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if (documentSnapshot.exists()) {
-                                            Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                                            usuariosChatsRecientes.add(usuario);
-                                            adaptadorCanciones = new AdaptadorChatsRecientes(usuariosChatsRecientes);
-                                            recyclerCanciones.setAdapter(adaptadorCanciones);
-                                        }
-                                    }
-                                });
-                            } else if (usuario2.equals(userId)) {
-                                db.collection(COLECCION).document(usuario1).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if (documentSnapshot.exists()) {
-                                            Usuario usuario = documentSnapshot.toObject(Usuario.class);
-                                            usuariosChatsRecientes.add(usuario);
-                                            adaptadorCanciones = new AdaptadorChatsRecientes(usuariosChatsRecientes);
-                                            recyclerCanciones.setAdapter(adaptadorCanciones);
-                                        }
-                                    }
-                                });
-                            }
+                            adaptadorMensajes = new AdaptadorChatsRecientes(listaChatsRecientes);
+                            recyclerMensajes.setAdapter(adaptadorMensajes);
+                            ordenarChats();
                         }
 
                         @Override
@@ -140,5 +116,20 @@ public class MensajesFragment extends Fragment {
                 }
             }
         });
+
+
+    }
+
+    // Ordenar la lista por fecha de último mensaje
+    public void ordenarChats() {
+        Collections.sort(listaChatsRecientes, new Comparator<Chat>() {
+            @Override
+            public int compare(Chat chat1, Chat chat2) {
+                return chat1.getFechaUltimoMsj().compareTo(chat2.getFechaUltimoMsj());
+            }
+        });
+        Collections.reverse(listaChatsRecientes);
+        adaptadorMensajes = new AdaptadorChatsRecientes(listaChatsRecientes);
+        recyclerMensajes.setAdapter(adaptadorMensajes);
     }
 }

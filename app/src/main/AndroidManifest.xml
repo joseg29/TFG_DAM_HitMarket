@@ -20,13 +20,6 @@
             android:name=".MarcoMenu"
             android:exported="true"></activity>
         <activity
-            android:name=".ChatsRecientes"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ChatVentana"
             android:exported="false">
             <meta-data
