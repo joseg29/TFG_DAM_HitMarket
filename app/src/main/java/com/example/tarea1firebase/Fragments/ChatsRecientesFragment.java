@@ -107,6 +107,20 @@ public class ChatsRecientesFragment extends Fragment {
                             ordenarChats();
                         }
 
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Manejar errores
+                        }
+                    });
+                    FirebaseDatabase.getInstance().getReference("chats").child(chats.get(i)).child("listaMensajes").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            System.out.println("recibido--- ");
+                            ordenarChats();
+                        }
+
+
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                             // Manejar errores

@@ -30,6 +30,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.units.qual.A;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -170,8 +171,11 @@ public class ChatVentana extends AppCompatActivity {
 
     private void enviarMensaje(String chatId, String remitente, String texto) {
         //Obtenemos la fecha y hora del mensaje
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+        Date date = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            date = Date.from(Instant.now());
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
         String strDate = formatter.format(date);
 

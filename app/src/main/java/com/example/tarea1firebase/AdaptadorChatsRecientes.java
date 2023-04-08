@@ -26,8 +26,7 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
     private List<Chat> listaChats;
     private FirebaseAuth mAuth;
     private String usuarioActualUid;
-    private Usuario otroUser;
-    private Mensaje ultimoMsj;
+
 
     public AdaptadorChatsRecientes(ArrayList<Chat> listaUsuarios) {
         this.listaChats = listaUsuarios;
@@ -37,6 +36,8 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
         private TextView nombreUsuario, ultimoMensaje;
         private CardView cardViewChatReciente;
         private ImageView imgPerfil;
+        private Usuario otroUser;
+        private Mensaje ultimoMsj;
 
 
         public ViewHolder(View v) {
@@ -64,25 +65,27 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
         mAuth = FirebaseAuth.getInstance();
         usuarioActualUid = mAuth.getCurrentUser().getUid();
         if (listaChats.get(position).getUsuario1().getId().equals(mAuth.getCurrentUser().getUid())) {
-            otroUser = listaChats.get(position).getUsuario2();
+            holder.otroUser = listaChats.get(position).getUsuario2();
+            System.out.println(holder.otroUser.getNombre() + " 1 -- " + position);
         } else if (listaChats.get(position).getUsuario2().getId().equals(mAuth.getCurrentUser().getUid())) {
-            otroUser = listaChats.get(position).getUsuario1();
+            holder.otroUser = listaChats.get(position).getUsuario1();
+            System.out.println(holder.otroUser.getNombre() + " 2 " + position);
         }
 
 
-        holder.nombreUsuario.setText(otroUser.getNombre());
-        if (!otroUser.getFotoPerfil().equals("")) {
+        holder.nombreUsuario.setText(holder.otroUser.getNombre());
+        if (!holder.otroUser.getFotoPerfil().equals("")) {
             try {
-                Glide.with(holder.itemView.getContext()).load(otroUser.getFotoPerfil()).into(holder.imgPerfil);
+                Glide.with(holder.itemView.getContext()).load(holder.otroUser.getFotoPerfil()).into(holder.imgPerfil);
             } catch (Exception e) {
             }
         }
         String chatKey;
 
-        if (usuarioActualUid.compareTo(otroUser.getId()) < 0) {
-            chatKey = usuarioActualUid + "_" + otroUser.getId();
+        if (usuarioActualUid.compareTo(holder.otroUser.getId()) < 0) {
+            chatKey = usuarioActualUid + "_" + holder.otroUser.getId();
         } else {
-            chatKey = otroUser.getId() + "_" + usuarioActualUid;
+            chatKey = holder.otroUser.getId() + "_" + usuarioActualUid;
         }
 
         FirebaseDatabase.getInstance().getReference("chats").child(chatKey).child("listaMensajes").limitToLast(1).addValueEventListener(new ValueEventListener() {
@@ -90,22 +93,21 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // Itera sobre los hijos de la referencia a los mensajes
                 for (DataSnapshot mensajeSnapshot : snapshot.getChildren()) {
-                    ultimoMsj = mensajeSnapshot.getValue(Mensaje.class);
+                    holder.ultimoMsj = mensajeSnapshot.getValue(Mensaje.class);
                 }
-                holder.ultimoMensaje.setText(ultimoMsj.getTexto());
+                holder.ultimoMensaje.setText(holder.ultimoMsj.getTexto());
             }
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Maneja el error
             }
         });
-        holder.cardViewChatReciente.setOnClickListener(v ->
-        {
+
+        holder.cardViewChatReciente.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), ChatVentana.class);
             intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
-            intent.putExtra("UidUsuarioReceptor", otroUser.getId());
+            intent.putExtra("UidUsuarioReceptor", holder.otroUser.getId());
             holder.itemView.getContext().startActivity(intent);
         });
     }
