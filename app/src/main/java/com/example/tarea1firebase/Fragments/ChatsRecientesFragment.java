@@ -89,10 +89,8 @@ public class ChatsRecientesFragment extends Fragment {
 
 
     public void obtenerChats() {
-        System.out.println("Obteniendo chats");
         listaChatsRecientes = new ArrayList<>();
         listaChatsRecientes.clear();
-        System.out.println(listaChatsRecientes.size());
         db.collection(COLECCION).document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -110,8 +108,8 @@ public class ChatsRecientesFragment extends Fragment {
 
                             // Buscamos si ya existe el chat en la lista
                             boolean existeChat = false;
-                            for(Chat c : listaChatsRecientes){
-                                if(c.getChatId().equals(chat.getChatId())){
+                            for (Chat c : listaChatsRecientes) {
+                                if (c.getChatId().equals(chat.getChatId())) {
                                     existeChat = true;
                                     break;
                                 }
@@ -119,16 +117,14 @@ public class ChatsRecientesFragment extends Fragment {
 
                             if (existeChat) {
                                 // Si el chat ya existe en la lista, lo reemplazamos
-                                for(int i = 0; i < listaChatsRecientes.size(); i++){
-                                    if(listaChatsRecientes.get(i).getChatId().equals(chat.getChatId())){
+                                for (int i = 0; i < listaChatsRecientes.size(); i++) {
+                                    if (listaChatsRecientes.get(i).getChatId().equals(chat.getChatId())) {
                                         listaChatsRecientes.set(i, chat);
                                         break;
                                     }
                                 }
-                                System.out.println("ex");
                             } else {
                                 // Si el chat no existe en la lista, lo añadimos
-                                System.out.println("no ex");
                                 listaChatsRecientes.add(chat);
                             }
 
@@ -150,7 +146,6 @@ public class ChatsRecientesFragment extends Fragment {
 
 
     public void ordenarChats() {
-        System.out.println("chats ordenados");
         Collections.sort(listaChatsRecientes, new Comparator<Chat>() {
             @Override
             public int compare(Chat chat1, Chat chat2) {
@@ -158,8 +153,7 @@ public class ChatsRecientesFragment extends Fragment {
             }
         });
         Collections.reverse(listaChatsRecientes);
-        adaptadorMensajes = new AdaptadorChatsRecientes(listaChatsRecientes);
-        recyclerMensajes.setAdapter(adaptadorMensajes);
+        adaptadorMensajes.setData(listaChatsRecientes);
         adaptadorMensajes.notifyDataSetChanged();
     }
 }
