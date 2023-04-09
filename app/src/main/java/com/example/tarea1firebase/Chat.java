@@ -6,16 +6,27 @@ public class Chat {
     private ArrayList<Mensaje> listaMensajes;
     private Usuario usuario1, usuario2;
     private String fechaUltimoMsj;
+    private String chatId;
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
+
 
     public Chat() {
 
     }
 
-    public Chat(ArrayList<Mensaje> listaMensajes, Usuario usuario1, Usuario usuario2, String fechaUltimoMsj) {
+    public Chat(ArrayList<Mensaje> listaMensajes, Usuario usuario1, Usuario usuario2, String fechaUltimoMsj, String chatKey) {
         this.listaMensajes = listaMensajes;
         this.usuario1 = usuario1;
         this.usuario2 = usuario2;
         this.fechaUltimoMsj = fechaUltimoMsj;
+        this.chatId = chatKey;
     }
 
     public ArrayList<Mensaje> getListaMensajes() {

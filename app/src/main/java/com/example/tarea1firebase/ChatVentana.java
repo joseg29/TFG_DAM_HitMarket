@@ -150,7 +150,7 @@ public class ChatVentana extends AppCompatActivity {
                 if (snapshot.exists()) {
                     chat = snapshot.getValue(Chat.class);
                 } else {
-                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "");
+                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "", chatKey);
                     chatRef.setValue(chat);
 
                     db.collection(Registro.COLECCION).document(usuario1Uid).update("chatsRecientes", FieldValue.arrayUnion(chatKey)).addOnSuccessListener(documentReference -> {
@@ -194,7 +194,7 @@ public class ChatVentana extends AppCompatActivity {
                 if (snapshot.exists()) {
                     chat = snapshot.getValue(Chat.class);
                 } else {
-                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "");
+                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "", chatKey);
                 }
                 listaMensajes = new ArrayList<>();
 

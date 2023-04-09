@@ -40,6 +40,8 @@ public class ChatsRecientesFragment extends Fragment {
     private ArrayList<Chat> listaChatsRecientes;
     private String chatKey;
     private Chat chat;
+    private String userId;
+    private List<String> chats;
 
     public ChatsRecientesFragment() {
         // Required empty public constructor
@@ -54,8 +56,6 @@ public class ChatsRecientesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
         return inflater.inflate(R.layout.activity_chats_recientes, container, false);
     }
 
@@ -80,62 +80,77 @@ public class ChatsRecientesFragment extends Fragment {
         DatabaseReference chatsRef = ref.child("chats");
 
 // Define el ID del usuario para el que quieres obtener los chats
-        String userId = mAuth.getCurrentUser().getUid();
+        userId = mAuth.getCurrentUser().getUid();
+        obtenerChats();
+    }
+
+
+    // Ordenar la lista por fecha de último mensaje
+
+
+    public void obtenerChats() {
+        System.out.println("Obteniendo chats");
+        listaChatsRecientes = new ArrayList<>();
+        listaChatsRecientes.clear();
+        System.out.println(listaChatsRecientes.size());
         db.collection(COLECCION).document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot document = task.getResult();
                 Usuario usuarioActual = document.toObject(Usuario.class);
-                List<String> chats;
                 chats = usuarioActual.getChatsRecientes();
-
-                listaChatsRecientes = new ArrayList<>();
+                listaChatsRecientes.clear();
                 for (int i = 0; i < chats.size(); i++) {
-                    if (userId.compareTo(chats.get(i)) < 0) {
-                        chatKey = userId + "_" + chats.get(i);
-                    } else {
-                        chatKey = chats.get(i) + "_" + userId;
-                    }
-                    FirebaseDatabase.getInstance().getReference("chats").child(chats.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+                    chatKey = chats.get(i);
+                    DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatKey);
+                    chatRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            chat = snapshot.getValue(Chat.class);
-                            listaChatsRecientes.add(chat);
+                            Chat chat = snapshot.getValue(Chat.class);
 
-                            adaptadorMensajes = new AdaptadorChatsRecientes(listaChatsRecientes);
-                            recyclerMensajes.setAdapter(adaptadorMensajes);
+                            // Buscamos si ya existe el chat en la lista
+                            boolean existeChat = false;
+                            for(Chat c : listaChatsRecientes){
+                                if(c.getChatId().equals(chat.getChatId())){
+                                    existeChat = true;
+                                    break;
+                                }
+                            }
+
+                            if (existeChat) {
+                                // Si el chat ya existe en la lista, lo reemplazamos
+                                for(int i = 0; i < listaChatsRecientes.size(); i++){
+                                    if(listaChatsRecientes.get(i).getChatId().equals(chat.getChatId())){
+                                        listaChatsRecientes.set(i, chat);
+                                        break;
+                                    }
+                                }
+                                System.out.println("ex");
+                            } else {
+                                // Si el chat no existe en la lista, lo añadimos
+                                System.out.println("no ex");
+                                listaChatsRecientes.add(chat);
+                            }
+
                             ordenarChats();
                         }
-
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                             // Manejar errores
                         }
                     });
-                    FirebaseDatabase.getInstance().getReference("chats").child(chats.get(i)).child("listaMensajes").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            System.out.println("recibido--- ");
-                            ordenarChats();
-                        }
-
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            // Manejar errores
-                        }
-                    });
-
                 }
+
             }
         });
 
 
     }
 
-    // Ordenar la lista por fecha de último mensaje
+
     public void ordenarChats() {
+        System.out.println("chats ordenados");
         Collections.sort(listaChatsRecientes, new Comparator<Chat>() {
             @Override
             public int compare(Chat chat1, Chat chat2) {
@@ -145,5 +160,6 @@ public class ChatsRecientesFragment extends Fragment {
         Collections.reverse(listaChatsRecientes);
         adaptadorMensajes = new AdaptadorChatsRecientes(listaChatsRecientes);
         recyclerMensajes.setAdapter(adaptadorMensajes);
+        adaptadorMensajes.notifyDataSetChanged();
     }
 }

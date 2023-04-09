@@ -20,6 +20,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChatsRecientes.ViewHolder> {
@@ -117,5 +119,11 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
     @Override
     public int getItemCount() {
         return listaChats.size();
+    }
+
+    public void setData(List<Chat> data) {
+        listaChats.clear();
+        listaChats.addAll(data);
+        notifyDataSetChanged();
     }
 }
