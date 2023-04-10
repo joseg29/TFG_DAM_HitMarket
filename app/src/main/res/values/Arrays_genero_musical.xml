@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="generos_musicales">
+        <item>#Trap</item>
+        <item>#Rap</item>
+        <item>#Drill</item>
+        <item>#Reggaeton</item>
+    </string-array>
+</resources>

@@ -48,8 +48,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/blueLogo"
                 android:layout_centerHorizontal="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/gotham_bold_1"
                 android:text="Crea una cuenta"
                 android:textAlignment="center"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lblTitulo"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/gotham_bold_1"
                 android:text="Nombre"
                 android:textAlignment="viewStart"
@@ -120,10 +120,33 @@
                 android:textAlignment="center" />
 
             <TextView
+                android:id="@+id/textViewSeleccionaOpcion"
+                android:layout_width="313dp"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/gotham_bold_1"
+                android:textColor="@color/white"
+                android:layout_below="@id/etEmail"
+                android:text="Ciudad" />
+
+            <Spinner
+                android:id="@+id/spinnerOpciones"
+                android:layout_width="313dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/edit_text_redondo"
+                android:alpha=".8"
+                android:spinnerMode="dropdown"
+                android:layout_below="@id/textViewSeleccionaOpcion"
+                android:prompt="@string/spinner_title"
+                android:entries="@array/autonomous_communities"/>
+
+            <TextView
                 android:id="@+id/lblPassword"
                 android:layout_width="313dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etEmail"
+                android:layout_below="@id/spinnerOpciones"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/gotham_bold_1"
@@ -137,6 +160,30 @@
                 android:layout_width="313dp"
                 android:layout_height="50dp"
                 android:layout_below="@id/lblPassword"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:alpha=".8"
+                android:background="@drawable/edit_text_redondo"
+                android:inputType="textPassword"
+                android:textAlignment="center" />
+            <TextView
+                android:id="@+id/lblConfirmarPassword"
+                android:layout_width="313dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etPassword"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Confirmar contraseña"
+                android:textAlignment="viewStart"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etConfirmarPassword"
+                android:layout_width="313dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/lblConfirmarPassword"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:alpha=".8"
@@ -160,10 +207,10 @@
             <CheckBox
                 android:id="@+id/terminos_checkbox"
                 android:layout_width="313dp"
-                android:layout_height="47dp"
-                android:layout_below="@id/etPassword"
+                android:layout_height="30dp"
+                android:layout_below="@id/etConfirmarPassword"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:buttonTint="@color/checkbox_selector"
                 android:fontFamily="@font/gotham_medium_1"
                 android:text="Acepto los términos y servicios"
@@ -179,7 +226,7 @@
                 android:layout_below="@id/terminos_checkbox"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
                 android:alpha=".8"

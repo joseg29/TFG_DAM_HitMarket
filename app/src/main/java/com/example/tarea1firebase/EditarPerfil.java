@@ -19,10 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tarea1firebase.Fragments.PerfilFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,12 +45,13 @@ public class EditarPerfil extends AppCompatActivity {
     public final static String COLECCION = "Usuarios";
     private LinearLayout layoutRedesEditable;
     private ImageButton btnMostrarRedes;
-    private Button btnGuardarCambios, btnCancelarCambios;
+    private Button btnGuardarCambios, btnCancelarCambios, btnCerrarSesion;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageButton btnCambiarFotoPerfil;
     private Uri mImageUri;
     private StorageReference mStorageRef;
     private String urlImagenPerfil;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,7 @@ public class EditarPerfil extends AppCompatActivity {
         setContentView(R.layout.activity_editar_perfil);
 
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         etNombre = findViewById(R.id.etNombreEditar);
         etDescripcion = findViewById(R.id.etDescripcionEditar);
@@ -62,6 +68,7 @@ public class EditarPerfil extends AppCompatActivity {
         etSpotify = findViewById(R.id.etSpotifyEditar);
         etYoutube = findViewById(R.id.etYoutubeEditar);
         etTikTok = findViewById(R.id.etTiktokEditar);
+        btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
 
         btnGuardarCambios = findViewById(R.id.btnGuardarEditarPerfil);
@@ -132,6 +139,20 @@ public class EditarPerfil extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(intent, "Selecciona una imagen"), PICK_IMAGE_REQUEST);
         });
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+
+        btnCerrarSesion.setOnClickListener(v -> {
+            mAuth.signOut();
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+            try {
+                mGoogleSignInClient.signOut();
+            } catch (Exception e) {
+
+            }
+            Intent intent = new Intent(EditarPerfil.this, Login.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
 

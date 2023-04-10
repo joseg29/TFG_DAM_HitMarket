@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="autonomous_communities">
+        <item>Andalucía</item>
+        <item>Aragón</item>
+        <item>Asturias</item>
+        <item>Baleares</item>
+        <item>Canarias</item>
+        <item>Cantabria</item>
+        <item>Castilla-La Mancha</item>
+        <item>Castilla y León</item>
+        <item>Cataluña</item>
+        <item>Comunidad Valenciana</item>
+        <item>Extremadura</item>
+        <item>Galicia</item>
+        <item>La Rioja</item>
+        <item>Madrid</item>
+        <item>Murcia</item>
+        <item>Navarra</item>
+        <item>País Vasco</item>
+        <item>Ceuta</item>
+        <item>Melilla</item>
+    </string-array>
+</resources>

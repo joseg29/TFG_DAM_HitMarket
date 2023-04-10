@@ -363,16 +363,7 @@
 
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/btnCerrarSesion"
-                android:layout_width="181dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:backgroundTint="#DC1414"
-                android:fontFamily="@font/gotham_bold_1"
-                android:text="Cerrar Sesión"
-                android:visibility="visible" />
+
 
         </LinearLayout>
 

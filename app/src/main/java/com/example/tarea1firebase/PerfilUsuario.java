@@ -56,7 +56,7 @@ public class PerfilUsuario extends AppCompatActivity {
     private TextView lblUsername, lblDescripcion, lblEmail;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
-    private Button btnCerrarSesion, btnChat, tvEditar;
+    private Button btnChat, tvEditar;
     private String uid;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil;
@@ -95,21 +95,7 @@ public class PerfilUsuario extends AppCompatActivity {
         btnTiktok = findViewById(R.id.btnTikTok);
         btnSpotify = findViewById(R.id.btnSpotify);
         btnSoundCloud = findViewById(R.id.btnSoundCloud);
-        btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
-        btnCerrarSesion.setOnClickListener(v -> {
-            mAuth.signOut();
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-            try {
-                mGoogleSignInClient.signOut();
-            } catch (Exception e) {
-
-            }
-            Intent intent = new Intent(PerfilUsuario.this, Login.class);
-            startActivity(intent);
-            finish();
-        });
 
         btnAñadirCancion = findViewById(R.id.btnSubirAudio);
 
@@ -118,7 +104,6 @@ public class PerfilUsuario extends AppCompatActivity {
         if (!uid.equals(mAuth.getCurrentUser().getUid())) {
             btnAñadirCancion.setVisibility(View.GONE);
             tvEditar.setVisibility(View.GONE);
-            btnCerrarSesion.setVisibility(View.GONE);
             btnChat.setVisibility(View.VISIBLE);
         }
 

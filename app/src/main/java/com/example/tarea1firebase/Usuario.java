@@ -7,6 +7,7 @@ public class Usuario implements Serializable {
     private String id;
     private String nombre;
     private String descripcion;
+    private String ciudad;
     private String instagram;
     private String tiktTok;
     private String email;
@@ -40,6 +41,7 @@ public class Usuario implements Serializable {
         this.id = id;
         this.nombre = name;
         this.descripcion = descripcion;
+        this.ciudad = ciudad;
         this.arrayCanciones = canciones;
         this.instagram = instagram;
         this.email = email;
@@ -97,6 +99,14 @@ public class Usuario implements Serializable {
         return descripcion;
     }
 
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
     public Usuario() {
     }
 
@@ -135,7 +145,13 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Usuario{" + "name='" + nombre + '\'' + ", id='" + id + '\'' + ", descripcion='" + descripcion + '\'' + ", arrayCanciones=" + arrayCanciones + '}';
+        return "Usuario{" +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", ciudad='" + ciudad + '\'' +
+                ", arrayCanciones=" + arrayCanciones +
+                '}';
     }
 
     public String getFotoPerfil() {

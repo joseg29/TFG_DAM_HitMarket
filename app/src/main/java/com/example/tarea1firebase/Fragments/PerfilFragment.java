@@ -65,7 +65,7 @@ public class PerfilFragment extends Fragment {
     private TextView lblUsername, lblDescripcion, lblEmail;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
-    private Button btnCerrarSesion, btnChat, tvEditar;
+    private Button btnChat, tvEditar;
     private String uid;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil;
@@ -127,21 +127,9 @@ public class PerfilFragment extends Fragment {
         btnTiktok = view.findViewById(R.id.btnTikTok);
         btnSpotify = view.findViewById(R.id.btnSpotify);
         btnSoundCloud = view.findViewById(R.id.btnSoundCloud);
-        btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
 
-        btnCerrarSesion.setOnClickListener(v -> {
-            mAuth.signOut();
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
-            try {
-                mGoogleSignInClient.signOut();
-            } catch (Exception e) {
 
-            }
-            Intent intent = new Intent(getContext(), Login.class);
-            startActivity(intent);
 
-        });
 
 
         btnAñadirCancion = view.findViewById(R.id.btnSubirAudio);
@@ -161,7 +149,7 @@ public class PerfilFragment extends Fragment {
                 getUid())) {
             btnAñadirCancion.setVisibility(View.GONE);
             tvEditar.setVisibility(View.GONE);
-            btnCerrarSesion.setVisibility(View.GONE);
+
             btnChat.setVisibility(View.VISIBLE);
         }
 

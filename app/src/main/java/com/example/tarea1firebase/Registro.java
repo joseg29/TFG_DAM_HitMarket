@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +45,7 @@ public class Registro extends AppCompatActivity {
     public final static String COLECCION = "Usuarios";
     private StorageReference storageRef;
     private FirebaseStorage storage;
-    private EditText etEmail, etNombre, etContrasena;
+    private EditText etEmail, etNombre, etContrasena, etConfirmPassword;
     private ImageButton btnMostrarContrasena;
     private boolean mostrarContrasena = false;
     private TextView tvIniciarSesion, lblContrasena;
@@ -54,6 +56,7 @@ public class Registro extends AppCompatActivity {
     private String nombre, email, id;
     private ProgressBar progressBar;
     private ImageView videoMarco;
+    private Spinner mySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,9 @@ public class Registro extends AppCompatActivity {
         btnRegistrar = findViewById(R.id.btnRegistrate);
         btnMostrarContrasena = findViewById(R.id.btnMostrarContrasena);
         etContrasena = findViewById(R.id.etPassword);
+        etConfirmPassword = findViewById(R.id.etConfirmarPassword);
         lblContrasena = findViewById(R.id.lblPassword);
+        mySpinner = findViewById(R.id.spinnerOpciones);
 
         tvIniciarSesion.setOnClickListener(v -> {
             //Cambio a activity de login
@@ -140,6 +145,11 @@ public class Registro extends AppCompatActivity {
             }
             etContrasena.setSelection(cursorPosition);
         });
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.autonomous_communities, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinner.setAdapter(adapter);
     }
 
 
@@ -147,6 +157,19 @@ public class Registro extends AppCompatActivity {
         String nombreUsuario = etNombre.getText().toString();
         String emailUsuario = etEmail.getText().toString();
         String contrasenaUsuario = etContrasena.getText().toString();
+        String confirmarContrasenaUsuario = etConfirmPassword.getText().toString();
+        String ciudad = mySpinner.getSelectedItem().toString();
+
+
+        if (contrasenaUsuario.isEmpty() || confirmarContrasenaUsuario.isEmpty()) {
+            Toast.makeText(this, "Debe completar ambos campos de contraseña", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!contrasenaUsuario.equals(confirmarContrasenaUsuario)) {
+            Toast.makeText(this, "La contraseña y su confirmación no coinciden", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         //Se crea el usuario en el authenticator de firebase
         progressBar.setVisibility(View.VISIBLE);
@@ -154,7 +177,7 @@ public class Registro extends AppCompatActivity {
         if (googleAccount != null) {
             registrarConGoogle(emailUsuario, nombreUsuario);
         } else {
-            if (!emailUsuario.isEmpty() && !contrasenaUsuario.isEmpty()) {
+            if (!emailUsuario.isEmpty()) {
                 mAuth.createUserWithEmailAndPassword(emailUsuario, contrasenaUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -174,6 +197,7 @@ public class Registro extends AppCompatActivity {
                             // Se crea el usuario en collections (FIRESTORE), y se le pasa el id de authenticator como referencia de documento
                             String idUsuario = task.getResult().getUser().getUid();
                             user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, Arrays.asList(), "", "", "", "", "", Arrays.asList(), "", Arrays.asList());
+                            user.setCiudad(ciudad);
                             db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
