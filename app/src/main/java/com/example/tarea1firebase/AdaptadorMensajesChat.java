@@ -56,11 +56,11 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
         String uidActual = mAuth.getCurrentUser().getUid();
 
         if (listaMensajes.get(position).getRemitente().equals(uidActual)) {
-            holder.textoMensaje.setBackgroundColor(holder.itemView.getResources().getColor(R.color.azul));
+            holder.textoMensaje.setBackgroundResource(R.drawable.corner_mensaje_enviado);
             holder.layoutMensaje.setGravity(Gravity.RIGHT);
             holder.layoutFecha.setGravity(Gravity.RIGHT);
         } else {
-            holder.textoMensaje.setBackgroundColor(holder.itemView.getResources().getColor(R.color.rosa));
+            holder.textoMensaje.setBackgroundResource(R.drawable.corner_mensaje_recibido);
             holder.layoutMensaje.setGravity(Gravity.LEFT);
             holder.layoutFecha.setGravity(Gravity.LEFT);
         }
