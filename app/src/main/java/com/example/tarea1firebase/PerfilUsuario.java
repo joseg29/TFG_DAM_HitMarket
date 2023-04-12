@@ -5,6 +5,7 @@ import static com.example.tarea1firebase.Registro.COLECCION;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,13 +54,13 @@ public class PerfilUsuario extends AppCompatActivity {
     private ProgressDialog dialogoCargando;
     private RecyclerView recyclerCanciones;
     private AdaptadorCancionesRecycler adaptadorCanciones;
-    private TextView lblUsername, lblDescripcion, lblEmail;
+    private TextView lblUsername, lblDescripcion, lblEmail, lblRecyclerVacio;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
     private Button btnChat, tvEditar;
     private String uid;
     private FirebaseAuth mAuth;
-    private ImageView imgFotoPerfil;
+    private ImageView imgFotoPerfil, imgRecyclerVacio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,8 @@ public class PerfilUsuario extends AppCompatActivity {
         btnSpotify = findViewById(R.id.btnSpotify);
         btnSoundCloud = findViewById(R.id.btnSoundCloud);
 
+        imgRecyclerVacio = findViewById(R.id.imagenRecyclerVacio);
+        lblRecyclerVacio = findViewById(R.id.lblRecyclerVacio);
 
         btnAñadirCancion = findViewById(R.id.btnSubirAudio);
 
@@ -211,12 +214,20 @@ public class PerfilUsuario extends AppCompatActivity {
                         adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
                         recyclerCanciones.setAdapter(adaptadorCanciones);
 
+
                         //Establecer foto de perfil
                         if (!usuario.getFotoPerfil().equals("")) {
                             try {
                                 Glide.with(PerfilUsuario.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
                             } catch (Exception e) {
                             }
+                        }
+                        if (adaptadorCanciones.getItemCount() > 0) {
+                            imgRecyclerVacio.setVisibility(View.GONE);
+                            lblRecyclerVacio.setVisibility(View.GONE);
+                        } else {
+                            imgRecyclerVacio.setVisibility(View.VISIBLE);
+                            lblRecyclerVacio.setVisibility(View.VISIBLE);
                         }
                     }
                 }

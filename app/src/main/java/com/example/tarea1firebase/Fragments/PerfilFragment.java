@@ -62,13 +62,13 @@ public class PerfilFragment extends Fragment {
     private ProgressDialog dialogoCargando;
     private RecyclerView recyclerCanciones;
     private AdaptadorCancionesRecycler adaptadorCanciones;
-    private TextView lblUsername, lblDescripcion, lblEmail;
+    private TextView lblUsername, lblDescripcion, lblEmail, lblRecyclerVacio;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
     private Button btnChat, tvEditar;
     private String uid;
     private FirebaseAuth mAuth;
-    private ImageView imgFotoPerfil;
+    private ImageView imgFotoPerfil, imgRecyclerVacio;
 
 
     public PerfilFragment() {
@@ -111,6 +111,10 @@ public class PerfilFragment extends Fragment {
 
         recyclerCanciones.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
+        imgRecyclerVacio = view.findViewById(R.id.imagenRecyclerVacio);
+        lblRecyclerVacio = view.findViewById(R.id.lblRecyclerVacio);
+
         ArrayList<String> arrayPrueba = new ArrayList<>();
 
         adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba);
@@ -127,9 +131,6 @@ public class PerfilFragment extends Fragment {
         btnTiktok = view.findViewById(R.id.btnTikTok);
         btnSpotify = view.findViewById(R.id.btnSpotify);
         btnSoundCloud = view.findViewById(R.id.btnSoundCloud);
-
-
-
 
 
         btnAñadirCancion = view.findViewById(R.id.btnSubirAudio);
@@ -278,6 +279,14 @@ public class PerfilFragment extends Fragment {
                             } catch (Exception e) {
                             }
                         }
+                        if (adaptadorCanciones.getItemCount() > 0) {
+                            imgRecyclerVacio.setVisibility(View.GONE);
+                            lblRecyclerVacio.setVisibility(View.GONE);
+                        } else {
+                            imgRecyclerVacio.setVisibility(View.VISIBLE);
+                            lblRecyclerVacio.setVisibility(View.VISIBLE);
+                        }
+
                     }
                 }
                 dialogoCargando.dismiss();

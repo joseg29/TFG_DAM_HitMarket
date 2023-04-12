@@ -207,22 +207,11 @@
                         android:src="@drawable/logo_soundcloud" />
                 </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerCanciones"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/layoutLogos"
-                    android:layout_centerHorizontal="true"
-
-                    >
-
-                </androidx.recyclerview.widget.RecyclerView>
-
                 <ImageButton
                     android:id="@+id/btnSubirAudio"
                     android:layout_width="57dp"
                     android:layout_height="39dp"
-                    android:layout_below="@id/recyclerCanciones"
+                    android:layout_below="@id/layoutRecycler"
                     android:layout_centerInParent="true"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="20dp"
@@ -231,11 +220,48 @@
                     android:src="@drawable/add"
                     android:textSize="24sp" />
 
+                <LinearLayout
+                    android:id="@+id/layoutRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layoutLogos"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imagenRecyclerVacio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/lupanotamusical"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/lblRecyclerVacio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gotham_bold"
+                        android:text="Este usuario no tiene canciones de muestra...."
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerCanciones"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        android:visibility="visible">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/tvGeneros"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/btnSubirAudio"
+                    android:layout_marginTop="15dp"
                     android:fontFamily="@font/gotham_bold_1"
                     android:text="Mis generos"
                     android:textAlignment="center"
@@ -362,7 +388,6 @@
                 </TableLayout>
 
             </RelativeLayout>
-
 
 
         </LinearLayout>
