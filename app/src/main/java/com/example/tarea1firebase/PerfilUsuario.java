@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.tarea1firebase.Fragments.GestorFirestore;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.example.tarea1firebase.adaptadores.AdaptadorCancionesRecycler;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.google.firebase.auth.FirebaseAuth;

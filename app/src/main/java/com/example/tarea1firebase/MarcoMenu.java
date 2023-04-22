@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.tarea1firebase.Fragments.ExploraFragment;
-import com.example.tarea1firebase.Fragments.ChatsRecientesFragment;
-import com.example.tarea1firebase.Fragments.NoticiasFragment;
-import com.example.tarea1firebase.Fragments.PerfilFragment;
+import com.example.tarea1firebase.entidades.fragments.ExploraFragment;
+import com.example.tarea1firebase.entidades.fragments.ChatsRecientesFragment;
+import com.example.tarea1firebase.entidades.fragments.NoticiasFragment;
+import com.example.tarea1firebase.entidades.fragments.PerfilFragment;
 import com.example.tarea1firebase.databinding.ActivityMarcoMenuBinding;
 
 
