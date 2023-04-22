@@ -2,6 +2,7 @@ package com.example.tarea1firebase;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.ybq.android.spinkit.sprite.Sprite;
@@ -59,23 +61,25 @@ public class RecuperarContrasena extends AppCompatActivity {
                         progressBar.setVisibility(View.VISIBLE);
                         Toast.makeText(RecuperarContrasena.this, "Correo Enviado", Toast.LENGTH_SHORT).show();
                         //Falta hacer un xml para que nos avise de quetodo se ha realizado de forma correct
-                        Intent intent = new Intent(RecuperarContrasena.this, Login.class);
-                        startActivity(intent);
-                        finish();
+                        View view = getLayoutInflater().inflate(R.layout.correo_enviado, null);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RecuperarContrasena.this);
+                        builder.setView(view);
+                        builder.setCancelable(false);
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+
+                        // Cerrar el AlertDialog después de un tiempo
+                        new Handler().postDelayed(() -> {
+                            alertDialog.dismiss();
+                            Intent intent = new Intent(RecuperarContrasena.this, Login.class);
+                            startActivity(intent);
+                            finish();
+                        }, 3000);
                     } else {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(RecuperarContrasena.this, "Correo inválido", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    //Con este método lo que conseguimos es que el usuario si no quiere recuperar contraseña
-    //puede interactuar para volver con el botón de android (flechita) hacia el Login.
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(RecuperarContrasena.this, Login.class);
-        startActivity(intent);
-        finish();
     }
 }

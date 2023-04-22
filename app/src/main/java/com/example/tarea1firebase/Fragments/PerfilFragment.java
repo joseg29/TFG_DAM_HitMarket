@@ -92,12 +92,7 @@ public class PerfilFragment extends Fragment {
 
         gestorFirebase = new GestorFirestore();
 
-        gestorFirebase.imprimir(new GestorFirestore.Callback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                //Hacer algo con el resultado
-            }
-        });
+
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="@drawable/progress_dialog_correo"
+    android:padding="16dp"
+    android:layout_marginTop="90dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tvTituloCorreo"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Correo enviado"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/redondo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/tvTituloCorreo"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/check_redondo"
+        android:src="@drawable/enviar_correo"
+        android:scaleType="centerInside">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/redondo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:text="Correo enviado con éxito"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+
+
+
+</RelativeLayout>
