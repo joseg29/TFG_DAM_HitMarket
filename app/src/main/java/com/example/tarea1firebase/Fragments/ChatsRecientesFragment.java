@@ -11,10 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tarea1firebase.AdaptadorChatsRecientes;
-import com.example.tarea1firebase.Chat;
+import com.example.tarea1firebase.adaptadores.AdaptadorChatsRecientes;
+import com.example.tarea1firebase.entidades.Chat;
 import com.example.tarea1firebase.R;
-import com.example.tarea1firebase.Usuario;
+import com.example.tarea1firebase.entidades.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;

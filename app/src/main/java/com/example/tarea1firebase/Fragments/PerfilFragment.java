@@ -24,11 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.tarea1firebase.AdaptadorCancionesRecycler;
+import com.example.tarea1firebase.adaptadores.AdaptadorCancionesRecycler;
 import com.example.tarea1firebase.ChatVentana;
 import com.example.tarea1firebase.EditarPerfil;
 import com.example.tarea1firebase.R;
-import com.example.tarea1firebase.Usuario;
+import com.example.tarea1firebase.entidades.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

@@ -15,17 +15,15 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.example.tarea1firebase.AdaptadorUsuariosRecycler;
+import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
 import com.example.tarea1firebase.R;
-import com.example.tarea1firebase.Usuario;
+import com.example.tarea1firebase.entidades.Usuario;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class ExploraFragment extends Fragment {
 

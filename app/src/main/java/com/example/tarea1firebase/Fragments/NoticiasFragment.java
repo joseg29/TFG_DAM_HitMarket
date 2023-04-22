@@ -2,11 +2,9 @@ package com.example.tarea1firebase.Fragments;
 
 import static com.example.tarea1firebase.Registro.COLECCION;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,9 +16,9 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.example.tarea1firebase.AdaptadorUsuariosRecycler;
+import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
 import com.example.tarea1firebase.R;
-import com.example.tarea1firebase.Usuario;
+import com.example.tarea1firebase.entidades.Usuario;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.OnCompleteListener;
