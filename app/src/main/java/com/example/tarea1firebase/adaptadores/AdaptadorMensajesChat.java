@@ -1,4 +1,4 @@
-package com.example.tarea1firebase;
+package com.example.tarea1firebase.adaptadores;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tarea1firebase.entidades.Mensaje;
+import com.example.tarea1firebase.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;

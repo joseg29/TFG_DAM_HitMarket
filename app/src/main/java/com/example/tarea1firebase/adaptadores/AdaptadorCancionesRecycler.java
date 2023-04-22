@@ -1,4 +1,4 @@
-package com.example.tarea1firebase;
+package com.example.tarea1firebase.adaptadores;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -11,9 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tarea1firebase.R;
 
 import java.io.IOException;
 import java.util.List;

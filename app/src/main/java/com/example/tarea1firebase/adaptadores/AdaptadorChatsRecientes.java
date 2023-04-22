@@ -1,4 +1,4 @@
-package com.example.tarea1firebase;
+package com.example.tarea1firebase.adaptadores;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -11,6 +11,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tarea1firebase.entidades.Chat;
+import com.example.tarea1firebase.ChatVentana;
+import com.example.tarea1firebase.entidades.Mensaje;
+import com.example.tarea1firebase.R;
+import com.example.tarea1firebase.entidades.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,8 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChatsRecientes.ViewHolder> {

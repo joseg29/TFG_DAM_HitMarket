@@ -1,4 +1,4 @@
-package com.example.tarea1firebase;
+package com.example.tarea1firebase.entidades;
 
 public class Mensaje {
     private String remitente, texto, fechaYHora;
