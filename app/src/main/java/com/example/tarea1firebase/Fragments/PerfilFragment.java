@@ -92,6 +92,13 @@ public class PerfilFragment extends Fragment {
 
         gestorFirebase = new GestorFirestore();
 
+        gestorFirebase.imprimir(new GestorFirestore.Callback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                //Hacer algo con el resultado
+            }
+        });
+
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         uid = mAuth.getCurrentUser().getUid();
@@ -413,7 +420,6 @@ public class PerfilFragment extends Fragment {
                     @Override
                     public void onSuccess(String url) {
                         Toast.makeText(getContext(), "Subido correctamente", Toast.LENGTH_SHORT).show();
-                        System.out.println("subido " + mAuth.getCurrentUser().getUid() + " -- " + url);
                         dialogoCargando.dismiss();
                         obtenerDatosUsuario();
                     }

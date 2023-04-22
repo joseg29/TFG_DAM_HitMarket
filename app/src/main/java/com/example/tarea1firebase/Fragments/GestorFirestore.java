@@ -3,6 +3,7 @@ package com.example.tarea1firebase.Fragments;
 import static com.example.tarea1firebase.Fragments.PerfilFragment.COLECCION;
 
 import android.net.Uri;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
@@ -28,7 +29,16 @@ public class GestorFirestore {
         storageRef = storage.getReference();
     }
 
-    public <T> void obtenerUsuarioPorId(String id, final Callback<T> callback, Class<T> clase) {
+    /**
+     * public void imprimir(Callback<String> callback) {
+     * System.out.println("buscando...");
+     * //Este callback solo se ejecutará cuando se llegue a esta línea del código, y se devovlerá el resultado
+     * //Luego en el otro lado donde se llama al método, el resultado se obtendrá en el onSuccess, despues de haber dado la orden de callback.
+     * callback.onSuccess("Listo");
+     * }
+     */
+
+    public <T> void obtenerUsuarioPorId(String id, Callback<T> callback, Class<T> clase) {
         DocumentReference docRef = db.collection(COLECCION).document(id);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
