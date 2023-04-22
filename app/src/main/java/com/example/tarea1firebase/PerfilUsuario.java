@@ -1,14 +1,6 @@
 package com.example.tarea1firebase;
 
 
-import static com.example.tarea1firebase.Registro.COLECCION;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,28 +11,23 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.example.tarea1firebase.Fragments.GestorFirestore;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,82 +43,34 @@ public class PerfilUsuario extends AppCompatActivity {
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private TextView lblUsername, lblDescripcion, lblEmail, lblRecyclerVacio;
     private Usuario usuario;
-    private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
+    private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button btnChat, tvEditar;
     private String uid;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil, imgRecyclerVacio;
+    private GestorFirestore gestorFirebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.perfil_usuario);
 
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        uid = getIntent().getStringExtra("UidUsuario");
-        imgFotoPerfil = findViewById(R.id.imgFotoPerfil);
-
+        inicializarObjetosFirebase();
         inicializarUsuario();
+        inicializarVistas();
 
-        recyclerCanciones = findViewById(R.id.recyclerCanciones);
-        recyclerCanciones.setHasFixedSize(true);
+        esconderBotonesUsuarioPropio();
 
-        recyclerCanciones.setLayoutManager(new LinearLayoutManager(this));
+        setListenerBotones();
 
-        ArrayList<String> arrayPrueba = new ArrayList<>();
+        inicializarBotonesRedesSociales();
+    }
 
-        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba);
-        recyclerCanciones.setAdapter(adaptadorCanciones);
+    public void setListenerBotones() {
 
+    }
 
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
-
-        storageRef = FirebaseStorage.getInstance().getReference();
-
-        btnChat = findViewById(R.id.btnChat);
-        btnInstagram = findViewById(R.id.btnInstagram);
-        btnYoutube = findViewById(R.id.btnYoutube);
-        btnTiktok = findViewById(R.id.btnTikTok);
-        btnSpotify = findViewById(R.id.btnSpotify);
-        btnSoundCloud = findViewById(R.id.btnSoundCloud);
-
-        imgRecyclerVacio = findViewById(R.id.imagenRecyclerVacio);
-        lblRecyclerVacio = findViewById(R.id.lblRecyclerVacio);
-
-        btnAñadirCancion = findViewById(R.id.btnSubirAudio);
-
-        tvEditar = findViewById(R.id.tvEditar);
-
-        if (!uid.equals(mAuth.getCurrentUser().getUid())) {
-            btnAñadirCancion.setVisibility(View.GONE);
-            tvEditar.setVisibility(View.GONE);
-            btnChat.setVisibility(View.VISIBLE);
-        }
-
-        tvEditar.setOnClickListener(v -> {
-            Intent intent = new Intent(PerfilUsuario.this, EditarPerfil.class);
-            db.collection(COLECCION).document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot.exists()) {
-                        usuario = documentSnapshot.toObject(Usuario.class);
-                        intent.putExtra("UsuarioAEditar", usuario);
-                        intent.putExtra("UidUsuario", mAuth.getCurrentUser().getUid());
-                        startActivity(intent);
-                        finish();
-                    } else {
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                }
-            });
-        });
-
-
+    public void inicializarBotonesRedesSociales() {
         btnChat.setOnClickListener(v -> {
             Intent intent = new Intent(PerfilUsuario.this, ChatVentana.class);
             intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
@@ -156,24 +95,67 @@ public class PerfilUsuario extends AppCompatActivity {
          btnSpotify.setOnClickListener(v -> {
          abrirSpotify();
          });**/
+
+
     }
 
-    private void inicializarUsuario() {
-        db.collection(COLECCION).document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    public void esconderBotonesUsuarioPropio() {
+        if (!uid.equals(mAuth.getCurrentUser().getUid())) {
+            btnAnadirCancion.setVisibility(View.GONE);
+            tvEditar.setVisibility(View.GONE);
+            btnChat.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void inicializarObjetosFirebase() {
+        gestorFirebase = new GestorFirestore();
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        uid = getIntent().getStringExtra("UidUsuario");
+        imgFotoPerfil = findViewById(R.id.imgFotoPerfil);
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+
+        storageRef = FirebaseStorage.getInstance().getReference();
+    }
+
+    public void inicializarVistas() {
+        btnChat = findViewById(R.id.btnChat);
+        btnInstagram = findViewById(R.id.btnInstagram);
+        btnYoutube = findViewById(R.id.btnYoutube);
+        btnTiktok = findViewById(R.id.btnTikTok);
+        btnSpotify = findViewById(R.id.btnSpotify);
+        btnSoundCloud = findViewById(R.id.btnSoundCloud);
+
+        imgRecyclerVacio = findViewById(R.id.imagenRecyclerVacio);
+        lblRecyclerVacio = findViewById(R.id.lblRecyclerVacio);
+
+        btnAnadirCancion = findViewById(R.id.btnSubirAudio);
+
+        tvEditar = findViewById(R.id.tvEditar);
+
+        recyclerCanciones = findViewById(R.id.recyclerCanciones);
+        recyclerCanciones.setHasFixedSize(true);
+
+        recyclerCanciones.setLayoutManager(new LinearLayoutManager(this));
+
+        ArrayList<String> arrayPrueba = new ArrayList<>();
+
+        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba);
+        recyclerCanciones.setAdapter(adaptadorCanciones);
+
+    }
+
+    public void inicializarUsuario() {
+        gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    usuario = documentSnapshot.toObject(Usuario.class);
-                    obtenerDatosUsuario();
-                    setRedesSociales();
-                } else {
-                }
+            public void onSuccess(Usuario usuarioDevuelto) {
+                usuario = usuarioDevuelto;
+                obtenerDatosUsuario();
+                setRedesSociales();
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-            }
-        });
+        }, Usuario.class);
     }
 
     //Busca las canciones de un usuario en la base de datos y asigna los audios a los mediaPlayer
@@ -184,57 +166,44 @@ public class PerfilUsuario extends AppCompatActivity {
         dialogoCargando.setCancelable(false);
         dialogoCargando.show();
 
-        CollectionReference refUsuarios = FirebaseFirestore.getInstance().
-
-                collection(COLECCION);
-
-
-        refUsuarios.document(usuario.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            //Obtenemos todas las urls del array de canciones del usuario en firebase, y asignamos cada una a un mediaplayer y seekbar distinto.
+        gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        //Obtenemos el usuario de la base de datos con todos sus campos
-                        Usuario usuario = document.toObject(Usuario.class);
+            public void onSuccess(Usuario usuarioDevuelto) {
+                usuario = usuarioDevuelto;
 
-                        //Canciones que obtenemos de la base de datos.
-                        List<String> canciones;
-                        canciones = usuario.getArrayCanciones();
+                //Canciones que obtenemos de la base de datos.
+                List<String> canciones;
+                canciones = usuario.getArrayCanciones();
 
-                        lblDescripcion = findViewById(R.id.tvDescripcion);
-                        lblUsername = findViewById(R.id.tvNombre);
-                        lblEmail = findViewById(R.id.tvCiudad);
+                lblDescripcion = findViewById(R.id.tvDescripcion);
+                lblUsername = findViewById(R.id.tvNombre);
+                lblEmail = findViewById(R.id.tvCiudad);
 
-                        lblUsername.setText(usuario.getNombre());
-                        lblDescripcion.setText(usuario.getDescripcion());
-                        lblEmail.setText(usuario.getEmail());
+                lblUsername.setText(usuario.getNombre());
+                lblDescripcion.setText(usuario.getDescripcion());
+                lblEmail.setText(usuario.getEmail());
 
-                        adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
-                        recyclerCanciones.setAdapter(adaptadorCanciones);
+                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
+                recyclerCanciones.setAdapter(adaptadorCanciones);
 
 
-                        //Establecer foto de perfil
-                        if (!usuario.getFotoPerfil().equals("")) {
-                            try {
-                                Glide.with(PerfilUsuario.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
-                            } catch (Exception e) {
-                            }
-                        }
-                        if (adaptadorCanciones.getItemCount() > 0) {
-                            imgRecyclerVacio.setVisibility(View.GONE);
-                            lblRecyclerVacio.setVisibility(View.GONE);
-                        } else {
-                            imgRecyclerVacio.setVisibility(View.VISIBLE);
-                            lblRecyclerVacio.setVisibility(View.VISIBLE);
-                        }
+                //Establecer foto de perfil
+                if (!usuario.getFotoPerfil().equals("")) {
+                    try {
+                        Glide.with(PerfilUsuario.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
+                    } catch (Exception e) {
                     }
+                }
+                if (adaptadorCanciones.getItemCount() > 0) {
+                    imgRecyclerVacio.setVisibility(View.GONE);
+                    lblRecyclerVacio.setVisibility(View.GONE);
+                } else {
+                    imgRecyclerVacio.setVisibility(View.VISIBLE);
+                    lblRecyclerVacio.setVisibility(View.VISIBLE);
                 }
                 dialogoCargando.dismiss();
             }
-        });
-
+        }, Usuario.class);
     }
 
 
@@ -244,75 +213,6 @@ public class PerfilUsuario extends AppCompatActivity {
         intent.setType("audio/mpeg");
         startActivityForResult(intent, PICK_AUDIO_REQUEST);
     }
-
-    //Listener que detecta cuando hemos seleccionado un audio.
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            dialogoCargando = new ProgressDialog(this);
-            dialogoCargando.setTitle("Subiendo...");
-            dialogoCargando.setMessage("Subiendo canción a base de datos");
-            dialogoCargando.setCancelable(false);
-            dialogoCargando.show();
-
-            if (requestCode == PICK_AUDIO_REQUEST && resultCode == RESULT_OK) {
-                Uri uri = data.getData();
-                //Todo esto es simplemente para obtener la ruta local del archivo para que firebase la pueda descargar (Código no importante)
-                try {
-                    String[] pathSegments = uri.getPath().split("/");
-                    if (pathSegments.length > 1) {
-                        String fileName = pathSegments[pathSegments.length - 1];
-                        File cacheDir = getCacheDir();
-                        File file = new File(cacheDir, fileName);
-                        InputStream inputStream = getContentResolver().openInputStream(uri);
-                        FileOutputStream outputStream = new FileOutputStream(file);
-                        byte[] buffer = new byte[4096];
-                        int len;
-                        while ((len = inputStream.read(buffer)) > 0) {
-                            outputStream.write(buffer, 0, len);
-                        }
-                        inputStream.close();
-                        outputStream.close();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                //Carpeta de archivos del storage
-                StorageReference storagePath = storageRef.child("audios").child(uri.getLastPathSegment());
-
-                storagePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(getApplicationContext(), "Subido correctamente", Toast.LENGTH_SHORT).show();
-                        Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
-                        firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String url = uri.toString();
-                                //Aquí se añaden los audios al array de canciones del usuario en firebase
-                                db.collection(COLECCION).document(usuario.getId()).update("arrayCanciones", FieldValue.arrayUnion(url)).addOnSuccessListener(documentReference -> {
-                                    Toast.makeText(getApplicationContext(), "Subido correctamente", Toast.LENGTH_SHORT).show();
-                                    dialogoCargando.dismiss();
-                                    obtenerDatosUsuario();
-                                }).addOnFailureListener(e -> {
-                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                });
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        dialogoCargando.dismiss();
-                        Toast.makeText(getApplicationContext(), "No se ha podido subir la canción", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                ;
-            }
-        }
-    }
-
 
     public void setRedesSociales() {
         //Revisa si tiene instagram

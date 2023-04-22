@@ -27,12 +27,8 @@ import com.bumptech.glide.Glide;
 import com.example.tarea1firebase.AdaptadorCancionesRecycler;
 import com.example.tarea1firebase.ChatVentana;
 import com.example.tarea1firebase.EditarPerfil;
-import com.example.tarea1firebase.Login;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.Usuario;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,11 +36,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,11 +58,12 @@ public class PerfilFragment extends Fragment {
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private TextView lblUsername, lblDescripcion, lblEmail, lblRecyclerVacio;
     private Usuario usuario;
-    private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAñadirCancion;
+    private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button btnChat, tvEditar;
     private String uid;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil, imgRecyclerVacio;
+    private GestorFirestore gestorFirebase;
 
 
     public PerfilFragment() {
@@ -94,6 +89,8 @@ public class PerfilFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        gestorFirebase = new GestorFirestore();
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -133,9 +130,9 @@ public class PerfilFragment extends Fragment {
         btnSoundCloud = view.findViewById(R.id.btnSoundCloud);
 
 
-        btnAñadirCancion = view.findViewById(R.id.btnSubirAudio);
-        btnAñadirCancion = view.findViewById(R.id.btnSubirAudio);
-        btnAñadirCancion.setOnClickListener(new View.OnClickListener() {
+        btnAnadirCancion = view.findViewById(R.id.btnSubirAudio);
+        btnAnadirCancion = view.findViewById(R.id.btnSubirAudio);
+        btnAnadirCancion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 seleccionarAudio();
@@ -148,33 +145,24 @@ public class PerfilFragment extends Fragment {
         if (!uid.equals(mAuth.getCurrentUser().
 
                 getUid())) {
-            btnAñadirCancion.setVisibility(View.GONE);
+            btnAnadirCancion.setVisibility(View.GONE);
             tvEditar.setVisibility(View.GONE);
 
             btnChat.setVisibility(View.VISIBLE);
         }
 
-        tvEditar.setOnClickListener(v ->
-
-        {
+        tvEditar.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), EditarPerfil.class);
-            db.collection(COLECCION).document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
                 @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot.exists()) {
-                        usuario = documentSnapshot.toObject(Usuario.class);
-                        intent.putExtra("UsuarioAEditar", usuario);
-                        intent.putExtra("UidUsuario", mAuth.getCurrentUser().getUid());
-                        getActivity().finish();
-                        startActivity(intent);
-                    } else {
-                    }
+                public void onSuccess(Usuario usuarioDevuelto) {
+                    usuario = usuarioDevuelto;
+                    intent.putExtra("UsuarioAEditar", usuario);
+                    intent.putExtra("UidUsuario", mAuth.getCurrentUser().getUid());
+                    startActivity(intent);
+                    getActivity().finish();
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                }
-            });
+            }, Usuario.class);
         });
 
 
@@ -421,37 +409,15 @@ public class PerfilFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                //Carpeta de archivos del storage
-                StorageReference storagePath = storageRef.child("audios").child(uri.getLastPathSegment());
-
-                storagePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                gestorFirebase.subirAudio(uri, mAuth.getCurrentUser().getUid(), new GestorFirestore.Callback<String>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    public void onSuccess(String url) {
                         Toast.makeText(getContext(), "Subido correctamente", Toast.LENGTH_SHORT).show();
-                        Task<Uri> firebaseUri = taskSnapshot.getStorage().getDownloadUrl();
-                        firebaseUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String url = uri.toString();
-                                //Aquí se añaden los audios al array de canciones del usuario en firebase
-                                db.collection(COLECCION).document(usuario.getId()).update("arrayCanciones", FieldValue.arrayUnion(url)).addOnSuccessListener(documentReference -> {
-                                    Toast.makeText(getContext(), "Subido correctamente", Toast.LENGTH_SHORT).show();
-                                    dialogoCargando.dismiss();
-                                    obtenerDatosUsuario();
-                                }).addOnFailureListener(e -> {
-                                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                });
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("subido " + mAuth.getCurrentUser().getUid() + " -- " + url);
                         dialogoCargando.dismiss();
-                        Toast.makeText(getContext(), "No se ha podido subir la canción", Toast.LENGTH_SHORT).show();
+                        obtenerDatosUsuario();
                     }
                 });
-                ;
             }
         }
     }
