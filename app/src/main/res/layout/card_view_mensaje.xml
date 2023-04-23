@@ -30,7 +30,9 @@
                     android:layout_width="250dp"
                     android:layout_height="30dp"
                     android:background="#92F886"
-                    android:fontFamily="@font/fuente_gotham" />
+                    android:fontFamily="@font/gotham_bold"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp" />
 
             </LinearLayout>
 
@@ -52,7 +54,8 @@
                     android:paddingRight="5dp"
                     android:shadowColor="@android:color/transparent"
                     android:textAlignment="gravity"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
             </LinearLayout>
 
         </LinearLayout>

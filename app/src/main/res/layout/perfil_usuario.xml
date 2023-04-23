@@ -244,7 +244,7 @@
                     android:layout_below="@+id/btnSubirAudio"
                     android:layout_marginTop="15dp"
                     android:fontFamily="@font/gotham_bold_1"
-                    android:text="Mis generos"
+                    android:text="Mis géneros"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="34sp"></TextView>
@@ -370,10 +370,22 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Reseñas"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="34sp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/RecyclerResenas"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="300dp"
+                android:layout_margin="20dp" />
 
 
         </LinearLayout>

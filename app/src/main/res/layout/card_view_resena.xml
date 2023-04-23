@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="20dp"
     android:background="@android:color/transparent"
     android:backgroundTint="@android:color/transparent">
 
@@ -26,14 +27,13 @@
 
                 <ImageView
                     android:id="@+id/imgUsuResena"
-                    android:layout_width="53dp"
+                    android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
                     android:id="@+id/txtNombreUsuResena"
-                    android:layout_width="288dp"
+                    android:layout_width="178dp"
                     android:layout_height="33dp"
                     android:fontFamily="@font/gotham_black"
                     android:gravity="center|left"
@@ -43,9 +43,8 @@
 
                 <TextView
                     android:id="@+id/txtValoracionResena"
-                    android:layout_width="38dp"
+                    android:layout_width="75dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:fontFamily="@font/gotham_bold"
                     android:gravity="center|right"
                     android:text="4,8"
@@ -54,10 +53,9 @@
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="0dp"
-                    android:layout_weight="1"
                     android:padding="2dp"
                     app:srcCompat="@drawable/estrella" />
 
@@ -71,6 +69,16 @@
                 android:fontFamily="@font/fuente_gotham"
                 android:text="Saiko es una banda chilena de rock alternativo formada en 1999. Su estilo musical se caracteriza por combinar elementos del rock, pop y electrónica, creando una atmósfera melancólica y reflexiva en sus letras y sonidos."
                 android:textAlignment="viewStart"
+                android:textColor="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/txtFechaResena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/fuente_gotham"
+                android:text="fecha"
+                android:textAlignment="textEnd"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
 

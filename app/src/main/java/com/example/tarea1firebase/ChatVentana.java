@@ -1,7 +1,5 @@
 package com.example.tarea1firebase;
 
-import static com.example.tarea1firebase.PerfilUsuario.COLECCION;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,16 +17,12 @@ import com.example.tarea1firebase.adaptadores.AdaptadorMensajesChat;
 import com.example.tarea1firebase.entidades.Chat;
 import com.example.tarea1firebase.entidades.Mensaje;
 import com.example.tarea1firebase.entidades.Usuario;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -44,26 +38,51 @@ public class ChatVentana extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private RecyclerView recyclerMensajes;
     private AdaptadorMensajesChat adaptadorCanciones;
-    private DatabaseReference chatRef;
-    private String chatKey;
+    private DatabaseReference chatsRef;
+    private String idChat;
     private ArrayList<Mensaje> listaMensajes;
     private String usuarioActualUid, usuario2Uid;
     private DatabaseReference mensajesRef, fechaUltimoMensajeRef;
-    private FirebaseFirestore db;
     private Usuario otroUsuarioReceptor;
     private TextView lblNombreContacto;
     private ImageView fotoPerfil;
     private Chat chat;
     private Usuario usuario1, usuario2;
+    private GestorFirestore gestorFirebase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_ventana);
-        FirebaseApp.initializeApp(this);
-        db = FirebaseFirestore.getInstance();
+        gestorFirebase = new GestorFirestore();
+
+        inicializarVistas();
+        inicializarReferenciasYFirebase();
+
+        inicializarListenerBotones();
+
+        inicializarUsuariosChat();
+        inicializarChat();
 
 
+        obtenerMensajes();
+    }
+
+    private void inicializarReferenciasYFirebase() {
+        usuarioActualUid = getIntent().getStringExtra("UsuarioActual");
+        usuario2Uid = getIntent().getStringExtra("UidUsuarioReceptor");
+        chatsRef = database.getReference("chats");
+        mensajesRef = chatsRef.child(chatsRef.getKey()).child("mensajes");
+        fechaUltimoMensajeRef = chatsRef.child(chatsRef.getKey()).child("fechaUltimoMensaje");
+    }
+
+    private void inicializarListenerBotones() {
+        btnEnviarMensaje.setOnClickListener(v -> {
+            crearChat(usuarioActualUid, usuario2Uid);
+        });
+    }
+
+    private void inicializarVistas() {
         recyclerMensajes = findViewById(R.id.recyclerMensajesChat);
         recyclerMensajes.setHasFixedSize(true);
 
@@ -77,32 +96,16 @@ public class ChatVentana extends AppCompatActivity {
         etMensaje = findViewById(R.id.etMensaje);
         fotoPerfil = findViewById(R.id.fotoPerfilChat);
         lblNombreContacto = findViewById(R.id.lblNombreContacto);
-
-        usuarioActualUid = getIntent().getStringExtra("UsuarioActual");
-        usuario2Uid = getIntent().getStringExtra("UidUsuarioReceptor");
-        inicializarUsuariosChat();
-        inicializarChat();
-
-        mensajesRef = database.getReference("chats").child(chatRef.getKey()).child("mensajes");
-        fechaUltimoMensajeRef = database.getReference("chats").child(chatRef.getKey()).child("fechaUltimoMensaje");
-
-        btnEnviarMensaje.setOnClickListener(v -> {
-            crearChat(usuarioActualUid, usuario2Uid);
-        });
-        obtenerMensajes();
     }
 
     private void inicializarChat() {
-
-        chatRef = database.getReference("chats");
-
         // Crea una clave única para el chat a partir de los UIDs de los usuarios
         if (usuarioActualUid.compareTo(usuario2Uid) < 0) {
-            chatKey = usuarioActualUid + "_" + usuario2Uid;
+            idChat = usuarioActualUid + "_" + usuario2Uid;
         } else {
-            chatKey = usuario2Uid + "_" + usuarioActualUid;
+            idChat = usuario2Uid + "_" + usuarioActualUid;
         }
-        chatRef = chatRef.child(chatKey);
+        chatsRef = chatsRef.child(idChat);
 
         etMensaje.addTextChangedListener(new TextWatcher() {
             @Override
@@ -126,40 +129,48 @@ public class ChatVentana extends AppCompatActivity {
 
             }
         });
-        db.collection(COLECCION).document(usuario2Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+        gestorFirebase.obtenerUsuarioPorId(usuario2Uid, new GestorFirestore.Callback<Usuario>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    otroUsuarioReceptor = documentSnapshot.toObject(Usuario.class);
-                    lblNombreContacto.setText(otroUsuarioReceptor.getNombre());
-                    if (!otroUsuarioReceptor.getFotoPerfil().equals("")) {
-                        try {
-                            Glide.with(ChatVentana.this).load(otroUsuarioReceptor.getFotoPerfil()).into(fotoPerfil);
-                        } catch (Exception e) {
-                        }
+            public void onSuccess(Usuario result) {
+                otroUsuarioReceptor = result;
+                lblNombreContacto.setText(otroUsuarioReceptor.getNombre());
+                if (!otroUsuarioReceptor.getFotoPerfil().equals("")) {
+                    try {
+                        Glide.with(ChatVentana.this).load(otroUsuarioReceptor.getFotoPerfil()).into(fotoPerfil);
+                    } catch (Exception e) {
                     }
                 }
             }
-        });
+        }, Usuario.class);
     }
+
 
     private void crearChat(String usuario1Uid, String usuario2Uid) {
         // Verifica si el chat ya existe antes de crear uno nuevo
-        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        chatsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     chat = snapshot.getValue(Chat.class);
                 } else {
-                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "", chatKey);
-                    chatRef.setValue(chat);
+                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "", idChat);
+                    chatsRef.setValue(chat);
 
-                    db.collection(Registro.COLECCION).document(usuario1Uid).update("chatsRecientes", FieldValue.arrayUnion(chatKey)).addOnSuccessListener(documentReference -> {
+                    gestorFirebase.actualiazarCampoUsuario(usuario1Uid, "chatsRecientes", idChat, new GestorFirestore.Callback<String>() {
+                        @Override
+                        public void onSuccess(String result) {
+
+                        }
                     });
-                    db.collection(Registro.COLECCION).document(usuario2Uid).update("chatsRecientes", FieldValue.arrayUnion(chatKey)).addOnSuccessListener(documentReference -> {
+                    gestorFirebase.actualiazarCampoUsuario(usuario2Uid, "chatsRecientes", idChat, new GestorFirestore.Callback<String>() {
+                        @Override
+                        public void onSuccess(String result) {
+
+                        }
                     });
                 }
-                enviarMensaje(chatRef.getKey(), usuario1Uid, etMensaje.getText().toString());
+                enviarMensaje(chatsRef.getKey(), usuario1Uid, etMensaje.getText().toString());
                 etMensaje.setText("");
             }
 
@@ -185,17 +196,17 @@ public class ChatVentana extends AppCompatActivity {
         chat.añadirMensaje(msj);
         chat.setFechaUltimoMsj(msj.getFechaYHora());
 
-        chatRef.setValue(chat);
+        chatsRef.setValue(chat);
     }
 
     private void obtenerMensajes() {
-        FirebaseDatabase.getInstance().getReference("chats").child(chatKey).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("chats").child(idChat).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     chat = snapshot.getValue(Chat.class);
                 } else {
-                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "", chatKey);
+                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "", idChat);
                 }
                 listaMensajes = new ArrayList<>();
 
@@ -218,22 +229,20 @@ public class ChatVentana extends AppCompatActivity {
     }
 
     public void inicializarUsuariosChat() {
-        db.collection(COLECCION).document(usuarioActualUid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        gestorFirebase.obtenerUsuarioPorId(usuarioActualUid, new GestorFirestore.Callback<Usuario>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    usuario1 = documentSnapshot.toObject(Usuario.class);
-                }
+            public void onSuccess(Usuario result) {
+                usuario1 = result;
             }
-        });
-        db.collection(COLECCION).document(usuario2Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        }, Usuario.class);
+
+        gestorFirebase.obtenerUsuarioPorId(usuario2Uid, new GestorFirestore.Callback<Usuario>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    usuario2 = documentSnapshot.toObject(Usuario.class);
-                }
+            public void onSuccess(Usuario result) {
+                usuario2 = result;
             }
-        });
+        }, Usuario.class);
+
     }
 }
 

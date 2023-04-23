@@ -21,15 +21,15 @@ import java.util.List;
 
 public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.ViewHolder> {
 
-        private List<Resena> listaResenas;
+    private List<Resena> listaResenas;
 
 
-    public AdaptadorResenas(ArrayList<Resena> listaResenas) {
+    public AdaptadorResenas(List<Resena> listaResenas) {
         this.listaResenas = listaResenas;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView nombreUsu,fecha,texto;
+        private TextView nombreUsu, fecha, texto;
         private ImageView imgUsu;
         private TextView estrellas;
 
@@ -37,29 +37,26 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
         public ViewHolder(View v) {
             super(v);
             texto = v.findViewById(R.id.txtContenidoResena);
-            nombreUsu = v.findViewById(R.id.txtNombreUsu);
+            nombreUsu = v.findViewById(R.id.txtNombreUsuResena);
             imgUsu = v.findViewById(R.id.imgUsuResena);
             estrellas = v.findViewById(R.id.txtValoracionResena);
-
-
+            fecha = v.findViewById(R.id.txtFechaResena);
         }
     }
 
-    @NonNull
     @Override
-    public AdaptadorResenas.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_resena, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdaptadorResenas.ViewHolder holder, int position) {
-        holder.nombreUsu.setText(listaResenas.get(position).getUsu().getNombre());
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.nombreUsu.setText(listaResenas.get(position).getAutor().getNombre());
         holder.texto.setText(listaResenas.get(position).getTexto());
-
-
-
+        holder.estrellas.setText(String.valueOf(listaResenas.get(position).getValoracion()));
+        holder.fecha.setText(listaResenas.get(position).getFecha());
     }
 
     @Override

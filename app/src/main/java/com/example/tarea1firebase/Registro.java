@@ -196,8 +196,7 @@ public class Registro extends AppCompatActivity {
                         } else {
                             // Se crea el usuario en collections (FIRESTORE), y se le pasa el id de authenticator como referencia de documento
                             String idUsuario = task.getResult().getUser().getUid();
-                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, Arrays.asList(), "", "", "", "", "", Arrays.asList(), "", Arrays.asList());
-                            user.setCiudad(ciudad);
+                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), "", Arrays.asList(), Arrays.asList());
                             db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -224,7 +223,8 @@ public class Registro extends AppCompatActivity {
     private void registrarConGoogle(String emailUsuario, String nombreUsuario) {
         //Ya existe el email
         String idUsuario = id;
-        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, Arrays.asList(), "", "", "", "", "", Arrays.asList(), "", Arrays.asList());
+        String ciudad = mySpinner.getSelectedItem().toString();
+        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), "", Arrays.asList(), Arrays.asList());
         db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

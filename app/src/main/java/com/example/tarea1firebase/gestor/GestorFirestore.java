@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.example.tarea1firebase.entidades.Resena;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -75,6 +76,12 @@ public class GestorFirestore {
             @Override
             public void onFailure(@NonNull Exception e) {
             }
+        });
+    }
+
+    public void actualiazarCampoUsuario(String idUsuario, String campoAActualizar, Object nuevoValor, Callback<String> callback) {
+        db.collection(COLECCION).document(idUsuario).update(campoAActualizar, FieldValue.arrayUnion(nuevoValor)).addOnSuccessListener(documentReference -> {
+            callback.onSuccess("Actualizado");
         });
     }
 

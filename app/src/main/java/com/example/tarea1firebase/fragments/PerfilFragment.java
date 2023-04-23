@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,16 +27,11 @@ import com.example.tarea1firebase.adaptadores.AdaptadorCancionesRecycler;
 import com.example.tarea1firebase.ChatVentana;
 import com.example.tarea1firebase.EditarPerfil;
 import com.example.tarea1firebase.R;
+import com.example.tarea1firebase.adaptadores.AdaptadorResenas;
+import com.example.tarea1firebase.entidades.Resena;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.example.tarea1firebase.gestor.GestorFirestore;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -48,23 +42,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PerfilFragment extends Fragment {
-    private FirebaseFirestore db;
     private int PICK_AUDIO_REQUEST = 123120;
     //Este será el nombre de la colección que daremos en la BBDD de Firebase
     public final static String COLECCION = "Usuarios";
     private StorageReference storageRef;
     private FirebaseStorage storage;
     private ProgressDialog dialogoCargando;
-    private RecyclerView recyclerCanciones;
+    private RecyclerView recyclerCanciones, recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private TextView lblUsername, lblDescripcion, lblEmail, lblRecyclerVacio;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
-    private Button btnChat, tvEditar;
+    private Button btnChat, btnEditar;
     private String uid;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil, imgRecyclerVacio;
     private GestorFirestore gestorFirebase;
+    private AdaptadorResenas adaptadorResenas;
 
 
     public PerfilFragment() {
@@ -80,18 +74,12 @@ public class PerfilFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         return inflater.inflate(R.layout.perfil_usuario, container, false);
-
-
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        gestorFirebase = new GestorFirestore();
 
         /**gestorFirebase.imprimir(new GestorFirestore.Callback<String>() {
         @Override public void onSuccess(String result) {
@@ -99,46 +87,30 @@ public class PerfilFragment extends Fragment {
         }
         });
          */
+        gestorFirebase = new GestorFirestore();
         mAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
         uid = mAuth.getCurrentUser().getUid();
-        imgFotoPerfil = view.findViewById(R.id.imgFotoPerfil);
-
-        lblDescripcion = view.findViewById(R.id.tvDescripcion);
-        lblUsername = view.findViewById(R.id.tvNombre);
-        lblEmail = view.findViewById(R.id.tvCiudad);
 
         inicializarUsuario();
+        inicializarVistas();
 
-        recyclerCanciones = view.findViewById(R.id.recyclerCanciones);
-        recyclerCanciones.setHasFixedSize(true);
+        añadirListenerBotones();
 
-        recyclerCanciones.setLayoutManager(new LinearLayoutManager(getContext()));
+        esconderVistasAjenas();
 
+    }
 
-        imgRecyclerVacio = view.findViewById(R.id.imagenRecyclerVacio);
-        lblRecyclerVacio = view.findViewById(R.id.lblRecyclerVacio);
+    private void esconderVistasAjenas() {
+        if (!uid.equals(mAuth.getCurrentUser().
+                getUid())) {
+            btnAnadirCancion.setVisibility(View.GONE);
+            btnEditar.setVisibility(View.GONE);
 
-        ArrayList<String> arrayPrueba = new ArrayList<>();
+            btnChat.setVisibility(View.VISIBLE);
+        }
+    }
 
-        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba);
-        recyclerCanciones.setAdapter(adaptadorCanciones);
-
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
-
-        storageRef = FirebaseStorage.getInstance().getReference();
-
-        btnChat = view.findViewById(R.id.btnChat);
-        btnInstagram = view.findViewById(R.id.btnInstagram);
-        btnYoutube = view.findViewById(R.id.btnYoutube);
-        btnTiktok = view.findViewById(R.id.btnTikTok);
-        btnSpotify = view.findViewById(R.id.btnSpotify);
-        btnSoundCloud = view.findViewById(R.id.btnSoundCloud);
-
-
-        btnAnadirCancion = view.findViewById(R.id.btnSubirAudio);
-        btnAnadirCancion = view.findViewById(R.id.btnSubirAudio);
+    private void añadirListenerBotones() {
         btnAnadirCancion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,19 +118,15 @@ public class PerfilFragment extends Fragment {
             }
         });
 
+        btnChat.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(getContext(), ChatVentana.class);
+            intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
+            intent.putExtra("UidUsuarioReceptor", uid);
+            startActivity(intent);
+        });
 
-        tvEditar = view.findViewById(R.id.tvEditar);
-
-        if (!uid.equals(mAuth.getCurrentUser().
-
-                getUid())) {
-            btnAnadirCancion.setVisibility(View.GONE);
-            tvEditar.setVisibility(View.GONE);
-
-            btnChat.setVisibility(View.VISIBLE);
-        }
-
-        tvEditar.setOnClickListener(v -> {
+        btnEditar.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), EditarPerfil.class);
             gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
                 @Override
@@ -172,15 +140,6 @@ public class PerfilFragment extends Fragment {
             }, Usuario.class);
         });
 
-
-        btnChat.setOnClickListener(v ->
-
-        {
-            Intent intent = new Intent(getContext(), ChatVentana.class);
-            intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
-            intent.putExtra("UidUsuarioReceptor", uid);
-            startActivity(intent);
-        });
 
         btnInstagram.setOnClickListener(v ->
 
@@ -207,22 +166,60 @@ public class PerfilFragment extends Fragment {
          });**/
     }
 
+
+    public void inicializarVistas() {
+        lblDescripcion = getView().findViewById(R.id.tvDescripcion);
+        lblUsername = getView().findViewById(R.id.tvNombre);
+        lblEmail = getView().findViewById(R.id.tvCiudad);
+        btnChat = getView().findViewById(R.id.btnChat);
+
+        btnEditar = getView().findViewById(R.id.tvEditar);
+
+        imgFotoPerfil = getView().findViewById(R.id.imgFotoPerfil);
+
+        btnInstagram = getView().findViewById(R.id.btnInstagram);
+        btnYoutube = getView().findViewById(R.id.btnYoutube);
+        btnTiktok = getView().findViewById(R.id.btnTikTok);
+        btnSpotify = getView().findViewById(R.id.btnSpotify);
+        btnSoundCloud = getView().findViewById(R.id.btnSoundCloud);
+
+
+        btnAnadirCancion = getView().findViewById(R.id.btnSubirAudio);
+        btnAnadirCancion = getView().findViewById(R.id.btnSubirAudio);
+
+        recyclerCanciones = getView().findViewById(R.id.recyclerCanciones);
+        recyclerCanciones.setHasFixedSize(true);
+
+        recyclerCanciones.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+        imgRecyclerVacio = getView().findViewById(R.id.imagenRecyclerVacio);
+        lblRecyclerVacio = getView().findViewById(R.id.lblRecyclerVacio);
+
+        ArrayList<String> arrayPrueba = new ArrayList<>();
+
+        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba);
+        recyclerCanciones.setAdapter(adaptadorCanciones);
+
+        recyclerResenas = getView().findViewById(R.id.RecyclerResenas);
+        recyclerResenas.setHasFixedSize(true);
+
+        recyclerResenas.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        ArrayList<Resena> arrayResenas = new ArrayList<>();
+        adaptadorResenas = new AdaptadorResenas(arrayResenas);
+        recyclerResenas.setAdapter(adaptadorResenas);
+    }
+
     private void inicializarUsuario() {
-        db.collection(COLECCION).document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    usuario = documentSnapshot.toObject(Usuario.class);
-                    obtenerDatosUsuario();
-                    setRedesSociales();
-                } else {
-                }
+            public void onSuccess(Usuario usuarioDevuelto) {
+                usuario = usuarioDevuelto;
+                obtenerDatosUsuario();
+                setRedesSociales();
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-            }
-        });
+        }, Usuario.class);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -240,53 +237,46 @@ public class PerfilFragment extends Fragment {
         dialogoCargando.setCancelable(false);
         dialogoCargando.show();
 
-        CollectionReference refUsuarios = FirebaseFirestore.getInstance().
-
-                collection(COLECCION);
-
-
-        refUsuarios.document(usuario.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            //Obtenemos todas las urls del array de canciones del usuario en firebase, y asignamos cada una a un mediaplayer y seekbar distinto.
+        gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        //Obtenemos el usuario de la base de datos con todos sus campos
-                        Usuario usuario = document.toObject(Usuario.class);
+            public void onSuccess(Usuario usuarioDevuelto) {
+                usuario = usuarioDevuelto;
 
-                        //Canciones que obtenemos de la base de datos.
-                        List<String> canciones;
-                        canciones = usuario.getArrayCanciones();
+                //Canciones que obtenemos de la base de datos.
+                List<String> canciones;
+                canciones = usuario.getArrayCanciones();
+
+                List<Resena> resenas;
+                resenas = usuario.getListaResenas();
+
+                lblUsername.setText(usuario.getNombre());
+                lblDescripcion.setText(usuario.getDescripcion());
+                lblEmail.setText(usuario.getEmail());
+
+                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
+                recyclerCanciones.setAdapter(adaptadorCanciones);
+
+                adaptadorResenas = new AdaptadorResenas(resenas);
+                recyclerResenas.setAdapter(adaptadorResenas);
 
 
-                        lblUsername.setText(usuario.getNombre());
-                        lblDescripcion.setText(usuario.getDescripcion());
-                        lblEmail.setText(usuario.getEmail());
-
-                        adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
-                        recyclerCanciones.setAdapter(adaptadorCanciones);
-
-                        //Establecer foto de perfil
-                        if (!usuario.getFotoPerfil().equals("")) {
-                            try {
-                                Glide.with(getContext()).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
-                            } catch (Exception e) {
-                            }
-                        }
-                        if (adaptadorCanciones.getItemCount() > 0) {
-                            imgRecyclerVacio.setVisibility(View.GONE);
-                            lblRecyclerVacio.setVisibility(View.GONE);
-                        } else {
-                            imgRecyclerVacio.setVisibility(View.VISIBLE);
-                            lblRecyclerVacio.setVisibility(View.VISIBLE);
-                        }
-
+                //Establecer foto de perfil
+                if (!usuario.getFotoPerfil().equals("")) {
+                    try {
+                        Glide.with(PerfilFragment.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
+                    } catch (Exception e) {
                     }
+                }
+                if (adaptadorCanciones.getItemCount() > 0) {
+                    imgRecyclerVacio.setVisibility(View.GONE);
+                    lblRecyclerVacio.setVisibility(View.GONE);
+                } else {
+                    imgRecyclerVacio.setVisibility(View.VISIBLE);
+                    lblRecyclerVacio.setVisibility(View.VISIBLE);
                 }
                 dialogoCargando.dismiss();
             }
-        });
+        }, Usuario.class);
 
     }
 

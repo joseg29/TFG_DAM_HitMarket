@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tarea1firebase.entidades.Usuario;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,15 +19,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class InicioApp extends AppCompatActivity {
-    private FirebaseFirestore db;
     private Usuario user;
+    private GestorFirestore gestorFirebase;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inicio_app);
-        db = FirebaseFirestore.getInstance();
+        gestorFirebase = new GestorFirestore();
     }
 
     @Override
@@ -52,23 +53,17 @@ public class InicioApp extends AppCompatActivity {
             String idDocumento = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
             //Se hace un get de firestore a partir del uid del currentUser. Su id se pasa como referencia de documento, para obtener el objeto Usuario y pasarlo a la siguiente activity.
-
-            db.collection(COLECCION).document(idDocumento).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            gestorFirebase.obtenerUsuarioPorId(idDocumento, new GestorFirestore.Callback<Usuario>() {
                 @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            user = document.toObject(Usuario.class);
-                            Toast.makeText(InicioApp.this, "Sesión iniciada", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(InicioApp.this, MarcoMenu.class);
-                            intent.putExtra("USUARIO", user.getId());
-                            startActivity(intent);
-                            finish();
-                        }
-                    }
+                public void onSuccess(Usuario result) {
+                    user = result;
+                    Toast.makeText(InicioApp.this, "Sesión iniciada", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(InicioApp.this, MarcoMenu.class);
+                    intent.putExtra("USUARIO", user.getId());
+                    startActivity(intent);
+                    finish();
                 }
-            });
+            }, Usuario.class);
         }
         //Si no hay ninguna sesión iniciada, se envía a la ventana de Login.
         else {

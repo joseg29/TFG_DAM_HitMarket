@@ -1,20 +1,31 @@
 package com.example.tarea1firebase.entidades;
 
-import android.widget.TextView;
+import java.io.Serializable;
 
-public class Resena {
-    private String texto,fecha;
-    private Usuario usu;
+public class Resena implements Serializable {
+    private String texto;
+
+    private String fecha;
+    private Usuario autor;
     private int valoracion;
 
-    public Resena(){
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public Resena() {
 
     }
 
-    public Resena(String texto, Usuario usu, int valoracion) {
+    public Resena(String texto, Usuario usu, int valoracion, String fecha) {
         this.texto = texto;
-        this.usu = usu;
+        this.autor = usu;
         this.valoracion = valoracion;
+        this.fecha = fecha;
     }
 
     public String getTexto() {
@@ -25,12 +36,12 @@ public class Resena {
         this.texto = texto;
     }
 
-    public Usuario getUsu() {
-        return usu;
+    public Usuario getAutor() {
+        return autor;
     }
 
-    public void setUsu(Usuario usu) {
-        this.usu = usu;
+    public void setAutor(Usuario autor) {
+        this.autor = autor;
     }
 
     public int getValoracion() {
