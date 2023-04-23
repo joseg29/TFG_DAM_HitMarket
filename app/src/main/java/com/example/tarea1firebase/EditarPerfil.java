@@ -38,7 +38,7 @@ import java.io.IOException;
 
 public class EditarPerfil extends AppCompatActivity {
     private TextView lblNombre, lblDescripcion, lblInstagram, lblYoutube, lblSpotify, lblTikTok, lblSoundCloud;
-    private EditText etNombre, etDescripcion, etInstagram, etYoutube, etSpotify, etTikTok, etSoundCloud;
+    private EditText etNombre, etDescripcion, etEmailEditar, etInstagram, etYoutube, etSpotify, etTikTok, etSoundCloud;
     private String uid;
     private Usuario usuarioEditando;
     private FirebaseFirestore db;
@@ -63,6 +63,7 @@ public class EditarPerfil extends AppCompatActivity {
 
         etNombre = findViewById(R.id.etNombreEditar);
         etDescripcion = findViewById(R.id.etDescripcionEditar);
+        etEmailEditar = findViewById(R.id.etEmailEditar);
         etInstagram = findViewById(R.id.etInstagramEditar);
         etSoundCloud = findViewById(R.id.etSoundCloudEditar);
         etSpotify = findViewById(R.id.etSpotifyEditar);
@@ -111,6 +112,8 @@ public class EditarPerfil extends AppCompatActivity {
             usuarioEditando.setYoutube(etYoutube.getText().toString());
             usuarioEditando.setSoundCloud(etSoundCloud.getText().toString());
             usuarioEditando.setTiktTok(etTikTok.getText().toString());
+            usuarioEditando.setEmail(etEmailEditar.getText().toString());
+
             if (urlImagenPerfil != null) {
                 usuarioEditando.setFotoPerfil(urlImagenPerfil);
             }
@@ -158,9 +161,7 @@ public class EditarPerfil extends AppCompatActivity {
 
     private void obtenerDatosUsuario(String uid) {
 
-        CollectionReference refUsuarios = FirebaseFirestore.getInstance().
-
-                collection(COLECCION);
+        CollectionReference refUsuarios = FirebaseFirestore.getInstance().collection(COLECCION);
 
 
         refUsuarios.document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -175,6 +176,7 @@ public class EditarPerfil extends AppCompatActivity {
 
                         etNombre.setText(usuario.getNombre());
                         etDescripcion.setText(usuario.getDescripcion());
+                        etEmailEditar.setText(usuario.getEmail());
                         etSpotify.setText(usuario.getSpotify());
                         etInstagram.setText(usuario.getInstagram());
                         etYoutube.setText(usuario.getYoutube());
