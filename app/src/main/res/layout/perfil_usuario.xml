@@ -88,47 +88,28 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="5dp">
 
-                    <ImageView
-                        android:id="@+id/star1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@id/star2"
-                        android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/estrella"
-                        android:textColor="@color/white" />
-
-
-                    <ImageView
-                        android:id="@+id/star2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@id/star3"
-                        android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/estrella" />
+                    <Button
+                        android:id="@+id/btnResena"
+                        android:layout_width="29dp"
+                        android:layout_height="35dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/gotham_bold"
+                        android:text="4,8"
+                        android:textAlignment="viewEnd"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp" />
 
                     <ImageView
-                        android:id="@+id/star3"
+                        android:id="@+id/imageView2"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@id/star4"
-                        android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/estrella" />
-
-                    <ImageView
-                        android:id="@+id/star4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@id/star5"
-                        android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/estrella" />
+                        android:layout_height="match_parent"
+                        android:layout_margin="0dp"
+                        android:layout_weight="1"
+                        android:padding="2dp"
+                        app:srcCompat="@drawable/estrella" />
 
 
-                    <ImageView
-                        android:id="@+id/star5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/transparent"
-                        android:src="@drawable/estrella" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -388,6 +369,11 @@
                 </TableLayout>
 
             </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/RecyclerResenas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
         </LinearLayout>

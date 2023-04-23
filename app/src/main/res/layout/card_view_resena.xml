@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:backgroundTint="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/carta_redonda_usuario"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="33dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgUsuResena"
+                    android:layout_width="53dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/txtNombreUsuResena"
+                    android:layout_width="288dp"
+                    android:layout_height="33dp"
+                    android:fontFamily="@font/gotham_black"
+                    android:gravity="center|left"
+                    android:paddingLeft="5dp"
+                    android:text="Pepe DJ"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/txtValoracionResena"
+                    android:layout_width="38dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/gotham_bold"
+                    android:gravity="center|right"
+                    android:text="4,8"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    app:srcCompat="@drawable/estrella" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtContenidoResena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/fuente_gotham"
+                android:text="Saiko es una banda chilena de rock alternativo formada en 1999. Su estilo musical se caracteriza por combinar elementos del rock, pop y electrónica, creando una atmósfera melancólica y reflexiva en sus letras y sonidos."
+                android:textAlignment="viewStart"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

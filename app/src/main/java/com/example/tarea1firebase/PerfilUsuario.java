@@ -1,15 +1,24 @@
 package com.example.tarea1firebase;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +26,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tarea1firebase.adaptadores.AdaptadorResenas;
+import com.example.tarea1firebase.entidades.Resena;
 import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.example.tarea1firebase.adaptadores.AdaptadorCancionesRecycler;
 import com.example.tarea1firebase.entidades.Usuario;
@@ -36,8 +47,9 @@ public class PerfilUsuario extends AppCompatActivity {
     private StorageReference storageRef;
     private FirebaseStorage storage;
     private ProgressDialog dialogoCargando;
-    private RecyclerView recyclerCanciones;
+    private RecyclerView recyclerCanciones,recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
+    private AdaptadorResenas adaptadorResenas;
     private TextView lblUsername, lblDescripcion, lblEmail, lblRecyclerVacio;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
@@ -46,6 +58,9 @@ public class PerfilUsuario extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil, imgRecyclerVacio;
     private GestorFirestore gestorFirebase;
+    private Button btnResena;
+    private EditText editNumero;
+    private EditText editTexto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +76,44 @@ public class PerfilUsuario extends AppCompatActivity {
         setListenerBotones();
 
         inicializarBotonesRedesSociales();
+
+        btnResena = findViewById(R.id.btnResena);
+
+
+        btnResena.setOnClickListener(v -> {
+            // Obtener la vista personalizada
+            View view = getLayoutInflater().inflate(R.layout.dialog_resena, null);
+            // Buscar el LinearLayout dentro de la vista personalizada
+            LinearLayout linearLayout = view.findViewById(R.id.dialog_layout);
+            // Remover el LinearLayout de su padre original (si lo tiene)
+            if (linearLayout.getParent() != null) {
+                ((ViewGroup) linearLayout.getParent()).removeView(linearLayout);
+            }
+
+            // Crear el diálogo
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(linearLayout);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Procesar los datos ingresados por el usuario
+                }
+            });
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Cerrar el diálogo
+                    dialog.cancel();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            Drawable fondo = getResources().getDrawable(R.drawable.carta_redonda_usuario);
+            dialog.getWindow().setBackgroundDrawable(fondo);
+            dialog.show();
+
+        });
     }
+
 
     public void setListenerBotones() {
 
@@ -151,6 +203,19 @@ public class PerfilUsuario extends AppCompatActivity {
                 usuario = usuarioDevuelto;
                 obtenerDatosUsuario();
                 setRedesSociales();
+
+                recyclerResenas = findViewById(R.id.RecyclerResenas);
+                recyclerResenas.setHasFixedSize(true);
+
+                recyclerResenas.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+                ArrayList<Resena> arrayResenas = new ArrayList<>();
+
+                Resena r1 = new Resena("Pepejahdaliusduiasgdluagdiluasgdiugasldikugalkjsdgalkjsd",new Usuario(),34);
+                arrayResenas.add(r1);
+
+                adaptadorResenas = new AdaptadorResenas(arrayResenas);
+                recyclerResenas.setAdapter(adaptadorResenas);
             }
         }, Usuario.class);
     }
