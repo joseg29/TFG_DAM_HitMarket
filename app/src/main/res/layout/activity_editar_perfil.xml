@@ -96,14 +96,13 @@
                 android:fontFamily="@font/gotham_bold_1"
                 android:text="Nombre"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/etNombreEditar"
                 android:layout_width="153dp"
-                android:layout_height="40dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="100dp"
-                android:alpha=".8"
                 android:backgroundTint="@color/white"
                 android:inputType="textPersonName"
                 android:textColor="@color/white" />
@@ -112,6 +111,36 @@
         <LinearLayout
             android:layout_width="380dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lblEmailEditar"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Email"
+                android:textAlignment="viewStart"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+
+            <EditText
+                android:id="@+id/etEmailEditar"
+                android:layout_width="153dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="100dp"
+                android:alpha=".8"
+                android:backgroundTint="@color/white"
+                android:inputType="textPersonName"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -140,7 +169,7 @@
         <LinearLayout
             android:layout_width="380dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -361,16 +390,91 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnCerrarSesion"
-            android:layout_width="181dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/boton_redondo"
-            android:backgroundTint="#DC1414"
-            android:fontFamily="@font/gotham_bold_1"
-            android:text="Cerrar Sesión" />
+        <LinearLayout
+            android:layout_width="410dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_text_editar_perfil"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lblPasswordActual"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Contraseña actual"
+                android:textAlignment="viewStart"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etPasswordActual"
+                android:layout_width="153dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="40dp"
+                android:backgroundTint="@color/white"
+                android:inputType="textPassword"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lblPasswordNuevo"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Nueva contraseña"
+                android:textAlignment="viewStart"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/etPasswordNuevo"
+                android:layout_width="153dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="40dp"
+                android:backgroundTint="@color/white"
+                android:inputType="textPassword"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="410dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edit_text_editar_perfil"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCerrarSesion"
+                android:layout_width="181dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/gotham_bold_1"
+                android:text="Cerrar Sesión"
+                android:textColor="@color/red" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
