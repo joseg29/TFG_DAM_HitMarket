@@ -9,38 +9,60 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="35dp"
-        android:layout_weight="1"
-        android:fontFamily="@font/gotham_bold"
-        android:text="Mensajes"
-        android:textColor="#FFFFFF"
-        android:textSize="20dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerChatsRecientes"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="31dp"
-        android:layout_marginRight="5dp"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="35dp"
+            android:backgroundTint="#FFFFFF"
+            android:fontFamily="@font/gotham_bold"
+            android:text="Mensajes"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_below="@+id/textView"
-        android:layout_marginTop="10dp"
-        android:background="?android:attr/listDivider"
-        android:backgroundTint="#959595" />
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginTop="10dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="#959595" />
+
+        <ImageView
+            android:id="@+id/imagenRecyclerMsgVacio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="165dp"
+            app:srcCompat="@drawable/no_hay_msg" />
+
+        <TextView
+            android:id="@+id/lblRecyclerVacio2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gotham_bold"
+            android:text="No hay mensajes"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerChatsRecientes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="31dp"
+            android:layout_marginRight="5dp"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
 
 </RelativeLayout>

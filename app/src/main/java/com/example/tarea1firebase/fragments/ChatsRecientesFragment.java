@@ -1,4 +1,4 @@
-package com.example.tarea1firebase.entidades.fragments;
+package com.example.tarea1firebase.fragments;
 
 import android.os.Bundle;
 
@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.tarea1firebase.adaptadores.AdaptadorChatsRecientes;
 import com.example.tarea1firebase.entidades.Chat;
@@ -42,6 +44,8 @@ public class ChatsRecientesFragment extends Fragment {
     private Chat chat;
     private String userId;
     private List<String> chats;
+    private ImageView imgMsgVacios;
+    private TextView lblMsgVacios;
 
     public ChatsRecientesFragment() {
         // Required empty public constructor
@@ -73,6 +77,9 @@ public class ChatsRecientesFragment extends Fragment {
 
         adaptadorMensajes = new AdaptadorChatsRecientes(arrayPrueba);
         recyclerMensajes.setAdapter(adaptadorMensajes);
+
+        imgMsgVacios = view.findViewById(R.id.imagenRecyclerMsgVacio);
+        lblMsgVacios = view.findViewById(R.id.lblRecyclerVacio2);
 // Obtén la referencia de la base de datos
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
@@ -82,6 +89,8 @@ public class ChatsRecientesFragment extends Fragment {
 // Define el ID del usuario para el que quieres obtener los chats
         userId = mAuth.getCurrentUser().getUid();
         obtenerChats();
+
+
     }
 
 
@@ -129,6 +138,14 @@ public class ChatsRecientesFragment extends Fragment {
                             }
 
                             ordenarChats();
+                            if (adaptadorMensajes.getItemCount() > 0) {
+                                imgMsgVacios.setVisibility(View.GONE);
+                                lblMsgVacios.setVisibility(View.GONE);
+                            } else {
+                                imgMsgVacios.setVisibility(View.VISIBLE);
+                                lblMsgVacios.setVisibility(View.VISIBLE);
+                            }
+
                         }
 
                         @Override

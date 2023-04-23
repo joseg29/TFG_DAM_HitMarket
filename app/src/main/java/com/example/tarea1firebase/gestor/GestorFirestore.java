@@ -1,6 +1,6 @@
 package com.example.tarea1firebase.gestor;
 
-import static com.example.tarea1firebase.entidades.fragments.PerfilFragment.COLECCION;
+import static com.example.tarea1firebase.fragments.PerfilFragment.COLECCION;
 
 import android.net.Uri;
 

@@ -1,4 +1,4 @@
-package com.example.tarea1firebase.Fragments;
+package com.example.tarea1firebase.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -29,6 +29,7 @@ import com.example.tarea1firebase.ChatVentana;
 import com.example.tarea1firebase.EditarPerfil;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.entidades.Usuario;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -93,12 +94,11 @@ public class PerfilFragment extends Fragment {
         gestorFirebase = new GestorFirestore();
 
         /**gestorFirebase.imprimir(new GestorFirestore.Callback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                //Hacer algo con el resultado
-            }
-        });**/
-
+        @Override public void onSuccess(String result) {
+        //Hacer algo con el resultado
+        }
+        });
+         */
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         uid = mAuth.getCurrentUser().getUid();

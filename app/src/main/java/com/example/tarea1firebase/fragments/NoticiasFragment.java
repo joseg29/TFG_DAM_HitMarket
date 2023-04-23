@@ -1,4 +1,4 @@
-package com.example.tarea1firebase.entidades.fragments;
+package com.example.tarea1firebase.fragments;
 
 import static com.example.tarea1firebase.Registro.COLECCION;
 
