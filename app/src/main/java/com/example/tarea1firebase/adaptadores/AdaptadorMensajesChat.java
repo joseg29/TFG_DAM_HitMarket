@@ -59,12 +59,17 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
 
         if (listaMensajes.get(position).getRemitente().equals(uidActual)) {
             holder.textoMensaje.setBackgroundResource(R.drawable.corner_mensaje_enviado);
+            holder.textoMensaje.setGravity(Gravity.RIGHT);
+            holder.textoMensaje.setPadding(0,12,25,0);
             holder.layoutMensaje.setGravity(Gravity.RIGHT);
             holder.layoutFecha.setGravity(Gravity.RIGHT);
+            holder.fechaMensaje.setGravity(Gravity.RIGHT);
         } else {
             holder.textoMensaje.setBackgroundResource(R.drawable.corner_mensaje_recibido);
+            holder.textoMensaje.setPadding(25,12,0,0);
             holder.layoutMensaje.setGravity(Gravity.LEFT);
             holder.layoutFecha.setGravity(Gravity.LEFT);
+            holder.fechaMensaje.setGravity(Gravity.LEFT);
         }
     }
 
