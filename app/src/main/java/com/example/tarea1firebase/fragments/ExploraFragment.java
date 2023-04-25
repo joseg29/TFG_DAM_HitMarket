@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.entidades.Usuario;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,11 +30,11 @@ public class ExploraFragment extends Fragment {
 
     private RecyclerView recyclerViewUsu;
     private AdaptadorUsuariosRecycler adaptadorUsuariosRecycler;
-    private FirebaseFirestore db;
     private Usuario user;
     private ArrayList<Usuario> listaUsuarios;
     private SearchView barraBusqueda;
     private ProgressBar progressBar;
+    private GestorFirestore gestorFirebase;
 
     public ExploraFragment() {
         // Required empty public constructor
@@ -42,8 +43,8 @@ public class ExploraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = FirebaseFirestore.getInstance();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,6 +57,22 @@ public class ExploraFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        inicializarVistas(view);
+        gestorFirebase = new GestorFirestore();
+        setListenerBarraBusqueda();
+
+        gestorFirebase.obtenerTodosLosUsuarios(new GestorFirestore.Callback<ArrayList<Usuario>>() {
+            @Override
+            public void onSuccess(ArrayList<Usuario> result) {
+                adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(result);
+                recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
+            }
+        });
+
+
+    }
+
+    private void inicializarVistas(View view) {
         recyclerViewUsu = view.findViewById(R.id.recyclerUsuarios);
         recyclerViewUsu.setHasFixedSize(true);
         recyclerViewUsu.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -64,20 +81,11 @@ public class ExploraFragment extends Fragment {
         Sprite doubleBounce = new FadingCircle();
         progressBar.setIndeterminateDrawable(doubleBounce);
         progressBar.setVisibility(View.GONE);
-
-        db.collection(COLECCION).get().addOnSuccessListener(documentSnapshots -> {
-            listaUsuarios = new ArrayList<>();
-            for (DocumentSnapshot documentSnapshot : documentSnapshots.getDocuments()) {
-                Usuario saludo = documentSnapshot.toObject(Usuario.class);
-                listaUsuarios.add(saludo);
-            }
-
-            adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);
-            recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
-        }).addOnFailureListener(e -> {
-            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        });
         barraBusqueda = view.findViewById(R.id.barraBusqueda);
+    }
+
+
+    private void setListenerBarraBusqueda() {
         barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -90,8 +98,6 @@ public class ExploraFragment extends Fragment {
                 return false;
             }
         });
-
-
     }
 }
 

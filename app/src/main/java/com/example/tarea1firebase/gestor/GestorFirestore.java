@@ -3,10 +3,15 @@ package com.example.tarea1firebase.gestor;
 import static com.example.tarea1firebase.fragments.PerfilFragment.COLECCION;
 
 import android.net.Uri;
+import android.telecom.Call;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.tarea1firebase.Registro;
+import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
 import com.example.tarea1firebase.entidades.Resena;
+import com.example.tarea1firebase.entidades.Usuario;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -17,6 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
 
 public class GestorFirestore {
     private StorageReference storageRef;
@@ -29,14 +36,18 @@ public class GestorFirestore {
         storageRef = storage.getReference();
     }
 
-    /**
-     * public void imprimir(Callback<String> callback) {
-     * System.out.println("buscando...");
-     * //Este callback solo se ejecutará cuando se llegue a esta línea del código, y se devovlerá el resultado
-     * //Luego en el otro lado donde se llama al método, el resultado se obtendrá en el onSuccess, despues de haber dado la orden de callback.
-     * callback.onSuccess("Listo");
-     * }
-     */
+    public void obtenerTodosLosUsuarios(Callback<ArrayList<Usuario>> callback) {
+        db.collection(Registro.COLECCION).get().addOnSuccessListener(documentSnapshots -> {
+            ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+            for (DocumentSnapshot documentSnapshot : documentSnapshots.getDocuments()) {
+                Usuario saludo = documentSnapshot.toObject(Usuario.class);
+                listaUsuarios.add(saludo);
+            }
+            callback.onSuccess(listaUsuarios);
+        }).addOnFailureListener(e -> {
+        });
+    }
+
 
     public <T> void obtenerUsuarioPorId(String id, Callback<T> callback, Class<T> clase) {
         DocumentReference docRef = db.collection(COLECCION).document(id);
