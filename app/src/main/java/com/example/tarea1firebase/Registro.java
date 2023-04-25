@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.tarea1firebase.fragments.ExploraFragment;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
@@ -48,7 +47,7 @@ public class Registro extends AppCompatActivity {
     private EditText etEmail, etNombre, etContrasena, etConfirmPassword;
     private ImageButton btnMostrarContrasena;
     private boolean mostrarContrasena = false;
-    private TextView tvIniciarSesion, lblContrasena;
+    private TextView tvIniciarSesion, lblContrasena, lblConfirmarContrasena;
     private Usuario user;
     private Button btnRegistrar;
     private FirebaseAuth mAuth;
@@ -63,6 +62,51 @@ public class Registro extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro);
 
+        db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        storageRef = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+
+        inicializarVistas();
+
+        inicializarListenerBotones();
+
+
+    }
+
+    private void inicializarListenerBotones() {
+        tvIniciarSesion.setOnClickListener(v -> {
+            //Cambio a activity de login
+            Intent intent = new Intent(Registro.this, Login.class);
+            startActivity(intent);
+            finish();
+        });
+
+        btnRegistrar.setOnClickListener(v -> {
+            crearUsuario();
+        });
+        btnMostrarContrasena.setOnClickListener(view -> {
+            mostrarContrasena = !mostrarContrasena;
+            int cursorPosition = etContrasena.getSelectionStart();
+            if (mostrarContrasena) {
+                // Si se permite mostrar la contraseña, se cambia el inputType del EditText
+                etContrasena.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnMostrarContrasena.setImageResource(R.drawable.ojo_cerrado);
+            } else {
+                etContrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                btnMostrarContrasena.setImageResource(R.drawable.ojo_abierto);
+            }
+            etContrasena.setSelection(cursorPosition);
+        });
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.autonomous_communities, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinner.setAdapter(adapter);
+    }
+
+    private void inicializarVistas() {
         //Fondo animado
         videoMarco = findViewById(R.id.imVideo);
         try {
@@ -78,10 +122,6 @@ public class Registro extends AppCompatActivity {
         progressBar.setIndeterminateDrawable(doubleBounce);
         progressBar.setVisibility(View.GONE);
 
-        db = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
-        storageRef = FirebaseStorage.getInstance().getReference();
         tvIniciarSesion = findViewById(R.id.linkIniciaSesion);
         btnRegistrar = findViewById(R.id.btnRegistrate);
         btnMostrarContrasena = findViewById(R.id.btnMostrarContrasena);
@@ -89,21 +129,7 @@ public class Registro extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.etConfirmarPassword);
         lblContrasena = findViewById(R.id.lblPassword);
         mySpinner = findViewById(R.id.spinnerOpciones);
-
-        tvIniciarSesion.setOnClickListener(v -> {
-            //Cambio a activity de login
-            Intent intent = new Intent(Registro.this, Login.class);
-            startActivity(intent);
-            finish();
-        });
-
-        btnRegistrar.setOnClickListener(v -> {
-            crearUsuario();
-        });
-
-
-        mAuth = FirebaseAuth.getInstance();
-
+        lblConfirmarContrasena = findViewById(R.id.lblConfirmarPassword);
         etNombre = findViewById(R.id.etNombre);
         etEmail = findViewById(R.id.etEmail);
         etContrasena = findViewById(R.id.etPassword);
@@ -127,29 +153,12 @@ public class Registro extends AppCompatActivity {
                 etContrasena.setVisibility(View.GONE);
                 lblContrasena.setVisibility(View.GONE);
                 btnMostrarContrasena.setVisibility(View.GONE);
+                etConfirmPassword.setVisibility(View.GONE);
+                lblConfirmarContrasena.setVisibility(View.GONE);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-        btnMostrarContrasena.setOnClickListener(view -> {
-            mostrarContrasena = !mostrarContrasena;
-            int cursorPosition = etContrasena.getSelectionStart();
-            if (mostrarContrasena) {
-                // Si se permite mostrar la contraseña, se cambia el inputType del EditText
-                etContrasena.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                btnMostrarContrasena.setImageResource(R.drawable.ojo_cerrado);
-            } else {
-                etContrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                btnMostrarContrasena.setImageResource(R.drawable.ojo_abierto);
-            }
-            etContrasena.setSelection(cursorPosition);
-        });
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.autonomous_communities, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mySpinner.setAdapter(adapter);
     }
 
 
@@ -160,23 +169,21 @@ public class Registro extends AppCompatActivity {
         String confirmarContrasenaUsuario = etConfirmPassword.getText().toString();
         String ciudad = mySpinner.getSelectedItem().toString();
 
-
-        if (contrasenaUsuario.isEmpty() || confirmarContrasenaUsuario.isEmpty()) {
-            Toast.makeText(this, "Debe completar ambos campos de contraseña", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (!contrasenaUsuario.equals(confirmarContrasenaUsuario)) {
-            Toast.makeText(this, "La contraseña y su confirmación no coinciden", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         //Se crea el usuario en el authenticator de firebase
         progressBar.setVisibility(View.VISIBLE);
 
         if (googleAccount != null) {
             registrarConGoogle(emailUsuario, nombreUsuario);
         } else {
+            if (contrasenaUsuario.isEmpty() || confirmarContrasenaUsuario.isEmpty()) {
+                Toast.makeText(this, "Debe completar ambos campos de contraseña", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!contrasenaUsuario.equals(confirmarContrasenaUsuario)) {
+                Toast.makeText(this, "La contraseña y su confirmación no coinciden", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (!emailUsuario.isEmpty()) {
                 mAuth.createUserWithEmailAndPassword(emailUsuario, contrasenaUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -229,7 +236,7 @@ public class Registro extends AppCompatActivity {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Registro.this, ExploraFragment.class);
+                Intent intent = new Intent(Registro.this, MarcoMenu.class);
                 intent.putExtra("UidUsuario", id);
                 startActivity(intent);
                 finish();

@@ -2,16 +2,21 @@ package com.example.tarea1firebase.gestor;
 
 import static com.example.tarea1firebase.fragments.PerfilFragment.COLECCION;
 
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.telecom.Call;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.tarea1firebase.Login;
+import com.example.tarea1firebase.MarcoMenu;
 import com.example.tarea1firebase.Registro;
 import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
 import com.example.tarea1firebase.entidades.Resena;
 import com.example.tarea1firebase.entidades.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -45,6 +50,23 @@ public class GestorFirestore {
             }
             callback.onSuccess(listaUsuarios);
         }).addOnFailureListener(e -> {
+        });
+    }
+
+    public void verificarSiUsuarioYaExisteEnFirestore(String id, Callback<Boolean> callback) {
+        db.collection(Registro.COLECCION).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                //Si el documento existe, es porque ya el usuario se ha registrado anteriormente con los campos que faltaban.
+                if (document.exists()) {
+                    callback.onSuccess(true);
+                }
+                //Si no existe, se envía a registro para que cree la cuenta por primera vez (Se pasan los campos como email y nombre).
+                else {
+                    callback.onSuccess(false);
+                }
+            }
         });
     }
 

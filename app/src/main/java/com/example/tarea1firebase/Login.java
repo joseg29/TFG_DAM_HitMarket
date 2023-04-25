@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tarea1firebase.entidades.Usuario;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -44,9 +45,6 @@ import pl.droidsonroids.gif.GifDrawable;
 
 public class Login extends AppCompatActivity {
     private Button btnIniciarSesion, btnGoogleLogin;
-    private FirebaseFirestore db;
-    private StorageReference storageRef;
-    private FirebaseStorage storage;
     private EditText etEmail, etPassword;
     private TextView tvRegistrar, tvForgetPassword;
     private Usuario user;
@@ -58,37 +56,26 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInAccount googleAccount;
     private ProgressBar progressBar;
+    private GestorFirestore gestorFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        gestorFirestore = new GestorFirestore();
+        inicializarVistas();
 
-        //Icono de carga
-        progressBar = findViewById(R.id.spin_kit);
-        Sprite doubleBounce = new FadingCircle();
-        progressBar.setIndeterminateDrawable(doubleBounce);
-        progressBar.setVisibility(View.GONE);
+        mAuth = FirebaseAuth.getInstance();
 
-        //Fondo animado
-        videoMarco = findViewById(R.id.imVideo);
-        try {
-            GifDrawable gifDrawable = new GifDrawable(getResources(), R.raw.humobackground);
-            videoMarco.setImageDrawable(gifDrawable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        inicializarListenersBotones();
 
-        db = FirebaseFirestore.getInstance();
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
+        // Configurar Google Sign-In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        btnIniciarSesion = findViewById(R.id.btnIniciarSesion);
+    }
 
-        btnGoogleLogin = findViewById(R.id.btnGoogle);
-
-        tvRegistrar = findViewById(R.id.linkRegistrate);
-
+    private void inicializarListenersBotones() {
         tvRegistrar.setOnClickListener(v -> {
             //Cambio a activity de registro
             Intent intent = new Intent(Login.this, Registro.class);
@@ -99,10 +86,6 @@ public class Login extends AppCompatActivity {
         btnIniciarSesion.setOnClickListener(v -> {
             validarLogin();
         });
-
-
-        btnMostrarContrasena = findViewById(R.id.btnMostrarContrasena);
-        etPassword = findViewById(R.id.etPassword);
 
         //Boton de mostrar u ocultar contraseña
         btnMostrarContrasena.setOnClickListener(view -> {
@@ -119,23 +102,43 @@ public class Login extends AppCompatActivity {
             etPassword.setSelection(cursorPosition);
         });
 
-        mAuth = FirebaseAuth.getInstance();
-
-        // Configurar Google Sign-In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        btnGoogleLogin = findViewById(R.id.btnGoogle);
         btnGoogleLogin.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
 
-        tvForgetPassword = findViewById(R.id.tvForgetPassword);
         tvForgetPassword.setOnClickListener(v -> {
             Intent intent = new Intent(Login.this, RecuperarContrasena.class);
             startActivity(intent);
             finish();
         });
+    }
+
+    private void inicializarVistas() {
+        //Icono de carga
+        progressBar = findViewById(R.id.spin_kit);
+        Sprite doubleBounce = new FadingCircle();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.GONE);
+
+        //Fondo animado
+        videoMarco = findViewById(R.id.imVideo);
+        try {
+            GifDrawable gifDrawable = new GifDrawable(getResources(), R.raw.humobackground);
+            videoMarco.setImageDrawable(gifDrawable);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        tvForgetPassword = findViewById(R.id.tvForgetPassword);
+        btnMostrarContrasena = findViewById(R.id.btnMostrarContrasena);
+        etPassword = findViewById(R.id.etPassword);
+        btnIniciarSesion = findViewById(R.id.btnIniciarSesion);
+        btnGoogleLogin = findViewById(R.id.btnGoogle);
+        tvRegistrar = findViewById(R.id.linkRegistrate);
+        btnGoogleLogin = findViewById(R.id.btnGoogle);
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
     }
 
     //Este método se ejecuta una vez termina el intentForResult
@@ -172,13 +175,8 @@ public class Login extends AppCompatActivity {
     }
 
     public void validarLogin() {
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-
-
         String emailUsuario = etEmail.getText().toString();
         String claveUsuario = etPassword.getText().toString();
-
 
         if (!emailUsuario.isEmpty() && !claveUsuario.isEmpty()) {
             mAuth.signInWithEmailAndPassword(emailUsuario, claveUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -188,17 +186,20 @@ public class Login extends AppCompatActivity {
                         try {
                             throw task.getException();
                         } catch (FirebaseAuthInvalidUserException e) {
-                            progressBar.setVisibility(View.GONE);
                             // El usuario no existe
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(Login.this, "Email o contraseña incorrecta", Toast.LENGTH_LONG).show();
                         } catch (FirebaseAuthInvalidCredentialsException e) {
-                            progressBar.setVisibility(View.GONE);
                             // Credenciales inválidas (correo electrónico incorrecto o contraseña incorrecta)
+                            progressBar.setVisibility(View.GONE);
                             Toast.makeText(Login.this, "Email o contraseña incorrecta", Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
-                            Toast.makeText(Login.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            //Otros problemas
+                            Toast.makeText(Login.this, "No se ha podido iniciar sesión.", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
+                    }
+                    //Si no ha habido ningún problema con los campos, se procede a iniciar sesión
+                    else {
                         progressBar.setVisibility(View.VISIBLE);
                         iniciarSesion();
                     }
@@ -213,47 +214,40 @@ public class Login extends AppCompatActivity {
     public void iniciarSesion() {
         String idDocumento = mAuth.getCurrentUser().getUid();
 
-        //Se hace un get de firestore database con el id como referencia de documento, para obtener el objeto Usuario y pasarlo a la siguiente activity
-        db.collection(COLECCION).document(idDocumento).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                //Verificamos si se ha iniciado sesión con una cuenta de google. De ser así, 'googleAccount' no será null.
-                if (googleAccount != null) {
-                    Bundle userBundle = new Bundle();
+        //Verificamos si se ha iniciado sesión con una cuenta de google. De ser así, 'googleAccount' no será null.
+        if (googleAccount != null) {
+            gestorFirestore.verificarSiUsuarioYaExisteEnFirestore(idDocumento, new GestorFirestore.Callback<Boolean>() {
+                @Override
+                public void onSuccess(Boolean existe) {
+                    Intent intent;
+                    //Si el usuario ya existe en firestore, se envía directamente al inicio.
+                    if (existe) {
+                        intent = new Intent(Login.this, MarcoMenu.class);
+                        intent.putExtra("UidUsuario", idDocumento);
+                    }
+                    //Si el usuario solo se ha registrado en authenticator con google pero no en firestore, se envía a registro para que rellene los campos que faltan
+                    else {
+                        intent = new Intent(Login.this, Registro.class);
 
-                    userBundle.putString("NOMBRE", googleAccount.getDisplayName());
-                    userBundle.putString("EMAIL", googleAccount.getEmail());
-                    userBundle.putString("ID", mAuth.getCurrentUser().getUid());
-                    db.collection(COLECCION).document(idDocumento).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            DocumentSnapshot document = task.getResult();
-                            //Si el documento existe, es porque ya el usuario se ha registrado anteriormente con los campos que faltaban.
-                            if (document.exists()) {
-                                Intent intent = new Intent(Login.this, MarcoMenu.class);
-                                intent.putExtra("UidUsuario", idDocumento);
-                                startActivity(intent);
-                                finish();
-                            }
-                            //Si no existe, se envía a registro para que cree la cuenta por primera vez (Se pasan los campos como email y nombre).
-                            else {
-                                Intent intent = new Intent(Login.this, Registro.class);
-                                intent.putExtra("CUENTAGOOGLE", userBundle);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }
-                    });
-                }
-                //Si 'googleAccount' es null, quiere decir que inicio sesíon con usuario y contraseña, y se envía a la siguiente activity.
-                else {
-                    Intent intent = new Intent(Login.this, MarcoMenu.class);
-                    intent.putExtra("UidUsuario", idDocumento);
+                        Bundle userBundle = new Bundle();
+                        userBundle.putString("NOMBRE", googleAccount.getDisplayName());
+                        userBundle.putString("EMAIL", googleAccount.getEmail());
+                        userBundle.putString("ID", mAuth.getCurrentUser().getUid());
+                        intent.putExtra("CUENTAGOOGLE", userBundle);
+                    }
                     startActivity(intent);
                     finish();
                 }
-            }
-        });
+            });
+        }
+        //Si 'googleAccount' es null, quiere decir que inicio sesíon con usuario y contraseña, y se envía a la siguiente activity.
+        else {
+            Intent intent = new Intent(Login.this, MarcoMenu.class);
+            intent.putExtra("UidUsuario", idDocumento);
+            startActivity(intent);
+            finish();
+        }
     }
+
 }
 
