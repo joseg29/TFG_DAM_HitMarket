@@ -11,12 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.tarea1firebase.adaptadores.AdaptadorChatsRecientes;
 import com.example.tarea1firebase.entidades.Chat;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.entidades.Usuario;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,6 +50,8 @@ public class ChatsRecientesFragment extends Fragment {
     private ImageView imgMsgVacios;
     private TextView lblMsgVacios;
 
+    private ProgressBar progressBar;
+
     public ChatsRecientesFragment() {
         // Required empty public constructor
     }
@@ -65,6 +70,11 @@ public class ChatsRecientesFragment extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        progressBar = view.findViewById(R.id.spin_kit);
+        Sprite doubleBounce = new FadingCircle();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.GONE);
 
         db = FirebaseFirestore.getInstance();
         listaChatsRecientes = new ArrayList<>();
@@ -98,6 +108,7 @@ public class ChatsRecientesFragment extends Fragment {
 
 
     public void obtenerChats() {
+        progressBar.setVisibility(View.VISIBLE);
         listaChatsRecientes = new ArrayList<>();
         listaChatsRecientes.clear();
         db.collection(COLECCION).document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -145,7 +156,7 @@ public class ChatsRecientesFragment extends Fragment {
                                 imgMsgVacios.setVisibility(View.VISIBLE);
                                 lblMsgVacios.setVisibility(View.VISIBLE);
                             }
-
+                            progressBar.setVisibility(View.GONE);
                         }
 
                         @Override
