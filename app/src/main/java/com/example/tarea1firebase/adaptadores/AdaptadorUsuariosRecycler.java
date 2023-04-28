@@ -42,7 +42,6 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     private String usuarioActualUid;
     private FirebaseFirestore db;
     private List<String> favoritos;
-    private ProgressBar progressBar;
 
     public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
@@ -54,7 +53,6 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         private TextView nombreUsu;
         private Button btnFav, btnVerPerf;
         private boolean isFavorite;
-        private ProgressBar progressBar;
 
 
         public ViewHolder(View v) {
@@ -62,8 +60,6 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
             nombreUsu = v.findViewById(R.id.txtNombreUsu);
             btnFav = v.findViewById(R.id.btnCoraVacio);
             btnVerPerf = v.findViewById(R.id.btnVerPerfil);
-            progressBar = v.findViewById(R.id.spin_kit);
-            progressBar.setVisibility(View.VISIBLE);
         }
     }
 
@@ -72,8 +68,6 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_usuarios_explora, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
-        Sprite doubleBounce = new FadingCircle();
-        viewHolder.progressBar.setIndeterminateDrawable(doubleBounce);
         return viewHolder;
     }
 
@@ -85,12 +79,11 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         mAuth = FirebaseAuth.getInstance();
         usuarioActualUid = mAuth.getCurrentUser().getUid();
         holder.isFavorite = false;
-        holder.progressBar.setVisibility(View.VISIBLE);
 
         db.collection(COLECCION).document(usuarioActualUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                new Handler().postDelayed(() -> holder.progressBar.setVisibility(View.GONE), 900);
+
 
                 DocumentSnapshot document = task.getResult();
 

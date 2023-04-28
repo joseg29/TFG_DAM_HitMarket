@@ -138,15 +138,6 @@
             android:foreground="@drawable/corazon_favoritos_vacio"
             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
-        <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/spin_kit"
-            style="@style/SpinKitView.Large.Circle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:elevation="100dp"
-            app:SpinKit_Color="@color/black" />
 
         <!--
         AQUI HAY QUE AÑADIR ALGO SOBRE LAS VALOARCIONES
