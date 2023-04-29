@@ -1,47 +1,35 @@
 package com.example.tarea1firebase;
 
 
-import static com.example.tarea1firebase.Registro.COLECCION;
-
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tarea1firebase.adaptadores.AdaptadorCancionesRecycler;
 import com.example.tarea1firebase.adaptadores.AdaptadorResenas;
 import com.example.tarea1firebase.entidades.Resena;
-import com.example.tarea1firebase.gestor.GestorFirestore;
-import com.example.tarea1firebase.adaptadores.AdaptadorCancionesRecycler;
 import com.example.tarea1firebase.entidades.Usuario;
+import com.example.tarea1firebase.gestor.GestorFirestore;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,11 +39,11 @@ public class PerfilUsuario extends AppCompatActivity {
     private int PICK_AUDIO_REQUEST = 123120;
     //Este será el nombre de la colección que daremos en la BBDD de Firebase
     public final static String COLECCION = "Usuarios";
-    private ProgressDialog dialogoCargando;
+    private ProgressBar progressBar;
     private RecyclerView recyclerCanciones, recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private AdaptadorResenas adaptadorResenas;
-    private TextView lblUsername, lblDescripcion, lblEmail, lblRecyclerVacio;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button btnChat, tvEditar;
@@ -84,6 +72,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
         inicializarBotonesRedesSociales();
 
+        inicializarProgressBar();
 
     }
 
@@ -177,7 +166,7 @@ public class PerfilUsuario extends AppCompatActivity {
     public void inicializarVistas() {
         lblDescripcion = findViewById(R.id.tvDescripcion);
         lblUsername = findViewById(R.id.tvNombre);
-        lblEmail = findViewById(R.id.tvCiudad);
+        lblCiudad = findViewById(R.id.tvCiudad);
         imgFotoPerfil = findViewById(R.id.imgFotoPerfil);
 
         btnChat = findViewById(R.id.btnChat);
@@ -215,6 +204,8 @@ public class PerfilUsuario extends AppCompatActivity {
         ArrayList<Resena> arrayResenas = new ArrayList<>();
         adaptadorResenas = new AdaptadorResenas(arrayResenas);
         recyclerResenas.setAdapter(adaptadorResenas);
+
+        progressBar = findViewById(R.id.spin_kit);
     }
 
     public void inicializarUsuario() {
@@ -230,12 +221,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
     //Busca las canciones de un usuario en la base de datos y asigna los audios a los mediaPlayer
     public void obtenerDatosUsuario() {
-        dialogoCargando = new ProgressDialog(this);
-        dialogoCargando.setTitle("Obteniendo");
-        dialogoCargando.setMessage("Obteniendo datos de usuario");
-        dialogoCargando.setCancelable(false);
-        dialogoCargando.show();
-
+        progressBar.setVisibility(View.VISIBLE);
         gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario usuarioDevuelto) {
@@ -250,7 +236,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
                 lblUsername.setText(usuario.getNombre());
                 lblDescripcion.setText(usuario.getDescripcion());
-                lblEmail.setText(usuario.getEmail());
+                lblCiudad.setText(usuario.getCiudad());
 
                 adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
                 recyclerCanciones.setAdapter(adaptadorCanciones);
@@ -273,9 +259,14 @@ public class PerfilUsuario extends AppCompatActivity {
                     imgRecyclerVacio.setVisibility(View.VISIBLE);
                     lblRecyclerVacio.setVisibility(View.VISIBLE);
                 }
-                dialogoCargando.dismiss();
+                progressBar.setVisibility(View.GONE);
             }
         }, Usuario.class);
+    }
+
+    private void inicializarProgressBar() {
+        Sprite doubleBounce = new FadingCircle();
+        progressBar.setIndeterminateDrawable(doubleBounce);
     }
 
 

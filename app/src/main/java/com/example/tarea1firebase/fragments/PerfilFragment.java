@@ -3,7 +3,6 @@ package com.example.tarea1firebase.fragments;
 import static android.app.Activity.RESULT_OK;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -19,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +31,8 @@ import com.example.tarea1firebase.adaptadores.AdaptadorResenas;
 import com.example.tarea1firebase.entidades.Resena;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.example.tarea1firebase.gestor.GestorFirestore;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -43,14 +45,13 @@ import java.util.List;
 
 public class PerfilFragment extends Fragment {
     private int PICK_AUDIO_REQUEST = 123120;
-    //Este será el nombre de la colección que daremos en la BBDD de Firebase
+    private ProgressBar progressBar;
     public final static String COLECCION = "Usuarios";
     private StorageReference storageRef;
     private FirebaseStorage storage;
-    private ProgressDialog dialogoCargando;
     private RecyclerView recyclerCanciones, recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
-    private TextView lblUsername, lblDescripcion, lblEmail, lblRecyclerVacio;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button btnChat, btnEditar;
@@ -62,7 +63,7 @@ public class PerfilFragment extends Fragment {
 
 
     public PerfilFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -81,15 +82,15 @@ public class PerfilFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        /**gestorFirebase.imprimir(new GestorFirestore.Callback<String>() {
-        @Override public void onSuccess(String result) {
-        //Hacer algo con el resultado
-        }
-        });
-         */
+
         gestorFirebase = new GestorFirestore();
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getCurrentUser().getUid();
+
+        progressBar = view.findViewById(R.id.spin_kit);
+        Sprite doubleBounce = new FadingCircle();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.GONE);
 
         inicializarUsuario();
         inicializarVistas();
@@ -157,20 +158,14 @@ public class PerfilFragment extends Fragment {
             abrirYoutube();
         });
 
-        /**btnSoundCloud.setOnClickListener(v -> {
-         abrirSoundCloud();
-         });
 
-         btnSpotify.setOnClickListener(v -> {
-         abrirSpotify();
-         });**/
     }
 
 
     public void inicializarVistas() {
         lblDescripcion = getView().findViewById(R.id.tvDescripcion);
         lblUsername = getView().findViewById(R.id.tvNombre);
-        lblEmail = getView().findViewById(R.id.tvCiudad);
+        lblCiudad = getView().findViewById(R.id.tvCiudad);
         btnChat = getView().findViewById(R.id.btnChat);
 
         btnEditar = getView().findViewById(R.id.tvEditar);
@@ -209,6 +204,8 @@ public class PerfilFragment extends Fragment {
         ArrayList<Resena> arrayResenas = new ArrayList<>();
         adaptadorResenas = new AdaptadorResenas(arrayResenas);
         recyclerResenas.setAdapter(adaptadorResenas);
+
+
     }
 
     private void inicializarUsuario() {
@@ -229,20 +226,14 @@ public class PerfilFragment extends Fragment {
         startActivityForResult(intent, PICK_AUDIO_REQUEST);
     }
 
-    //Busca las canciones de un usuario en la base de datos y asigna los audios a los mediaPlayer
     public void obtenerDatosUsuario() {
-        dialogoCargando = new ProgressDialog(getActivity());
-        dialogoCargando.setTitle("Obteniendo");
-        dialogoCargando.setMessage("Obteniendo datos de usuario");
-        dialogoCargando.setCancelable(false);
-        dialogoCargando.show();
-
+        progressBar.setVisibility(View.VISIBLE);
         gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario usuarioDevuelto) {
                 usuario = usuarioDevuelto;
 
-                //Canciones que obtenemos de la base de datos.
+
                 List<String> canciones;
                 canciones = usuario.getArrayCanciones();
 
@@ -251,7 +242,7 @@ public class PerfilFragment extends Fragment {
 
                 lblUsername.setText(usuario.getNombre());
                 lblDescripcion.setText(usuario.getDescripcion());
-                lblEmail.setText(usuario.getEmail());
+                lblCiudad.setText(usuario.getCiudad());
 
                 adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
                 recyclerCanciones.setAdapter(adaptadorCanciones);
@@ -260,7 +251,6 @@ public class PerfilFragment extends Fragment {
                 recyclerResenas.setAdapter(adaptadorResenas);
 
 
-                //Establecer foto de perfil
                 if (!usuario.getFotoPerfil().equals("")) {
                     try {
                         Glide.with(PerfilFragment.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
@@ -274,39 +264,31 @@ public class PerfilFragment extends Fragment {
                     imgRecyclerVacio.setVisibility(View.VISIBLE);
                     lblRecyclerVacio.setVisibility(View.VISIBLE);
                 }
-                dialogoCargando.dismiss();
+                progressBar.setVisibility(View.GONE);
             }
         }, Usuario.class);
 
     }
 
 
-    //Listener que detecta cuando hemos seleccionado un audio.
-
-
     public void setRedesSociales() {
         //Revisa si tiene instagram
         if (usuario.getInstagram() != "") {
-            //Si tiene, pone el botón para que se pueda clickar y opacidad al 100%
             btnInstagram.setClickable(true);
             btnInstagram.setAlpha(1.0F);
         } else {
-            //Lo desactiva y opacidad al 20%
             btnInstagram.setClickable(false);
             btnInstagram.setAlpha(0.2f);
         }
 
         if (usuario.getYoutube() != "") {
-            //Si tiene, pone el botón para que se pueda clickar y opacidad al 100%
             btnYoutube.setClickable(true);
             btnYoutube.setAlpha(1.0F);
         } else {
-            //Lo desactiva y opacidad al 20%
             btnYoutube.setClickable(false);
             btnYoutube.setAlpha(0.2f);
         }
 
-        //Exactamente lo mismo con TikTok
         if (usuario.getTiktTok() != "") {
             btnTiktok.setClickable(true);
             btnTiktok.setAlpha(1.0F);
@@ -334,12 +316,12 @@ public class PerfilFragment extends Fragment {
     }
 
     public void abrirYoutube() {
-        String username = usuario.getYoutube(); // Nombre de usuario del canal
+        String username = usuario.getYoutube();
         String channelUrl = "https://www.youtube.com/user/" + username;
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(channelUrl));
-        intent.setPackage(null); // Elimina el paquete de la aplicación de YouTube para abrir en el navegador
-        startActivity(intent); // Abre el canal en el navegador predeterminado
+        intent.setPackage(null);
+        startActivity(intent);
     }
 
     private void abrirInstagram() {
@@ -348,14 +330,11 @@ public class PerfilFragment extends Fragment {
 
         Intent intent;
 
-        // Verificar si la aplicación de Instagram está instalada
         try {
-            // Si la aplicación de Instagram está instalada, abrir la aplicación
             getContext().getPackageManager().getPackageInfo("com.instagram.android", 0);
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse("instagram://user?username=" + usuario.getInstagram()));
             intent.setPackage("com.instagram.android");
         } catch (PackageManager.NameNotFoundException e) {
-            // Si la aplicación de Instagram no está instalada, abrir la página de Instagram en el navegador
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         }
 
@@ -368,7 +347,7 @@ public class PerfilFragment extends Fragment {
         intent.setPackage("com.zhiliaoapp.musically");
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
         } else {
-            intent.setPackage(null); // Elimina el paquete de la aplicación de TikTok para abrir en el navegador
+            intent.setPackage(null);
         }
         startActivity(intent);
     }
@@ -377,15 +356,9 @@ public class PerfilFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
-            dialogoCargando = new ProgressDialog(requireContext());
-            dialogoCargando.setTitle("Subiendo...");
-            dialogoCargando.setMessage("Subiendo canción a base de datos");
-            dialogoCargando.setCancelable(false);
-            dialogoCargando.show();
 
             if (requestCode == PICK_AUDIO_REQUEST && resultCode == RESULT_OK) {
                 Uri uri = data.getData();
-                //Todo esto es simplemente para obtener la ruta local del archivo para que firebase la pueda descargar (Código no importante)
                 try {
                     String[] pathSegments = uri.getPath().split("/");
                     if (pathSegments.length > 1) {
@@ -410,7 +383,6 @@ public class PerfilFragment extends Fragment {
                     @Override
                     public void onSuccess(String url) {
                         Toast.makeText(getContext(), "Subido correctamente", Toast.LENGTH_SHORT).show();
-                        dialogoCargando.dismiss();
                         obtenerDatosUsuario();
                     }
                 });

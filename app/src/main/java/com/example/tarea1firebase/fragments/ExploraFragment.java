@@ -21,6 +21,7 @@ import com.example.tarea1firebase.entidades.Usuario;
 import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -35,6 +36,7 @@ public class ExploraFragment extends Fragment {
     private SearchView barraBusqueda;
     private ProgressBar progressBar;
     private GestorFirestore gestorFirebase;
+    private FirebaseAuth mAuth;
 
     public ExploraFragment() {
         // Required empty public constructor
@@ -58,12 +60,18 @@ public class ExploraFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         inicializarVistas(view);
+        mAuth = FirebaseAuth.getInstance();
         gestorFirebase = new GestorFirestore();
         setListenerBarraBusqueda();
 
         gestorFirebase.obtenerTodosLosUsuarios(new GestorFirestore.Callback<ArrayList<Usuario>>() {
             @Override
             public void onSuccess(ArrayList<Usuario> result) {
+                for (int i = 0; i < result.size(); i++) {
+                    if (result.get(i).getId().equals(mAuth.getCurrentUser().getUid())) {
+                        result.remove(result.get(i));
+                    }
+                }
                 adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(result);
                 recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
             }
