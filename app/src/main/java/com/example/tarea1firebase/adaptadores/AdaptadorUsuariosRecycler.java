@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.tarea1firebase.PerfilUsuario;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.entidades.Usuario;
@@ -53,13 +55,14 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         private TextView nombreUsu;
         private Button btnFav, btnVerPerf;
         private boolean isFavorite;
-
+        private ImageView fotoPerfil;
 
         public ViewHolder(View v) {
             super(v);
             nombreUsu = v.findViewById(R.id.txtNombreUsu);
             btnFav = v.findViewById(R.id.btnCoraVacio);
             btnVerPerf = v.findViewById(R.id.btnVerPerfil);
+            fotoPerfil = v.findViewById(R.id.fotoPerfilExplora);
         }
     }
 
@@ -83,8 +86,6 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         db.collection(COLECCION).document(usuarioActualUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-
                 DocumentSnapshot document = task.getResult();
 
                 //Obtenemos el usuario de la base de datos con todos sus campos
@@ -104,10 +105,18 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
                         }
                     }
                 }
+
             }
         });
 
         holder.nombreUsu.setText(listaUsuariosFiltrados.get(position).getNombre().toUpperCase(Locale.ROOT));
+
+        if (!listaUsuariosFiltrados.get(position).getFotoPerfil().equals("")) {
+            try {
+                Glide.with(holder.itemView.getContext()).load(listaUsuariosFiltrados.get(position).getFotoPerfil()).fitCenter().into(holder.fotoPerfil);
+            } catch (Exception e) {
+            }
+        }
 
         holder.btnVerPerf.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), PerfilUsuario.class);
@@ -141,6 +150,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
                     holder.isFavorite = true;
                 });
             }
+
         });
     }
 

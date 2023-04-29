@@ -46,7 +46,8 @@ public class PerfilUsuario extends AppCompatActivity {
     private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
-    private Button btnChat, tvEditar;
+    private Button  tvEditar;
+    private ImageButton btnChat;
     private String uid;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil, imgRecyclerVacio;

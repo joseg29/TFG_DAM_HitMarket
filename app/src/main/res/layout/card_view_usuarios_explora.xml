@@ -40,7 +40,7 @@
 
             <com.google.android.material.imageview.ShapeableImageView
 
-                android:id="@+id/imageView"
+                android:id="@+id/fotoPerfilExplora"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clipToOutline="true"

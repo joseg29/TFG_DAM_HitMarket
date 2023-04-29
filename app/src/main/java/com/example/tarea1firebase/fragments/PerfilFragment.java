@@ -54,7 +54,9 @@ public class PerfilFragment extends Fragment {
     private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
-    private Button btnChat, btnEditar;
+    private Button btnEditar;
+    private ImageButton btnChat;
+
     private String uid;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil, imgRecyclerVacio;
