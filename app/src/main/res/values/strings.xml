@@ -3,6 +3,6 @@
     <string name="web_cliente_id">888840880080-uvasev208t4524783cdi2nc03vlkred6.apps.googleusercontent.com</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="spinner_title">Comunidades Autónomas</string>
+    <string name="spinner_title">Ciudad</string>
     <string name="spinner_title2">Géneros musicales</string>
 </resources>

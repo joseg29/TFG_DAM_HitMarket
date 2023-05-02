@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 
 public class EditarPerfil extends AppCompatActivity {
-    private TextView lblNombre, lblDescripcion, lblInstagram, lblYoutube, lblSpotify, lblTikTok, lblSoundCloud;
+    private TextView lblNombre, lblDescripcion, lblInstagram, lblYoutube, lblSpotify, lblTikTok, lblSoundCloud, tvAyuda;
     private EditText etNombre, etDescripcion, etEmailEditar, etInstagram, etYoutube, etSpotify, etTikTok, etSoundCloud;
     private String uid;
     private Usuario usuarioEditando;
@@ -47,7 +48,7 @@ public class EditarPerfil extends AppCompatActivity {
     private ImageButton btnMostrarRedes;
     private Button btnGuardarCambios, btnCancelarCambios, btnCerrarSesion;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private ImageButton btnCambiarFotoPerfil;
+    private ImageButton btnCambiarFotoPerfil, btnMostrarTextoAyuda;
     private Uri mImageUri;
     private StorageReference mStorageRef;
     private String urlImagenPerfil;
@@ -74,6 +75,8 @@ public class EditarPerfil extends AppCompatActivity {
 
         btnGuardarCambios = findViewById(R.id.btnGuardarEditarPerfil);
         btnCancelarCambios = findViewById(R.id.btnCancelarEditarPerfil);
+        btnMostrarTextoAyuda = findViewById(R.id.btnMostrarAyuda);
+        tvAyuda = findViewById(R.id.tvAyuda);
 
         uid = getIntent().getStringExtra("UidUsuario");
         usuarioEditando = (Usuario) getIntent().getSerializableExtra("UsuarioAEditar");
@@ -82,6 +85,14 @@ public class EditarPerfil extends AppCompatActivity {
 
         btnMostrarRedes = findViewById(R.id.btnMostrarRedesEditables);
         layoutRedesEditable = findViewById(R.id.layoutRedesEditables);
+
+        btnMostrarTextoAyuda.setOnClickListener(v -> {
+            if (tvAyuda.getVisibility() == View.INVISIBLE) {
+                tvAyuda.setVisibility(View.VISIBLE);
+            } else {
+                tvAyuda.setVisibility(View.INVISIBLE);
+            }
+        });
 
         btnMostrarRedes.setOnClickListener(new View.OnClickListener() {
             @Override
