@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@id/tvCiudad"
                     android:layout_alignParentBottom="false"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginBottom="0dp"
                     android:fontFamily="@font/gotham_bold_1"
                     android:textColor="@color/white"
@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/gotham_bold_1"
                     android:textColor="@color/white"
@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@id/tvNombre"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="30dp"
                     android:text="0"
                     android:textColor="#FFFFFF"
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/gotham_medium_1"
                     android:text="Editar >"
@@ -107,6 +107,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_margin="0dp"
+                        android:layout_marginEnd="15dp"
                         android:layout_weight="1"
                         android:padding="2dp"
                         app:srcCompat="@drawable/estrella" />
@@ -133,23 +134,26 @@
 
                 <TextView
                     android:id="@+id/tvConoceMiMusica"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:layout_below="@id/tvDescripcion"
-                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
                     android:layout_marginTop="15dp"
                     android:layout_marginBottom="10dp"
+                    android:background="@drawable/fondo_titulos_perfil"
                     android:fontFamily="@font/gotham_bold_1"
+                    android:gravity="center"
                     android:text="¡Conoce mi música!"
                     android:textColor="@color/white"
                     android:textSize="34sp" />
+
 
                 <LinearLayout
                     android:id="@+id/layoutLogos"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_below="@id/tvConoceMiMusica"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -188,6 +192,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:src="@drawable/logo_soundcloud" />
+
                 </LinearLayout>
 
                 <ImageButton
@@ -224,7 +229,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gotham_bold"
-                        android:text="Este usuario no tiene canciones de muestra...."
+                        android:text="Este usuario no tiene                canciones de muestra"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
@@ -252,15 +257,27 @@
 
                 <TextView
                     android:id="@+id/tvGeneros"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/btnSubirAudio"
+                    android:layout_centerInParent="true"
                     android:layout_marginTop="15dp"
+                    android:background="@drawable/fondo_titulos_perfil"
                     android:fontFamily="@font/gotham_bold_1"
+                    android:padding="10dp"
                     android:text="Mis géneros"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="34sp"></TextView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@+id/tvGeneros"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="#616161" />
+
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -381,24 +398,45 @@
 
                 </TableLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_below="@+id/tvConoceMiMusica"
+                    android:layout_marginTop="-10dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="#616161" />
+
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/textView4"
-                android:layout_width="match_parent"
+                android:id="@+id/txtResenas"
+                android:layout_width="173dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/fondo_titulos_perfil"
                 android:fontFamily="@font/gotham_bold_1"
+                android:padding="10dp"
                 android:text="Reseñas"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="34sp" />
 
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_below="@+id/txtResenas"
+                android:layout_marginTop="-5dp"
+                android:layout_marginBottom="14dp"
+                android:background="#616161" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/RecyclerResenas"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_margin="20dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp" />
 
 
         </LinearLayout>
@@ -416,8 +454,8 @@
             android:id="@+id/btnChat"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/fondo_boton_play"
             android:clickable="true"
             android:focusable="true"

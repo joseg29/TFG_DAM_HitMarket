@@ -33,7 +33,7 @@
 
                 <TextView
                     android:id="@+id/txtNombreUsuResena"
-                    android:layout_width="178dp"
+                    android:layout_width="210dp"
                     android:layout_height="33dp"
                     android:fontFamily="@font/gotham_black"
                     android:gravity="center|left"
@@ -43,7 +43,7 @@
 
                 <TextView
                     android:id="@+id/txtValoracionResena"
-                    android:layout_width="75dp"
+                    android:layout_width="34dp"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/gotham_bold"
                     android:gravity="center|right"
@@ -53,7 +53,7 @@
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="0dp"
                     android:padding="2dp"
