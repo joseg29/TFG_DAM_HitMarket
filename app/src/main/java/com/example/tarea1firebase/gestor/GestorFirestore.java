@@ -29,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GestorFirestore {
     private StorageReference storageRef;
@@ -115,6 +116,31 @@ public class GestorFirestore {
     public void actualiazarCampoUsuario(String idUsuario, String campoAActualizar, Object nuevoValor, Callback<String> callback) {
         db.collection(COLECCION).document(idUsuario).update(campoAActualizar, FieldValue.arrayUnion(nuevoValor)).addOnSuccessListener(documentReference -> {
             callback.onSuccess("Actualizado");
+        });
+    }
+
+    public void obtenerMediaResenas(String id, Callback<Double> callback) {
+        DocumentReference docRef = db.collection(COLECCION).document(id);
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    double media = 0;
+
+                    Usuario usuario = document.toObject(Usuario.class);
+                    List<Resena> listaValoraciones = usuario.getListaResenas();
+
+                    for (int i = 0; i < listaValoraciones.size(); i++) {
+                        media += listaValoraciones.get(i).getValoracion();
+                    }
+                    media = media / listaValoraciones.size();
+
+                    callback.onSuccess(media);
+
+                } else {
+                    System.out.println("No existe el usuario");
+                }
+            }
         });
     }
 

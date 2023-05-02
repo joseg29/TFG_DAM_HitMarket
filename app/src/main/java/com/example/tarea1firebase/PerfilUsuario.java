@@ -43,16 +43,15 @@ public class PerfilUsuario extends AppCompatActivity {
     private RecyclerView recyclerCanciones, recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private AdaptadorResenas adaptadorResenas;
-    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
-    private Button  tvEditar;
+    private Button tvEditar;
     private ImageButton btnChat;
-    private String uid;
+    private String uidUsuarioActual;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil, imgRecyclerVacio;
     private GestorFirestore gestorFirebase;
-    private Button btnResena;
     private AlertDialog dialog;
 
     @Override
@@ -62,7 +61,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
         gestorFirebase = new GestorFirestore();
         mAuth = FirebaseAuth.getInstance();
-        uid = getIntent().getStringExtra("UidUsuario");
+        uidUsuarioActual = getIntent().getStringExtra("UidUsuario");
 
         inicializarUsuario();
         inicializarVistas();
@@ -75,11 +74,14 @@ public class PerfilUsuario extends AppCompatActivity {
 
         inicializarProgressBar();
 
+
+
+
     }
 
 
     public void setListenerBotones() {
-        btnResena.setOnClickListener(v -> {
+        lblMediaEstrellas.setOnClickListener(v -> {
             crearDialogoResena();
             dialog.show();
         });
@@ -131,7 +133,7 @@ public class PerfilUsuario extends AppCompatActivity {
         btnChat.setOnClickListener(v -> {
             Intent intent = new Intent(PerfilUsuario.this, ChatVentana.class);
             intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
-            intent.putExtra("UidUsuarioReceptor", uid);
+            intent.putExtra("UidUsuarioReceptor", uidUsuarioActual);
             startActivity(intent);
         });
 
@@ -157,7 +159,7 @@ public class PerfilUsuario extends AppCompatActivity {
     }
 
     public void esconderBotonesUsuarioPropio() {
-        if (!uid.equals(mAuth.getCurrentUser().getUid())) {
+        if (!uidUsuarioActual.equals(mAuth.getCurrentUser().getUid())) {
             btnAnadirCancion.setVisibility(View.GONE);
             tvEditar.setVisibility(View.GONE);
             btnChat.setVisibility(View.VISIBLE);
@@ -181,7 +183,7 @@ public class PerfilUsuario extends AppCompatActivity {
         lblRecyclerVacio = findViewById(R.id.lblRecyclerVacio);
 
         btnAnadirCancion = findViewById(R.id.btnSubirAudio);
-        btnResena = findViewById(R.id.btnResena);
+        lblMediaEstrellas = findViewById(R.id.lblMediaEstrellas);
 
 
         tvEditar = findViewById(R.id.tvEditar);
@@ -210,7 +212,7 @@ public class PerfilUsuario extends AppCompatActivity {
     }
 
     public void inicializarUsuario() {
-        gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
+        gestorFirebase.obtenerUsuarioPorId(uidUsuarioActual, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario usuarioDevuelto) {
                 usuario = usuarioDevuelto;
@@ -223,7 +225,7 @@ public class PerfilUsuario extends AppCompatActivity {
     //Busca las canciones de un usuario en la base de datos y asigna los audios a los mediaPlayer
     public void obtenerDatosUsuario() {
         progressBar.setVisibility(View.VISIBLE);
-        gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
+        gestorFirebase.obtenerUsuarioPorId(uidUsuarioActual, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario usuarioDevuelto) {
                 usuario = usuarioDevuelto;
@@ -263,6 +265,13 @@ public class PerfilUsuario extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         }, Usuario.class);
+
+        gestorFirebase.obtenerMediaResenas(uidUsuarioActual, new GestorFirestore.Callback() {
+            @Override
+            public void onSuccess(Object mediaEstrellas) {
+                lblMediaEstrellas.setText(mediaEstrellas.toString());
+            }
+        });
     }
 
     private void inicializarProgressBar() {

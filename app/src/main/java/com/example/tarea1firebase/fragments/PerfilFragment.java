@@ -51,13 +51,13 @@ public class PerfilFragment extends Fragment {
     private FirebaseStorage storage;
     private RecyclerView recyclerCanciones, recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
-    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button btnEditar;
     private ImageButton btnChat;
 
-    private String uid;
+    private String uidUsuarioActual;
     private FirebaseAuth mAuth;
     private ImageView imgFotoPerfil, imgRecyclerVacio;
     private GestorFirestore gestorFirebase;
@@ -87,7 +87,7 @@ public class PerfilFragment extends Fragment {
 
         gestorFirebase = new GestorFirestore();
         mAuth = FirebaseAuth.getInstance();
-        uid = mAuth.getCurrentUser().getUid();
+        uidUsuarioActual = mAuth.getCurrentUser().getUid();
 
         progressBar = view.findViewById(R.id.spin_kit);
         Sprite doubleBounce = new FadingCircle();
@@ -104,7 +104,7 @@ public class PerfilFragment extends Fragment {
     }
 
     private void esconderVistasAjenas() {
-        if (!uid.equals(mAuth.getCurrentUser().
+        if (!uidUsuarioActual.equals(mAuth.getCurrentUser().
                 getUid())) {
             btnAnadirCancion.setVisibility(View.GONE);
             btnEditar.setVisibility(View.GONE);
@@ -125,13 +125,13 @@ public class PerfilFragment extends Fragment {
         {
             Intent intent = new Intent(getContext(), ChatVentana.class);
             intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
-            intent.putExtra("UidUsuarioReceptor", uid);
+            intent.putExtra("UidUsuarioReceptor", uidUsuarioActual);
             startActivity(intent);
         });
 
         btnEditar.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), EditarPerfil.class);
-            gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
+            gestorFirebase.obtenerUsuarioPorId(uidUsuarioActual, new GestorFirestore.Callback<Usuario>() {
                 @Override
                 public void onSuccess(Usuario usuarioDevuelto) {
                     usuario = usuarioDevuelto;
@@ -169,7 +169,7 @@ public class PerfilFragment extends Fragment {
         lblUsername = getView().findViewById(R.id.tvNombre);
         lblCiudad = getView().findViewById(R.id.tvCiudad);
         btnChat = getView().findViewById(R.id.btnChat);
-
+        lblMediaEstrellas = getView().findViewById(R.id.lblMediaEstrellas);
         btnEditar = getView().findViewById(R.id.tvEditar);
 
         imgFotoPerfil = getView().findViewById(R.id.imgFotoPerfil);
@@ -211,7 +211,7 @@ public class PerfilFragment extends Fragment {
     }
 
     private void inicializarUsuario() {
-        gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
+        gestorFirebase.obtenerUsuarioPorId(uidUsuarioActual, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario usuarioDevuelto) {
                 usuario = usuarioDevuelto;
@@ -230,7 +230,7 @@ public class PerfilFragment extends Fragment {
 
     public void obtenerDatosUsuario() {
         progressBar.setVisibility(View.VISIBLE);
-        gestorFirebase.obtenerUsuarioPorId(uid, new GestorFirestore.Callback<Usuario>() {
+        gestorFirebase.obtenerUsuarioPorId(uidUsuarioActual, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario usuarioDevuelto) {
                 usuario = usuarioDevuelto;
@@ -269,7 +269,12 @@ public class PerfilFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
             }
         }, Usuario.class);
-
+        gestorFirebase.obtenerMediaResenas(uidUsuarioActual, new GestorFirestore.Callback() {
+            @Override
+            public void onSuccess(Object mediaEstrellas) {
+                lblMediaEstrellas.setText(mediaEstrellas.toString());
+            }
+        });
     }
 
 

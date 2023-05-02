@@ -29,12 +29,12 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/mandado" />
 
+
                 <View
                     android:id="@+id/overLayFoto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#83000000" />
-
 
                 <TextView
                     android:id="@+id/tvNombre"
@@ -80,17 +80,16 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="5dp">
 
-                    <Button
-                        android:id="@+id/btnResena"
-                        android:layout_width="29dp"
-                        android:layout_height="35dp"
+                    <TextView
+                        android:id="@+id/lblMediaEstrellas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/gotham_bold"
-                        android:text="4,8"
                         android:textAlignment="viewEnd"
                         android:textColor="#FFFFFF"
-                        android:textSize="18sp" />
+                        android:textSize="24sp" />
 
                     <ImageView
                         android:id="@+id/imageView2"
