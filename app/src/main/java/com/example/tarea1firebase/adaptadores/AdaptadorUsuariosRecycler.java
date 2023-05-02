@@ -24,8 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.tarea1firebase.PerfilUsuario;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.entidades.Usuario;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,25 +43,29 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     private String usuarioActualUid;
     private FirebaseFirestore db;
     private List<String> favoritos;
+    private GestorFirestore gestorFirebase;
 
     public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
         this.listaUsuariosFiltrados = new ArrayList<>();
         listaUsuariosFiltrados.addAll(listaUsuarios);
+        gestorFirebase = new GestorFirestore();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView nombreUsu;
+        private TextView lblNombreUsuario, lblMediaEstrellas;
         private Button btnFav, btnVerPerf;
         private boolean isFavorite;
         private ImageView fotoPerfil;
 
         public ViewHolder(View v) {
             super(v);
-            nombreUsu = v.findViewById(R.id.txtNombreUsu);
+            lblNombreUsuario = v.findViewById(R.id.txtNombreUsu);
             btnFav = v.findViewById(R.id.btnCoraVacio);
             btnVerPerf = v.findViewById(R.id.btnVerPerfil);
             fotoPerfil = v.findViewById(R.id.fotoPerfilExplora);
+            lblMediaEstrellas = v.findViewById(R.id.txtValoracion);
+
         }
     }
 
@@ -109,7 +112,14 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
             }
         });
 
-        holder.nombreUsu.setText(listaUsuariosFiltrados.get(position).getNombre().toUpperCase(Locale.ROOT));
+        gestorFirebase.obtenerMediaResenas(listaUsuariosFiltrados.get(position).getId(), new GestorFirestore.Callback() {
+            @Override
+            public void onSuccess(Object mediaEstrellas) {
+                holder.lblMediaEstrellas.setText(mediaEstrellas.toString());
+            }
+        });
+
+        holder.lblNombreUsuario.setText(listaUsuariosFiltrados.get(position).getNombre().toUpperCase(Locale.ROOT));
 
         if (!listaUsuariosFiltrados.get(position).getFotoPerfil().equals("")) {
             try {
@@ -152,6 +162,8 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
             }
 
         });
+
+
     }
 
 

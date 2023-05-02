@@ -119,28 +119,34 @@ public class GestorFirestore {
         });
     }
 
-    public void obtenerMediaResenas(String id, Callback<Double> callback) {
+    public void obtenerMediaResenas(String id, Callback<String> callback) {
         DocumentReference docRef = db.collection(COLECCION).document(id);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    double media = 0;
+                    Double media = 0.0;
 
                     Usuario usuario = document.toObject(Usuario.class);
                     List<Resena> listaValoraciones = usuario.getListaResenas();
 
-                    for (int i = 0; i < listaValoraciones.size(); i++) {
-                        media += listaValoraciones.get(i).getValoracion();
+                    if (listaValoraciones.size() > 0) {
+                        for (int i = 0; i < listaValoraciones.size(); i++) {
+                            media += listaValoraciones.get(i).getValoracion();
+                        }
+                        media = media / listaValoraciones.size();
                     }
-                    media = media / listaValoraciones.size();
-
-                    callback.onSuccess(media);
+                    callback.onSuccess(String.valueOf(media));
 
                 } else {
                     System.out.println("No existe el usuario");
                 }
             }
+        });
+    }
+
+    public void anadirVisitaAlPerfil(String idUsuarioQueEsVisitado, String idUsuarioQueVisita) {
+        db.collection(COLECCION).document(idUsuarioQueEsVisitado).update("visitasAlPerfil", FieldValue.arrayUnion(idUsuarioQueVisita)).addOnSuccessListener(documentReference -> {
         });
     }
 

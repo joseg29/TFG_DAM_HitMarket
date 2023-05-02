@@ -51,7 +51,7 @@ public class PerfilFragment extends Fragment {
     private FirebaseStorage storage;
     private RecyclerView recyclerCanciones, recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
-    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button btnEditar;
@@ -171,6 +171,7 @@ public class PerfilFragment extends Fragment {
         btnChat = getView().findViewById(R.id.btnChat);
         lblMediaEstrellas = getView().findViewById(R.id.lblMediaEstrellas);
         btnEditar = getView().findViewById(R.id.tvEditar);
+        lblNVisitas = getView().findViewById(R.id.lblVisitasAlPerfil);
 
         imgFotoPerfil = getView().findViewById(R.id.imgFotoPerfil);
 
@@ -275,6 +276,10 @@ public class PerfilFragment extends Fragment {
                 lblMediaEstrellas.setText(mediaEstrellas.toString());
             }
         });
+
+        int nVisitas = usuario.getVisitasAlPerfil().size();
+        lblNVisitas.setText(String.valueOf(nVisitas));
+
     }
 
 

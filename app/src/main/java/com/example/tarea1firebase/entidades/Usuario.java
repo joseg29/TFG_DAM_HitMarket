@@ -19,26 +19,12 @@ public class Usuario implements Serializable {
     private List<String> arrayCanciones;
     private List<String> listaFavoritos;
     private List<Resena> listaResenas;
+    private List<String> visitasAlPerfil;
 
-    public List<String> getListaFavoritos() {
-        return listaFavoritos;
+    public Usuario() {
     }
 
-    public void setListaFavoritos(List<String> listaFavoritos) {
-        this.listaFavoritos = listaFavoritos;
-    }
-
-
-    public List<String> getChatsRecientes() {
-        return chatsRecientes;
-    }
-
-    public void setChatsRecientes(List<String> chatsRecientes) {
-        this.chatsRecientes = chatsRecientes;
-    }
-
-
-    public Usuario(String id, String email, String name, String descripcion, String ciudad, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<String> chatsRecientes, String fotoPerfil, List<String> listaFavoritos, List<Resena> listaResenas) {
+    public Usuario(String id, String email, String name, String descripcion, String ciudad, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<String> chatsRecientes, String fotoPerfil, List<String> listaFavoritos, List<Resena> listaResenas, List<String> listaVisitas) {
         this.id = id;
         this.nombre = name;
         this.descripcion = descripcion;
@@ -54,6 +40,31 @@ public class Usuario implements Serializable {
         this.fotoPerfil = fotoPerfil;
         this.listaFavoritos = listaFavoritos;
         this.listaResenas = listaResenas;
+        this.visitasAlPerfil = listaVisitas;
+    }
+
+    public List<String> getListaFavoritos() {
+        return listaFavoritos;
+    }
+
+    public void setListaFavoritos(List<String> listaFavoritos) {
+        this.listaFavoritos = listaFavoritos;
+    }
+
+    public List<String> getChatsRecientes() {
+        return chatsRecientes;
+    }
+
+    public void setChatsRecientes(List<String> chatsRecientes) {
+        this.chatsRecientes = chatsRecientes;
+    }
+
+    public List<String> getVisitasAlPerfil() {
+        return visitasAlPerfil;
+    }
+
+    public void setVisitasAlPerfil(List<String> visitasAlPerfil) {
+        this.visitasAlPerfil = visitasAlPerfil;
     }
 
     public String getSpotify() {
@@ -71,7 +82,6 @@ public class Usuario implements Serializable {
     public void setSoundCloud(String soundCloud) {
         this.soundCloud = soundCloud;
     }
-
 
     public String getYoutube() {
         return youtube;
@@ -107,9 +117,6 @@ public class Usuario implements Serializable {
 
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
-    }
-
-    public Usuario() {
     }
 
     public void setNombre(String nombre) {
