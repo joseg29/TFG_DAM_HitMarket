@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Chat {
     private ArrayList<Mensaje> listaMensajes;
-    private Usuario usuario1, usuario2;
+    private String usuario1, usuario2;
     private String fechaUltimoMsj;
     private String chatId;
 
@@ -21,7 +21,7 @@ public class Chat {
 
     }
 
-    public Chat(ArrayList<Mensaje> listaMensajes, Usuario usuario1, Usuario usuario2, String fechaUltimoMsj, String chatKey) {
+    public Chat(ArrayList<Mensaje> listaMensajes, String usuario1, String usuario2, String fechaUltimoMsj, String chatKey) {
         this.listaMensajes = listaMensajes;
         this.usuario1 = usuario1;
         this.usuario2 = usuario2;
@@ -37,19 +37,19 @@ public class Chat {
         this.listaMensajes = listaMensajes;
     }
 
-    public Usuario getUsuario1() {
+    public String getUsuario1() {
         return usuario1;
     }
 
-    public void setUsuario1(Usuario usuario1) {
+    public void setUsuario1(String usuario1) {
         this.usuario1 = usuario1;
     }
 
-    public Usuario getUsuario2() {
+    public String getUsuario2() {
         return usuario2;
     }
 
-    public void setUsuario2(Usuario usuario2) {
+    public void setUsuario2(String usuario2) {
         this.usuario2 = usuario2;
     }
 

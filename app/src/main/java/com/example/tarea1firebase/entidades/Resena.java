@@ -6,7 +6,7 @@ public class Resena implements Serializable {
     private String texto;
 
     private String fecha;
-    private Usuario autor;
+    private String uidAutor;
     private int valoracion;
 
     public String getFecha() {
@@ -21,9 +21,9 @@ public class Resena implements Serializable {
 
     }
 
-    public Resena(String texto, Usuario usu, int valoracion, String fecha) {
+    public Resena(String texto, String uidAutor, int valoracion, String fecha) {
         this.texto = texto;
-        this.autor = usu;
+        this.uidAutor = uidAutor;
         this.valoracion = valoracion;
         this.fecha = fecha;
     }
@@ -36,12 +36,12 @@ public class Resena implements Serializable {
         this.texto = texto;
     }
 
-    public Usuario getAutor() {
-        return autor;
+    public String getUidAutor() {
+        return uidAutor;
     }
 
-    public void setAutor(Usuario autor) {
-        this.autor = autor;
+    public void setUidAutor(String uidAutor) {
+        this.uidAutor = uidAutor;
     }
 
     public int getValoracion() {

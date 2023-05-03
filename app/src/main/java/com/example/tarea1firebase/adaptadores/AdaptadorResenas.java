@@ -1,28 +1,24 @@
 package com.example.tarea1firebase.adaptadores;
 
-import android.view.Gravity;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tarea1firebase.R;
-import com.example.tarea1firebase.entidades.Mensaje;
 import com.example.tarea1firebase.entidades.Resena;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.tarea1firebase.entidades.Usuario;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.ViewHolder> {
 
     private List<Resena> listaResenas;
-
 
     public AdaptadorResenas(List<Resena> listaResenas) {
         this.listaResenas = listaResenas;
@@ -32,6 +28,7 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
         private TextView nombreUsu, fecha, texto;
         private ImageView imgUsu;
         private TextView estrellas;
+        private GestorFirestore gestorFirestore;
 
 
         public ViewHolder(View v) {
@@ -41,6 +38,7 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
             imgUsu = v.findViewById(R.id.imgUsuResena);
             estrellas = v.findViewById(R.id.txtValoracionResena);
             fecha = v.findViewById(R.id.txtFechaResena);
+            gestorFirestore = new GestorFirestore();
         }
     }
 
@@ -52,11 +50,17 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.nombreUsu.setText(listaResenas.get(position).getAutor().getNombre());
-        holder.texto.setText(listaResenas.get(position).getTexto());
-        holder.estrellas.setText(String.valueOf(listaResenas.get(position).getValoracion()));
-        holder.fecha.setText(listaResenas.get(position).getFecha());
+    public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        holder.gestorFirestore.obtenerUsuarioPorId(listaResenas.get(position).getUidAutor(), new GestorFirestore.Callback<Usuario>() {
+            @Override
+            public void onSuccess(Usuario autor) {
+                holder.nombreUsu.setText(autor.getNombre());
+                holder.texto.setText(listaResenas.get(position).getTexto());
+                holder.estrellas.setText(String.valueOf(listaResenas.get(position).getValoracion()));
+                holder.fecha.setText(listaResenas.get(position).getFecha());
+            }
+        }, Usuario.class);
+
     }
 
     @Override

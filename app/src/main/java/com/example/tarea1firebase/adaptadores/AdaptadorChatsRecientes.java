@@ -16,6 +16,7 @@ import com.example.tarea1firebase.ChatVentana;
 import com.example.tarea1firebase.entidades.Mensaje;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.entidades.Usuario;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,8 +43,9 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
         private CardView cardViewChatReciente;
         private ImageView imgPerfil;
         private Usuario otroUser;
+        private String uidOtroUser;
         private Mensaje ultimoMsj;
-
+        private GestorFirestore gestorFirestore;
 
         public ViewHolder(View v) {
             super(v);
@@ -51,6 +53,7 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
             nombreUsuario = v.findViewById(R.id.lblNombreChat);
             ultimoMensaje = v.findViewById(R.id.lblPreviewUltimoMensajeChat);
             imgPerfil = v.findViewById(R.id.imgPerfilChat);
+            gestorFirestore = new GestorFirestore();
         }
     }
 
@@ -69,52 +72,51 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
     public void onBindViewHolder(ViewHolder holder, int position) {
         mAuth = FirebaseAuth.getInstance();
         usuarioActualUid = mAuth.getCurrentUser().getUid();
-        if (listaChats.get(position).getUsuario1().getId().equals(mAuth.getCurrentUser().getUid())) {
-            holder.otroUser = listaChats.get(position).getUsuario2();
-            System.out.println(holder.otroUser.getNombre() + " 1 -- " + position);
-        } else if (listaChats.get(position).getUsuario2().getId().equals(mAuth.getCurrentUser().getUid())) {
-            holder.otroUser = listaChats.get(position).getUsuario1();
-            System.out.println(holder.otroUser.getNombre() + " 2 " + position);
+        if (listaChats.get(position).getUsuario1().equals(mAuth.getCurrentUser().getUid())) {
+            holder.uidOtroUser = listaChats.get(position).getUsuario2();
+        } else if (listaChats.get(position).getUsuario2().equals(mAuth.getCurrentUser().getUid())) {
+            holder.uidOtroUser = listaChats.get(position).getUsuario1();
         }
 
-
-        holder.nombreUsuario.setText(holder.otroUser.getNombre());
-        if (!holder.otroUser.getFotoPerfil().equals("")) {
-            try {
-                Glide.with(holder.itemView.getContext()).load(holder.otroUser.getFotoPerfil()).into(holder.imgPerfil);
-            } catch (Exception e) {
-            }
-        }
-        String chatKey;
-
-        if (usuarioActualUid.compareTo(holder.otroUser.getId()) < 0) {
-            chatKey = usuarioActualUid + "_" + holder.otroUser.getId();
-        } else {
-            chatKey = holder.otroUser.getId() + "_" + usuarioActualUid;
-        }
-
-        FirebaseDatabase.getInstance().getReference("chats").child(chatKey).child("listaMensajes").limitToLast(1).addValueEventListener(new ValueEventListener() {
+        holder.gestorFirestore.obtenerUsuarioPorId(holder.uidOtroUser, new GestorFirestore.Callback<Usuario>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Itera sobre los hijos de la referencia a los mensajes
-                for (DataSnapshot mensajeSnapshot : snapshot.getChildren()) {
-                    holder.ultimoMsj = mensajeSnapshot.getValue(Mensaje.class);
+            public void onSuccess(Usuario result) {
+                holder.otroUser = result;
+                holder.nombreUsuario.setText(holder.otroUser.getNombre());
+                Glide.with(holder.itemView.getContext()).load(holder.otroUser.getFotoPerfil()).override(100, 100).into(holder.imgPerfil);
+
+                String chatKey;
+
+                if (usuarioActualUid.compareTo(holder.otroUser.getId()) < 0) {
+                    chatKey = usuarioActualUid + "_" + holder.otroUser.getId();
+                } else {
+                    chatKey = holder.otroUser.getId() + "_" + usuarioActualUid;
                 }
-                holder.ultimoMensaje.setText(holder.ultimoMsj.getTexto());
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Maneja el error
-            }
-        });
+                FirebaseDatabase.getInstance().getReference("chats").child(chatKey).child("listaMensajes").limitToLast(1).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        // Itera sobre los hijos de la referencia a los mensajes
+                        for (DataSnapshot mensajeSnapshot : snapshot.getChildren()) {
+                            holder.ultimoMsj = mensajeSnapshot.getValue(Mensaje.class);
+                        }
+                        holder.ultimoMensaje.setText(holder.ultimoMsj.getTexto());
+                    }
 
-        holder.cardViewChatReciente.setOnClickListener(v -> {
-            Intent intent = new Intent(holder.itemView.getContext(), ChatVentana.class);
-            intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
-            intent.putExtra("UidUsuarioReceptor", holder.otroUser.getId());
-            holder.itemView.getContext().startActivity(intent);
-        });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // Maneja el error
+                    }
+                });
+
+                holder.cardViewChatReciente.setOnClickListener(v -> {
+                    Intent intent = new Intent(holder.itemView.getContext(), ChatVentana.class);
+                    intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
+                    intent.putExtra("UidUsuarioReceptor", holder.otroUser.getId());
+                    holder.itemView.getContext().startActivity(intent);
+                });
+            }
+        }, Usuario.class);
     }
 
 

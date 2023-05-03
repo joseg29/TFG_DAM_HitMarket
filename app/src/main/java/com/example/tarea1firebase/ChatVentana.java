@@ -135,12 +135,11 @@ public class ChatVentana extends AppCompatActivity {
             public void onSuccess(Usuario result) {
                 otroUsuarioReceptor = result;
                 lblNombreContacto.setText(otroUsuarioReceptor.getNombre());
-                if (!otroUsuarioReceptor.getFotoPerfil().equals("")) {
                     try {
                         Glide.with(ChatVentana.this).load(otroUsuarioReceptor.getFotoPerfil()).into(fotoPerfil);
                     } catch (Exception e) {
                     }
-                }
+
             }
         }, Usuario.class);
     }
@@ -154,7 +153,7 @@ public class ChatVentana extends AppCompatActivity {
                 if (snapshot.exists()) {
                     chat = snapshot.getValue(Chat.class);
                 } else {
-                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "", idChat);
+                    chat = new Chat(new ArrayList<>(), usuario1Uid, usuario2Uid, "", idChat);
                     chatsRef.setValue(chat);
 
                     gestorFirebase.actualiazarCampoUsuario(usuario1Uid, "chatsRecientes", idChat, new GestorFirestore.Callback<String>() {
@@ -206,7 +205,7 @@ public class ChatVentana extends AppCompatActivity {
                 if (snapshot.exists()) {
                     chat = snapshot.getValue(Chat.class);
                 } else {
-                    chat = new Chat(new ArrayList<>(), usuario1, usuario2, "", idChat);
+                    chat = new Chat(new ArrayList<>(), usuarioActualUid, usuario2Uid, "", idChat);
                 }
                 listaMensajes = new ArrayList<>();
 

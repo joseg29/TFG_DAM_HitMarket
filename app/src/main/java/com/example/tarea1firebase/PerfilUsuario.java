@@ -119,20 +119,17 @@ public class PerfilUsuario extends AppCompatActivity {
                 String textoResena = etTextoResena.getText().toString();
                 int rating = (int) ratingBar.getRating();
                 String fechaActual = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-                gestorFirebase.obtenerUsuarioPorId(mAuth.getCurrentUser().getUid(), new GestorFirestore.Callback<Usuario>() {
-                    @Override
-                    public void onSuccess(Usuario result) {
-                        Resena resena = new Resena(textoResena, result, rating, fechaActual);
-                        gestorFirebase.actualiazarCampoUsuario(usuario.getId(), "listaResenas", resena, new GestorFirestore.Callback<String>() {
-                            @Override
-                            public void onSuccess(String result) {
-                                obtenerDatosUsuario();
-                            }
-                        });
 
-                        dialogInterface.dismiss(); // Cierra el diálogo
+                Resena resena = new Resena(textoResena, mAuth.getCurrentUser().getUid(), rating, fechaActual);
+
+                gestorFirebase.actualiazarCampoUsuario(usuario.getId(), "listaResenas", resena, new GestorFirestore.Callback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        obtenerDatosUsuario();
                     }
-                }, Usuario.class);
+                });
+
+                dialogInterface.dismiss(); // Cierra el diálogo
 
             }
         });
