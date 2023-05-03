@@ -76,11 +76,13 @@
             android:textColor="@color/white"
             android:textSize="30sp" />
 
-        <LinearLayout
-            android:layout_width="410dp"
-            android:layout_height="1dp"
-            android:background="@drawable/edit_text_editar_perfil"
-            android:orientation="horizontal" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/tvConoceMiMusica"
+            android:layout_marginTop="-5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#616161" />
 
         <LinearLayout
             android:layout_width="380dp"
@@ -195,11 +197,13 @@
                 android:theme="@style/SpinnerCustomStyle" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="410dp"
-            android:layout_height="1dp"
-            android:background="@drawable/edit_text_editar_perfil"
-            android:orientation="horizontal" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/tvConoceMiMusica"
+            android:layout_marginTop="-5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#616161" />
 
         <LinearLayout
             android:layout_width="380dp"
@@ -232,11 +236,13 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="410dp"
-            android:layout_height="1dp"
-            android:background="@drawable/edit_text_editar_perfil"
-            android:orientation="horizontal" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/tvConoceMiMusica"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#616161" />
 
         <LinearLayout
             android:id="@+id/layoutBotonMostrarRedes"
@@ -292,7 +298,7 @@
                 android:layout_below="@+id/btnMostrarAyuda"
                 android:text="para poder introducir tus redes sociales debes introducir tus nombres de usuario"
                 android:textSize="16sp"
-                android:background="@drawable/edit_text_redondo"
+                android:background="@drawable/descripcion_editar_perfil"
                 android:visibility="invisible" />
 
 
@@ -407,12 +413,13 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="410dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/edit_text_editar_perfil"
-            android:orientation="horizontal" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/tvConoceMiMusica"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#616161" />
 
         <LinearLayout
             android:layout_width="380dp"
@@ -469,12 +476,13 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="410dp"
-            android:layout_height="1dp"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_below="@+id/tvConoceMiMusica"
             android:layout_marginTop="10dp"
-            android:background="@drawable/edit_text_editar_perfil"
-            android:orientation="horizontal" />
+            android:layout_marginBottom="5dp"
+            android:background="#616161" />
 
         <LinearLayout
             android:layout_width="380dp"
