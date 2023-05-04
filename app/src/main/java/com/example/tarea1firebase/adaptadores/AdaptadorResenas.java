@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.entidades.Resena;
 import com.example.tarea1firebase.entidades.Usuario;
@@ -58,6 +59,10 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
                 holder.texto.setText(listaResenas.get(position).getTexto());
                 holder.estrellas.setText(String.valueOf(listaResenas.get(position).getValoracion()));
                 holder.fecha.setText(listaResenas.get(position).getFecha());
+                try {
+                    Glide.with(holder.itemView.getContext()).load(autor.getFotoPerfil()).into(holder.imgUsu);
+                } catch (Exception e) {
+                }
             }
         }, Usuario.class);
 
