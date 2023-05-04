@@ -20,7 +20,7 @@
                 android:id="@+id/contenedorTop"
                 android:layout_width="match_parent"
                 android:layout_height="243dp"
-                android:background="#EC9F9F">
+                android:background="@color/black">
 
                 <ImageView
                     android:id="@+id/imgFotoPerfil"

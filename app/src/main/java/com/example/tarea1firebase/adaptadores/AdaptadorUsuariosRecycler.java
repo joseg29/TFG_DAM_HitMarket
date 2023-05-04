@@ -121,10 +121,20 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
 
         holder.lblNombreUsuario.setText(listaUsuariosFiltrados.get(position).getNombre().toUpperCase(Locale.ROOT));
 
-        try {
-            Glide.with(holder.itemView.getContext()).load(listaUsuariosFiltrados.get(position).getFotoPerfil()).fitCenter().into(holder.fotoPerfil);
-        } catch (Exception e) {
+        if (listaUsuariosFiltrados.get(position).getFotoPerfil().equals(holder.itemView.getContext().getString(R.string.urlImagenPerfilPorDefecto))){
+            holder.fotoPerfil.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            try {
+                Glide.with(holder.itemView.getContext()).load(listaUsuariosFiltrados.get(position).getFotoPerfil()).into(holder.fotoPerfil);
+            } catch (Exception e) {
+            }
+        }else{
+            try {
+                holder.fotoPerfil.setScaleType(ImageView.ScaleType.FIT_XY);
+                Glide.with(holder.itemView.getContext()).load(listaUsuariosFiltrados.get(position).getFotoPerfil()).fitCenter().into(holder.fotoPerfil);
+            } catch (Exception e) {
+            }
         }
+
 
 
         holder.btnVerPerf.setOnClickListener(v -> {
