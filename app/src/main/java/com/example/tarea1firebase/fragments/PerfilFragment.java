@@ -254,12 +254,11 @@ public class PerfilFragment extends Fragment {
                 recyclerResenas.setAdapter(adaptadorResenas);
 
 
-                if (!usuario.getFotoPerfil().equals("")) {
                     try {
                         Glide.with(PerfilFragment.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
                     } catch (Exception e) {
                     }
-                }
+
                 if (adaptadorCanciones.getItemCount() > 0) {
                     imgRecyclerVacio.setVisibility(View.GONE);
                     lblRecyclerVacio.setVisibility(View.GONE);

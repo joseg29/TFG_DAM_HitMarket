@@ -265,11 +265,10 @@ public class PerfilUsuario extends AppCompatActivity {
 
 
                 //Establecer foto de perfil
-                if (!usuario.getFotoPerfil().equals("")) {
-                    try {
-                        Glide.with(PerfilUsuario.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
-                    } catch (Exception e) {
-                    }
+                try {
+                    Glide.with(PerfilUsuario.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
+                } catch (Exception e) {
+
                 }
                 if (adaptadorCanciones.getItemCount() > 0) {
                     imgRecyclerVacio.setVisibility(View.GONE);
