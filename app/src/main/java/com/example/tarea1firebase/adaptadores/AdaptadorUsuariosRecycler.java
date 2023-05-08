@@ -189,7 +189,8 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
             listaUsuariosFiltrados.addAll(listaUsuarios);
         } else {
             for (Usuario user : listaUsuarios) {
-                if (user.getNombre().toLowerCase().contains(query.toLowerCase())) {
+                if (user.getNombre().toLowerCase().contains(query.toLowerCase())
+                        || user.getCiudad().toLowerCase().contains(query.toLowerCase())) {
                     listaUsuariosFiltrados.add(user);
                 }
             }

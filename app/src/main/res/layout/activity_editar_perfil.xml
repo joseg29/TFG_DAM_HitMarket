@@ -163,8 +163,8 @@
                 android:backgroundTint="@color/white"
                 android:entries="@array/autonomous_communities"
                 android:prompt="@string/spinner_title"
-                android:spinnerMode="dialog"
-                android:theme="@style/SpinnerCustomStyle" />
+                android:spinnerMode="dropdown"
+                android:theme="@style/MySpinnerStyle" />
 
         </LinearLayout>
 
@@ -194,7 +194,7 @@
                 android:entries="@array/generos_musicales"
                 android:prompt="@string/spinner_title2"
                 android:spinnerMode="dropdown"
-                android:theme="@style/SpinnerCustomStyle" />
+                android:theme="@style/MySpinnerStyle" />
         </LinearLayout>
 
         <View
@@ -291,16 +291,16 @@
                 android:layout_marginStart="160dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_baseline_help_outline_24" />
+
             <TextView
                 android:id="@+id/tvAyuda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/btnMostrarAyuda"
+                android:background="@drawable/descripcion_editar_perfil"
                 android:text="para poder introducir tus redes sociales debes introducir tus nombres de usuario"
                 android:textSize="16sp"
-                android:background="@drawable/descripcion_editar_perfil"
                 android:visibility="invisible" />
-
 
 
             <TextView

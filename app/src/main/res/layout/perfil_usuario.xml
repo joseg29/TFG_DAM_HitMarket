@@ -72,8 +72,8 @@
                         android:layout_width="61dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:tint="#FFFFFF"
-                        app:srcCompat="@drawable/ojo_abierto" />
+                        app:srcCompat="@drawable/ojo_abierto"
+                        app:tint="#FFFFFF" />
 
                     <TextView
                         android:id="@+id/lblVisitasAlPerfil"
@@ -90,14 +90,13 @@
                     android:id="@+id/tvEditar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="10dp"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/gotham_medium_1"
+                    android:fontFamily="@font/gotham_bold_1"
                     android:text="Editar >"
-                    android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textColor="@color/white" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
