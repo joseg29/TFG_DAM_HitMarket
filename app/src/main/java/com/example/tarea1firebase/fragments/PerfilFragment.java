@@ -159,6 +159,16 @@ public class PerfilFragment extends Fragment {
         {
             abrirYoutube();
         });
+        btnSpotify.setOnClickListener(v ->
+
+        {
+            abrirSpotify();
+        });
+        btnSoundCloud.setOnClickListener(v ->
+
+        {
+            abrirSoundCloud();
+        });
 
 
     }
@@ -362,6 +372,23 @@ public class PerfilFragment extends Fragment {
         }
         startActivity(intent);
     }
+    public void abrirSpotify() {
+
+        String channelUrl = usuario.getSpotify();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(channelUrl));
+        intent.setPackage(null);
+        startActivity(intent);
+    }
+    public void abrirSoundCloud() {
+
+        String channelUrl = usuario.getSoundCloud();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(channelUrl));
+        intent.setPackage(null);
+        startActivity(intent);
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
