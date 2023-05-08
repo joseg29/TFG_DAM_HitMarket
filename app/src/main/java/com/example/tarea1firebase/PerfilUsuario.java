@@ -1,8 +1,6 @@
 package com.example.tarea1firebase;
 
 
-import static com.example.tarea1firebase.Registro.COLECCION;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,7 +29,6 @@ import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FieldValue;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -198,9 +195,9 @@ public class PerfilUsuario extends AppCompatActivity {
         btnSpotify = findViewById(R.id.btnSpotify);
         btnSoundCloud = findViewById(R.id.btnSoundCloud);
 
-        imgRecyclerVacio = findViewById(R.id.imagenRecyclerVacio);
+        imgRecyclerVacio = findViewById(R.id.imagenRecyclerVacioFavsVacio);
         imgResenasVacias = findViewById(R.id.imagenRecyclerVacioRese);
-        lblRecyclerVacio = findViewById(R.id.lblRecyclerVacio);
+        lblRecyclerVacio = findViewById(R.id.lblRecyclerVacioFavsVacio);
         lblRecyclerRese = findViewById(R.id.lblRecyclerVacioRese);
 
         btnAnadirCancion = findViewById(R.id.btnSubirAudio);

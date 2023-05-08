@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
@@ -37,6 +39,8 @@ public class ExploraFragment extends Fragment {
     private ProgressBar progressBar;
     private GestorFirestore gestorFirebase;
     private FirebaseAuth mAuth;
+    private ImageView imgFavsVacios;
+    private TextView lblFavsVacios;
 
     public ExploraFragment() {
         // Required empty public constructor
@@ -62,6 +66,9 @@ public class ExploraFragment extends Fragment {
         inicializarVistas(view);
         mAuth = FirebaseAuth.getInstance();
         gestorFirebase = new GestorFirestore();
+        imgFavsVacios = view.findViewById(R.id.imagenRecyclerVacioFavsVacio);
+        lblFavsVacios = view.findViewById(R.id.lblRecyclerVacioFavsVacio);
+        lblFavsVacios.setText("No hay usuarios disponibles");
         setListenerBarraBusqueda();
 
         gestorFirebase.obtenerTodosLosUsuarios(new GestorFirestore.Callback<ArrayList<Usuario>>() {
@@ -74,6 +81,13 @@ public class ExploraFragment extends Fragment {
                 }
                 adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler(result);
                 recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
+                if (adaptadorUsuariosRecycler.getItemCount() > 0) {
+                    imgFavsVacios.setVisibility(View.GONE);
+                    lblFavsVacios.setVisibility(View.GONE);
+                } else {
+                    imgFavsVacios.setVisibility(View.VISIBLE);
+                    lblFavsVacios.setVisibility(View.VISIBLE);
+                }
             }
         });
 

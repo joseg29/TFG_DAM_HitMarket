@@ -201,8 +201,8 @@ public class PerfilFragment extends Fragment {
         recyclerCanciones.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-        imgRecyclerVacio = getView().findViewById(R.id.imagenRecyclerVacio);
-        lblRecyclerVacio = getView().findViewById(R.id.lblRecyclerVacio);
+        imgRecyclerVacio = getView().findViewById(R.id.imagenRecyclerVacioFavsVacio);
+        lblRecyclerVacio = getView().findViewById(R.id.lblRecyclerVacioFavsVacio);
 
         imgRecyclerRese = getView().findViewById(R.id.imagenRecyclerVacioRese);
         lblSinRese = getView().findViewById(R.id.lblRecyclerVacioRese);

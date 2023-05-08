@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
@@ -45,6 +47,8 @@ public class NoticiasFragment extends Fragment {
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
     private GestorFirestore gestorFirebase;
+    private ImageView imgFavsVacios;
+    private TextView lblFavsVacios;
 
     public NoticiasFragment() {
         // Required empty public constructor
@@ -68,6 +72,8 @@ public class NoticiasFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         gestorFirebase = new GestorFirestore();
+        imgFavsVacios = view.findViewById(R.id.imagenRecyclerVacioFavsVacio);
+        lblFavsVacios = view.findViewById(R.id.lblRecyclerVacioFavsVacio);
 
         inicializarVistas(view);
         incializarUsuarioActual();
@@ -112,7 +118,17 @@ public class NoticiasFragment extends Fragment {
                                 }
                                 adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);
                                 recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
+
+                                if (adaptadorUsuariosRecycler.getItemCount() > 0) {
+                                    imgFavsVacios.setVisibility(View.GONE);
+                                    lblFavsVacios.setVisibility(View.GONE);
+                                } else {
+                                    imgFavsVacios.setVisibility(View.VISIBLE);
+                                    lblFavsVacios.setVisibility(View.VISIBLE);
+                                }
                             }
+
+
                         }
                     }, Usuario.class);
                 }
