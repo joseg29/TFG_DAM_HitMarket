@@ -53,7 +53,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView lblNombreUsuario, lblMediaEstrellas;
+        private TextView lblNombreUsuario, lblMediaEstrellas , lblUbicacion, lblView3; //AQUI DEFINO EL lblView3
         private Button btnFav, btnVerPerf;
         private boolean isFavorite;
         private ImageView fotoPerfil;
@@ -61,6 +61,9 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         public ViewHolder(View v) {
             super(v);
             lblNombreUsuario = v.findViewById(R.id.txtNombreUsu);
+            lblUbicacion = v.findViewById(R.id.txtUbicacion);
+            //AQUI LO DECLARO
+            lblView3 = v.findViewById(R.id.textView3);
             btnFav = v.findViewById(R.id.btnCoraVacio);
             btnVerPerf = v.findViewById(R.id.btnVerPerfil);
             fotoPerfil = v.findViewById(R.id.fotoPerfilExplora);
@@ -120,6 +123,10 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         });
 
         holder.lblNombreUsuario.setText(listaUsuariosFiltrados.get(position).getNombre().toUpperCase(Locale.ROOT));
+
+        holder.lblUbicacion.setText(listaUsuariosFiltrados.get(position).getCiudad().toUpperCase(Locale.ROOT));
+        // EN ESTA LINEA COMENTADA ME DA EL ERROR NULLPOINTEREXCEPTION
+        //holder.lblView3.setText(listaUsuariosFiltrados.get(position).getGenero().toUpperCase(Locale.ROOT));
 
         if (listaUsuariosFiltrados.get(position).getFotoPerfil().equals(holder.itemView.getContext().getString(R.string.urlImagenPerfilPorDefecto))){
             holder.fotoPerfil.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -190,7 +197,8 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         } else {
             for (Usuario user : listaUsuarios) {
                 if (user.getNombre().toLowerCase().contains(query.toLowerCase())
-                        || user.getCiudad().toLowerCase().contains(query.toLowerCase())) {
+                        || user.getCiudad().toLowerCase().contains(query.toLowerCase())
+                        || user.getGenero().toLowerCase().contains(query.toLowerCase())) {
                     listaUsuariosFiltrados.add(user);
                 }
             }

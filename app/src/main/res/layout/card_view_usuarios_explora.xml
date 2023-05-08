@@ -29,7 +29,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/gotham_bold"
-            android:text="#TRAP/#RAP/"
+            android:text="#TRAP"
             android:textColor="@color/white"
             android:textSize="15sp" />
 

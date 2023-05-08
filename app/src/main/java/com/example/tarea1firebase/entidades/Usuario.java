@@ -8,6 +8,7 @@ public class Usuario implements Serializable {
     private String nombre;
     private String descripcion;
     private String ciudad;
+    private String genero;
     private String instagram;
     private String tiktTok;
     private String email;
@@ -24,11 +25,12 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(String id, String email, String name, String descripcion, String ciudad, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<String> chatsRecientes, String fotoPerfil, List<String> listaFavoritos, List<Resena> listaResenas, List<String> listaVisitas) {
+    public Usuario(String id, String email, String name, String descripcion, String ciudad, String genero, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<String> chatsRecientes, String fotoPerfil, List<String> listaFavoritos, List<Resena> listaResenas, List<String> listaVisitas) {
         this.id = id;
         this.nombre = name;
         this.descripcion = descripcion;
         this.ciudad = ciudad;
+        this.genero = genero;
         this.arrayCanciones = canciones;
         this.instagram = instagram;
         this.email = email;
@@ -119,6 +121,14 @@ public class Usuario implements Serializable {
         this.ciudad = ciudad;
     }
 
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -159,6 +169,7 @@ public class Usuario implements Serializable {
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", ciudad='" + ciudad + '\'' +
+                ", genero='" + genero + '\'' +
                 ", arrayCanciones=" + arrayCanciones +
                 '}';
     }

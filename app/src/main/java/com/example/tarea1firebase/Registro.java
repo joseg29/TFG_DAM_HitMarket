@@ -55,7 +55,7 @@ public class Registro extends AppCompatActivity {
     private String nombre, email, id;
     private ProgressBar progressBar;
     private ImageView videoMarco;
-    private Spinner mySpinner;
+    private Spinner mySpinner, mySpinnerGenero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +104,11 @@ public class Registro extends AppCompatActivity {
                 R.array.autonomous_communities, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+                R.array.generos_musicales, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mySpinnerGenero.setAdapter(adapter2);
     }
 
     private void inicializarVistas() {
@@ -129,6 +134,7 @@ public class Registro extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.etConfirmarPassword);
         lblContrasena = findViewById(R.id.lblPassword);
         mySpinner = findViewById(R.id.spinnerOpciones);
+        mySpinnerGenero = findViewById(R.id.spinnerOpcionesGenero);
         lblConfirmarContrasena = findViewById(R.id.lblConfirmarPassword);
         etNombre = findViewById(R.id.etNombre);
         etEmail = findViewById(R.id.etEmail);
@@ -168,6 +174,7 @@ public class Registro extends AppCompatActivity {
         String contrasenaUsuario = etContrasena.getText().toString();
         String confirmarContrasenaUsuario = etConfirmPassword.getText().toString();
         String ciudad = mySpinner.getSelectedItem().toString();
+        String genero = mySpinnerGenero.getSelectedItem().toString();
 
         //Se crea el usuario en el authenticator de firebase
         progressBar.setVisibility(View.VISIBLE);
@@ -203,7 +210,7 @@ public class Registro extends AppCompatActivity {
                         } else {
                             // Se crea el usuario en collections (FIRESTORE), y se le pasa el id de authenticator como referencia de documento
                             String idUsuario = task.getResult().getUser().getUid();
-                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList());
+                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, genero, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList());
                             db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -231,7 +238,8 @@ public class Registro extends AppCompatActivity {
         //Ya existe el email
         String idUsuario = id;
         String ciudad = mySpinner.getSelectedItem().toString();
-        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList());
+        String genero = mySpinnerGenero.getSelectedItem().toString();
+        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, genero, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList());
         db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

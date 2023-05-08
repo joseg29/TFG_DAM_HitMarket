@@ -143,10 +143,33 @@
                 android:entries="@array/autonomous_communities"/>
 
             <TextView
+                android:id="@+id/textViewSeleccionaOpcionGenero"
+                android:layout_width="313dp"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/gotham_bold_1"
+                android:textColor="@color/white"
+                android:layout_below="@id/spinnerOpciones"
+                android:text="Genero" />
+
+            <Spinner
+                android:id="@+id/spinnerOpcionesGenero"
+                android:layout_width="313dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/edit_text_redondo"
+                android:alpha=".8"
+                android:spinnerMode="dropdown"
+                android:layout_below="@id/textViewSeleccionaOpcionGenero"
+                android:prompt="@string/spinner_title2"
+                android:entries="@array/generos_musicales"/>
+
+            <TextView
                 android:id="@+id/lblPassword"
                 android:layout_width="313dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/spinnerOpciones"
+                android:layout_below="@id/spinnerOpcionesGenero"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/gotham_bold_1"
