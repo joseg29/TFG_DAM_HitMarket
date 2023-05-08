@@ -195,10 +195,11 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         if (query.isEmpty()) {
             listaUsuariosFiltrados.addAll(listaUsuarios);
         } else {
+            String lowercaseQuery = query.toLowerCase();
             for (Usuario user : listaUsuarios) {
-                if (user.getNombre().toLowerCase().contains(query.toLowerCase())
-                        || user.getCiudad().toLowerCase().contains(query.toLowerCase())
-                        || user.getGenero().toLowerCase().contains(query.toLowerCase())) {
+                if (user.getNombre().toLowerCase().contains(lowercaseQuery)
+                        || (user.getCiudad() != null && user.getCiudad().toLowerCase().contains(lowercaseQuery))
+                        || (user.getGenero() != null && user.getGenero().toLowerCase().contains(lowercaseQuery))) {
                     listaUsuariosFiltrados.add(user);
                 }
             }
@@ -206,6 +207,8 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         notifyDataSetChanged();
         new Handler().postDelayed(() -> progressBar.setVisibility(View.GONE), 900);
     }
+
+
 
 }
 
