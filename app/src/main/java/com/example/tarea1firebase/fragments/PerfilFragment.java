@@ -51,7 +51,7 @@ public class PerfilFragment extends Fragment {
     private FirebaseStorage storage;
     private RecyclerView recyclerCanciones, recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
-    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas,lblSinRese;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button btnEditar;
@@ -59,7 +59,7 @@ public class PerfilFragment extends Fragment {
 
     private String uidUsuarioActual;
     private FirebaseAuth mAuth;
-    private ImageView imgFotoPerfil, imgRecyclerVacio;
+    private ImageView imgFotoPerfil, imgRecyclerVacio,imgRecyclerRese;
     private GestorFirestore gestorFirebase;
     private AdaptadorResenas adaptadorResenas;
 
@@ -204,6 +204,9 @@ public class PerfilFragment extends Fragment {
         imgRecyclerVacio = getView().findViewById(R.id.imagenRecyclerVacio);
         lblRecyclerVacio = getView().findViewById(R.id.lblRecyclerVacio);
 
+        imgRecyclerRese = getView().findViewById(R.id.imagenRecyclerVacioRese);
+        lblSinRese = getView().findViewById(R.id.lblRecyclerVacioRese);
+
         ArrayList<String> arrayPrueba = new ArrayList<>();
 
         adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba);
@@ -275,6 +278,13 @@ public class PerfilFragment extends Fragment {
                 } else {
                     imgRecyclerVacio.setVisibility(View.VISIBLE);
                     lblRecyclerVacio.setVisibility(View.VISIBLE);
+                }
+                if (adaptadorResenas.getItemCount() > 0) {
+                    imgRecyclerRese.setVisibility(View.GONE);
+                    lblSinRese.setVisibility(View.GONE);
+                } else {
+                    imgRecyclerRese.setVisibility(View.VISIBLE);
+                    lblSinRese.setVisibility(View.VISIBLE);
                 }
                 progressBar.setVisibility(View.GONE);
             }

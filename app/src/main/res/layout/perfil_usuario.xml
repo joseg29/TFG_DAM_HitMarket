@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <ScrollView
@@ -446,12 +446,43 @@
                 android:layout_marginBottom="14dp"
                 android:background="#616161" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/RecyclerResenas"
+            <LinearLayout
+                android:id="@+id/layoutRecyclerRese"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="10dp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imagenRecyclerVacioRese"
+                    android:layout_width="231dp"
+                    android:layout_height="163dp"
+                    android:layout_gravity="center"
+
+                    android:background="@drawable/sin_coments"
+                    android:backgroundTint="#FFFFFF"
+                    android:padding="20dp"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/lblRecyclerVacioRese"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/gotham_bold"
+                    android:text="Este usuario no tiene reseñas"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/RecyclerResenas"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="10dp">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
 
 
         </LinearLayout>

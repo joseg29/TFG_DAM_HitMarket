@@ -46,14 +46,14 @@ public class PerfilUsuario extends AppCompatActivity {
     private RecyclerView recyclerCanciones, recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private AdaptadorResenas adaptadorResenas;
-    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas,lblRecyclerRese;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button tvEditar;
     private ImageButton btnChat;
     private String uidUsuarioMostrandose;
     private FirebaseAuth mAuth;
-    private ImageView imgFotoPerfil, imgRecyclerVacio;
+    private ImageView imgFotoPerfil, imgRecyclerVacio,imgResenasVacias;
     private GestorFirestore gestorFirebase;
     private AlertDialog dialog;
     private String uidUsuarioActual;
@@ -162,13 +162,16 @@ public class PerfilUsuario extends AppCompatActivity {
             abrirYoutube();
         });
 
-        /**btnSoundCloud.setOnClickListener(v -> {
-         abrirSoundCloud();
-         });
+        btnSpotify.setOnClickListener(v ->
 
-         btnSpotify.setOnClickListener(v -> {
-         abrirSpotify();
-         });**/
+        {
+            abrirSpotify();
+        });
+        btnSoundCloud.setOnClickListener(v ->
+
+        {
+            abrirSoundCloud();
+        });
 
 
     }
@@ -196,7 +199,9 @@ public class PerfilUsuario extends AppCompatActivity {
         btnSoundCloud = findViewById(R.id.btnSoundCloud);
 
         imgRecyclerVacio = findViewById(R.id.imagenRecyclerVacio);
+        imgResenasVacias = findViewById(R.id.imagenRecyclerVacioRese);
         lblRecyclerVacio = findViewById(R.id.lblRecyclerVacio);
+        lblRecyclerRese = findViewById(R.id.lblRecyclerVacioRese);
 
         btnAnadirCancion = findViewById(R.id.btnSubirAudio);
         lblMediaEstrellas = findViewById(R.id.lblMediaEstrellas);
@@ -276,6 +281,13 @@ public class PerfilUsuario extends AppCompatActivity {
                 } else {
                     imgRecyclerVacio.setVisibility(View.VISIBLE);
                     lblRecyclerVacio.setVisibility(View.VISIBLE);
+                }
+                if (adaptadorResenas.getItemCount() > 0) {
+                    imgResenasVacias.setVisibility(View.GONE);
+                    lblRecyclerRese.setVisibility(View.GONE);
+                } else {
+                    imgResenasVacias.setVisibility(View.VISIBLE);
+                    lblRecyclerRese.setVisibility(View.VISIBLE);
                 }
                 progressBar.setVisibility(View.GONE);
             }
@@ -394,4 +406,21 @@ public class PerfilUsuario extends AppCompatActivity {
         }
         startActivity(intent);
     }
+    public void abrirSpotify() {
+
+        String channelUrl = usuario.getSpotify();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(channelUrl));
+        intent.setPackage(null);
+        startActivity(intent);
+    }
+    public void abrirSoundCloud() {
+
+        String channelUrl = usuario.getSoundCloud();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(channelUrl));
+        intent.setPackage(null);
+        startActivity(intent);
+    }
+
 }
