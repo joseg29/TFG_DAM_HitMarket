@@ -125,8 +125,10 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         holder.lblNombreUsuario.setText(listaUsuariosFiltrados.get(position).getNombre().toUpperCase(Locale.ROOT));
 
         holder.lblUbicacion.setText(listaUsuariosFiltrados.get(position).getCiudad().toUpperCase(Locale.ROOT));
-        // EN ESTA LINEA COMENTADA ME DA EL ERROR NULLPOINTEREXCEPTION
-        //holder.lblView3.setText(listaUsuariosFiltrados.get(position).getGenero().toUpperCase(Locale.ROOT));
+        if (holder.lblView3 != null) {
+            holder.lblView3.setText(listaUsuariosFiltrados.get(position).getGenero().toUpperCase(Locale.ROOT));
+        }
+
 
         if (listaUsuariosFiltrados.get(position).getFotoPerfil().equals(holder.itemView.getContext().getString(R.string.urlImagenPerfilPorDefecto))){
             holder.fotoPerfil.setScaleType(ImageView.ScaleType.FIT_CENTER);
