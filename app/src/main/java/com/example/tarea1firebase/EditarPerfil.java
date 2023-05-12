@@ -6,11 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -53,6 +56,7 @@ public class EditarPerfil extends AppCompatActivity {
     private StorageReference mStorageRef;
     private String urlImagenPerfil;
     private FirebaseAuth mAuth;
+    private Spinner spinnerCiudad, spinnerGenero;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,8 @@ public class EditarPerfil extends AppCompatActivity {
         etNombre = findViewById(R.id.etNombreEditar);
         etDescripcion = findViewById(R.id.etDescripcionEditar);
         etEmailEditar = findViewById(R.id.etEmailEditar);
+        spinnerCiudad = findViewById(R.id.spinnerOpcionesEditarCiudades);
+        spinnerGenero = findViewById(R.id.spinnerOpcionesGeneroMusical);
         etInstagram = findViewById(R.id.etInstagramEditar);
         etSoundCloud = findViewById(R.id.etSoundCloudEditar);
         etSpotify = findViewById(R.id.etSpotifyEditar);
@@ -124,6 +130,8 @@ public class EditarPerfil extends AppCompatActivity {
             usuarioEditando.setSoundCloud(etSoundCloud.getText().toString());
             usuarioEditando.setTiktTok(etTikTok.getText().toString());
             usuarioEditando.setEmail(etEmailEditar.getText().toString());
+            usuarioEditando.setCiudad(spinnerCiudad.getSelectedItem().toString());
+            usuarioEditando.setGenero(spinnerGenero.getSelectedItem().toString());
 
             if (urlImagenPerfil != null) {
                 usuarioEditando.setFotoPerfil(urlImagenPerfil);
@@ -193,6 +201,13 @@ public class EditarPerfil extends AppCompatActivity {
                         etYoutube.setText(usuario.getYoutube());
                         etSoundCloud.setText(usuario.getSoundCloud());
                         etTikTok.setText(usuario.getTiktTok());
+
+                        ArrayAdapter<String> adapterCiudad = (ArrayAdapter<String>) spinnerCiudad.getAdapter();
+                        spinnerCiudad.setSelection(adapterCiudad.getPosition(usuario.getCiudad()));
+
+                        ArrayAdapter<String> adapterGenero = (ArrayAdapter<String>) spinnerGenero.getAdapter();
+                        spinnerGenero.setSelection(adapterGenero.getPosition(usuario.getGenero()));
+
 
                     } else {
                         Toast.makeText(getApplicationContext(), "Error al obtener datos", Toast.LENGTH_LONG);
