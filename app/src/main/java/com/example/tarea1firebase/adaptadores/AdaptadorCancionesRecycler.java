@@ -1,7 +1,13 @@
+/**
+ * Esta clase es un adaptador para un RecyclerView que se utiliza para mostrar una lista de canciones.
+ * El adaptador tiene una lista de URL de las canciones, y se encarga de reproducirlas y controlar su reproducción.
+ * La clase tiene un ViewHolder que contiene un botón de reproducción, un reproductor de medios y un SeekBar que muestra el progreso de la canción.
+ * El adaptador tiene tres métodos: onCreateViewHolder, onBindViewHolder y getItemCount, que son necesarios para implementar un RecyclerView.Adapter.
+ * Además, tiene un constructor que toma una lista de URLs de las canciones.
+ */
 package com.example.tarea1firebase.adaptadores;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -21,17 +27,28 @@ import java.util.List;
 
 public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCancionesRecycler.ViewHolder> {
     private List<String> listaUrls;
-    private ProgressDialog dialogoCargando;
 
+    /**
+     * Constructor para el adaptador. Recibe una lista de URLs de las canciones.
+     * @param listaUsuarios Lista de URLs de las canciones.
+     */
     public AdaptadorCancionesRecycler(List<String> listaUsuarios) {
         this.listaUrls = listaUsuarios;
     }
 
+    /**
+     * ViewHolder para cada elemento del RecyclerView. Contiene un botón de reproducción,
+     * un reproductor de medios y un SeekBar que muestra el progreso de la canción.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ImageButton btnPlay;
         private MediaPlayer mediaPlayer;
         private SeekBar seekBar;
 
+        /**
+         * Constructor del ViewHolder. Toma una vista y busca los elementos necesarios para reproducir la canción.
+         * @param v Vista del elemento del RecyclerView.
+         */
         public ViewHolder(View v) {
             super(v);
             btnPlay = v.findViewById(R.id.btnPlay);
@@ -41,7 +58,12 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
         }
     }
 
-    //será quien devuelva el ViewHolder con el layout seteado que previamente definimos
+    /**
+     * Crea y devuelve un ViewHolder con el layout seteado que previamente definimos.
+     * @param parent ViewGroup en el que se va a agregar la vista creada.
+     * @param viewType Tipo de la vista.
+     * @return ViewHolder con el layout seteado que previamente definimos.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_canciones, parent, false);
@@ -49,7 +71,11 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
         return viewHolder;
     }
 
-    //será quien se encargue de establecer los objetos en el ViewHolder
+    /**
+     * Establece los objetos en el ViewHolder. Se encarga de reproducir la canción, establecer el progreso en el SeekBar y controlar la pausa y reproducción.
+     * @param holder ViewHolder que se está estableciendo.
+     * @param position Posición del elemento en el RecyclerView.
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.btnPlay.setOnClickListener(view -> {
@@ -79,7 +105,7 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
                 }
             });
         });
-
+        // Configura el MediaPlayer y el SeekBar.
         try {
             holder.mediaPlayer.reset();
             holder.mediaPlayer.setDataSource(listaUrls.get(position));
@@ -132,7 +158,10 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
         });
     }
 
-    //será quien devuelva la cantidad de items que se encuentra en la lista
+    /**
+     Devuelve la cantidad de elementos en la lista.
+     @return La cantidad de elementos en la lista.
+     */
     @Override
     public int getItemCount() {
         return listaUrls.size();

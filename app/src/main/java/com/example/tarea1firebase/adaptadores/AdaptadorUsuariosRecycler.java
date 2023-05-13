@@ -1,3 +1,10 @@
+/**
+ Esta clase representa el adaptador para el RecyclerView que muestra la lista de usuarios
+ explorables por el usuario actual.
+ El adaptador se encarga de asociar cada elemento de la lista con su respectiva vista en el
+ RecyclerView y gestionar los eventos de interacción de los elementos de la lista, como la
+ selección de favoritos o la visualización del perfil de un usuario.
+ */
 package com.example.tarea1firebase.adaptadores;
 
 import static com.example.tarea1firebase.Registro.COLECCION;
@@ -45,6 +52,10 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     private List<String> favoritos;
     private GestorFirestore gestorFirebase;
 
+    /**
+     * Constructor para el adaptador de usuarios.
+     * @param listaUsuarios la lista de usuarios que se mostrarán en el RecyclerView
+     */
     public AdaptadorUsuariosRecycler(ArrayList<Usuario> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
         this.listaUsuariosFiltrados = new ArrayList<>();
@@ -53,16 +64,18 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView lblNombreUsuario, lblMediaEstrellas , lblUbicacion, lblView3; //AQUI DEFINO EL lblView3
+        private TextView lblNombreUsuario, lblMediaEstrellas, lblUbicacion, lblView3;
         private Button btnFav, btnVerPerf;
         private boolean isFavorite;
         private ImageView fotoPerfil;
-
+        /**
+         * Constructor para la clase ViewHolder.
+         * @param v la vista que se asociará con el ViewHolder
+         */
         public ViewHolder(View v) {
             super(v);
             lblNombreUsuario = v.findViewById(R.id.txtNombreUsu);
             lblUbicacion = v.findViewById(R.id.txtUbicacion);
-            //AQUI LO DECLARO
             lblView3 = v.findViewById(R.id.textView3);
             btnFav = v.findViewById(R.id.btnCoraVacio);
             btnVerPerf = v.findViewById(R.id.btnVerPerfil);
@@ -71,8 +84,12 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
 
         }
     }
-
-    //será quien devuelva el ViewHolder con el layout seteado que previamente definimos
+    /**
+     * Este método es llamado por el RecyclerView para crear una nueva vista para un elemento de la lista.
+     * @param parent el ViewGroup en el que se añadirá la vista.
+     * @param viewType el tipo de vista del elemento
+     * @return una nueva instancia de la vista del elemento
+     * */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_usuarios_explora, parent, false);
@@ -80,8 +97,11 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         return viewHolder;
     }
 
-
-    //será quien se encargue de establecer los objetos en el ViewHolder
+    /**
+     * Método que establece los objetos en el ViewHolder
+     * @param holder ViewHolder donde se establecerán los objetos
+     * @param position posición del elemento en la lista
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         db = FirebaseFirestore.getInstance();
@@ -130,20 +150,19 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         }
 
 
-        if (listaUsuariosFiltrados.get(position).getFotoPerfil().equals(holder.itemView.getContext().getString(R.string.urlImagenPerfilPorDefecto))){
+        if (listaUsuariosFiltrados.get(position).getFotoPerfil().equals(holder.itemView.getContext().getString(R.string.urlImagenPerfilPorDefecto))) {
             holder.fotoPerfil.setScaleType(ImageView.ScaleType.FIT_CENTER);
             try {
                 Glide.with(holder.itemView.getContext()).load(listaUsuariosFiltrados.get(position).getFotoPerfil()).into(holder.fotoPerfil);
             } catch (Exception e) {
             }
-        }else{
+        } else {
             try {
                 holder.fotoPerfil.setScaleType(ImageView.ScaleType.FIT_XY);
                 Glide.with(holder.itemView.getContext()).load(listaUsuariosFiltrados.get(position).getFotoPerfil()).fitCenter().into(holder.fotoPerfil);
             } catch (Exception e) {
             }
         }
-
 
 
         holder.btnVerPerf.setOnClickListener(v -> {
@@ -184,13 +203,19 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
 
     }
 
-
-    //será quien devuelva la cantidad de items que se encuentra en la lista
+    /**
+     * Método que devuelve la cantidad de items que se encuentra en la lista
+     * @return cantidad de items en la lista
+     */
     @Override
     public int getItemCount() {
         return listaUsuariosFiltrados.size();
     }
-
+    /**
+     * Método que filtra la lista de usuarios
+     * @param query cadena de texto para filtrar la lista de usuarios
+     * @param progressBar barra de progreso que se mostrará durante el filtrado
+     */
     public void filter(String query, ProgressBar progressBar) {
         listaUsuariosFiltrados.clear();
         progressBar.setVisibility(View.VISIBLE);
@@ -209,7 +234,6 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
         notifyDataSetChanged();
         new Handler().postDelayed(() -> progressBar.setVisibility(View.GONE), 900);
     }
-
 
 
 }

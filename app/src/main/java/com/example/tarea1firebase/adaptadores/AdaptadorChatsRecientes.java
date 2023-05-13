@@ -1,3 +1,6 @@
+/**
+ * Clase que representa el adaptador para la lista de chats recientes.
+ */
 package com.example.tarea1firebase.adaptadores;
 
 import android.content.Intent;
@@ -28,12 +31,19 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adaptador de RecyclerView para mostrar la lista de chats recientes.
+ */
 public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChatsRecientes.ViewHolder> {
     private List<Chat> listaChats;
     private FirebaseAuth mAuth;
     private String usuarioActualUid;
 
-
+    /**
+     * Constructor que inicializa la lista de chats recientes.
+     *
+     * @param listaUsuarios Lista de chats recientes a mostrar.
+     */
     public AdaptadorChatsRecientes(ArrayList<Chat> listaUsuarios) {
         this.listaChats = listaUsuarios;
     }
@@ -47,6 +57,11 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
         private Mensaje ultimoMsj;
         private GestorFirestore gestorFirestore;
 
+        /**
+         * Constructor que inicializa las views de la vista de chat reciente.
+         *
+         * @param v Vista de chat reciente.
+         */
         public ViewHolder(View v) {
             super(v);
             cardViewChatReciente = v.findViewById(R.id.cardViewChatReciente);
@@ -57,7 +72,12 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
         }
     }
 
-    //será quien devuelva el ViewHolder con el layout seteado que previamente definimos
+    /**
+     * Método que se encarga de inflar la vista de chat reciente.
+     * @param parent   El ViewGroup al que se añadirá la vista.
+     * @param viewType El tipo de vista.
+     * @return Un ViewHolder que contiene la vista de chat reciente inflada.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_chat_reciente, parent, false);
@@ -67,11 +87,16 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
     }
 
 
-    //será quien se encargue de establecer los objetos en el ViewHolder
+    /**
+     * Método que se encarga de establecer los datos en un ViewHolder.
+     * @param holder   El ViewHolder en el cual se establecerán los datos.
+     * @param position La posición del item en la lista de chats recientes.
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         mAuth = FirebaseAuth.getInstance();
         usuarioActualUid = mAuth.getCurrentUser().getUid();
+        // Obtener el UID del otro usuario con quien se mantiene la conversación
         if (listaChats.get(position).getUsuario1().equals(mAuth.getCurrentUser().getUid())) {
             holder.uidOtroUser = listaChats.get(position).getUsuario2();
         } else if (listaChats.get(position).getUsuario2().equals(mAuth.getCurrentUser().getUid())) {
@@ -120,7 +145,10 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
     }
 
 
-    //será quien devuelva la cantidad de items que se encuentra en la lista
+    /**
+     * Obtiene el número de elementos en la lista de chats recientes.
+     * @return El número de elementos en la lista de chats recientes.
+     */
     @Override
     public int getItemCount() {
         return listaChats.size();

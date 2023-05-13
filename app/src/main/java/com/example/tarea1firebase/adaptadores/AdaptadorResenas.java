@@ -20,7 +20,10 @@ import java.util.List;
 public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.ViewHolder> {
 
     private List<Resena> listaResenas;
-
+    /**
+     * Constructor de la clase AdaptadorResenas.
+     * @param listaResenas La lista de Resenas que se mostrará en el RecyclerView.
+     */
     public AdaptadorResenas(List<Resena> listaResenas) {
         this.listaResenas = listaResenas;
     }
@@ -31,7 +34,10 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
         private TextView estrellas;
         private GestorFirestore gestorFirestore;
 
-
+        /**
+         * Constructor de la clase ViewHolder.
+         * @param v La vista que se utilizará para representar cada elemento de la lista.
+         */
         public ViewHolder(View v) {
             super(v);
             texto = v.findViewById(R.id.txtContenidoResena);
@@ -42,16 +48,26 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
             gestorFirestore = new GestorFirestore();
         }
     }
-
+    /**
+     * Método que se ejecuta cuando el RecyclerView necesita crear una nueva vista.
+     * @param parent   El ViewGroup en el que se añadirá la nueva vista.
+     * @param viewType El tipo de vista que se creará.
+     * @return Una nueva instancia de la clase ViewHolder.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_resena, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
-
+    /**
+     * Método que se ejecuta para mostrar los datos de una Resena en una vista de ViewHolder.
+     * @param holder   La vista de ViewHolder en la que se mostrarán los datos de la Resena.
+     * @param position La posición de la Resena en la lista.
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        // Obtener el autor de la reseña a partir de su ID
         holder.gestorFirestore.obtenerUsuarioPorId(listaResenas.get(position).getUidAutor(), new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario autor) {
@@ -67,7 +83,10 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
         }, Usuario.class);
 
     }
-
+    /**
+     * Método que devuelve el número de elementos en la lista de Resenas.
+     * @return El número de elementos en la lista de Resenas.
+     */
     @Override
     public int getItemCount() {
         return listaResenas.size();
