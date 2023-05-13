@@ -163,8 +163,7 @@
                 android:backgroundTint="@color/white"
                 android:entries="@array/autonomous_communities"
                 android:prompt="@string/spinner_title"
-                android:spinnerMode="dropdown"
-                android:theme="@style/MySpinnerStyle" />
+                android:spinnerMode="dropdown" />
 
         </LinearLayout>
 
@@ -193,8 +192,7 @@
                 android:backgroundTint="@color/white"
                 android:entries="@array/generos_musicales"
                 android:prompt="@string/spinner_title2"
-                android:spinnerMode="dropdown"
-                android:theme="@style/MySpinnerStyle" />
+                android:spinnerMode="dropdown" />
         </LinearLayout>
 
         <View
@@ -294,11 +292,11 @@
 
             <TextView
                 android:id="@+id/tvAyuda"
-                android:layout_width="wrap_content"
+                android:layout_width="340dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/btnMostrarAyuda"
                 android:background="@drawable/descripcion_editar_perfil"
-                android:text="para poder introducir tus redes sociales debes introducir tus nombres de usuario"
+                android:text="@string/tvAyuda"
                 android:textSize="16sp"
                 android:visibility="invisible" />
 
@@ -341,7 +339,7 @@
                 android:alpha=".8"
                 android:background="@drawable/edit_text_redondo"
                 android:drawableStart="@drawable/logo_youtube_editar_perfil"
-                android:hint="\@nombre_de_usuario"
+                android:hint="\http://ejemplo.com"
                 android:inputType="textPersonName"
                 android:padding="5dp"
                 android:textAlignment="center" />
@@ -386,6 +384,7 @@
                 android:background="@drawable/edit_text_redondo"
                 android:drawableStart="@drawable/logo_spotify_editar_perfil"
                 android:inputType="textPersonName"
+                android:hint="\http://ejemplo.com"
                 android:padding="5dp"
                 android:textAlignment="center" />
 
@@ -407,6 +406,7 @@
                 android:background="@drawable/edit_text_redondo"
                 android:drawableStart="@drawable/logo_soundcloud_editar_perfil"
                 android:inputType="textPersonName"
+                android:hint="\http://ejemplo.com"
                 android:padding="5dp"
                 android:textAlignment="center" />
 

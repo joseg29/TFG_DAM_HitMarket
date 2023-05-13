@@ -22,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tarea1firebase.adaptadores.CustomSpinnerAdapter;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -175,6 +176,13 @@ public class EditarPerfil extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+        String[] ciudad = getResources().getStringArray(R.array.autonomous_communities);
+        CustomSpinnerAdapter adapterCiudad = new CustomSpinnerAdapter(this, ciudad);
+        spinnerCiudad.setAdapter(adapterCiudad);
+
+        String[] genero = getResources().getStringArray(R.array.generos_musicales);
+        CustomSpinnerAdapter adapterGenero = new CustomSpinnerAdapter(this, genero);
+        spinnerGenero.setAdapter(adapterGenero);
     }
 
 
