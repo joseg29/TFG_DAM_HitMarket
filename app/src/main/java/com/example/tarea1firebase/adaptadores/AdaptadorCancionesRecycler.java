@@ -4,6 +4,7 @@
  * La clase tiene un ViewHolder que contiene un botón de reproducción, un reproductor de medios y un SeekBar que muestra el progreso de la canción.
  * El adaptador tiene tres métodos: onCreateViewHolder, onBindViewHolder y getItemCount, que son necesarios para implementar un RecyclerView.Adapter.
  * Además, tiene un constructor que toma una lista de URLs de las canciones.
+ * @author Jose Gregorio
  */
 package com.example.tarea1firebase.adaptadores;
 
@@ -143,7 +144,9 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
             holder.mediaPlayer.reset();
             holder.mediaPlayer.setDataSource(listaUrls.get(position));
             holder.mediaPlayer.prepare();
-
+            /**
+             Listener para manejar los cambios en una barra de progreso.
+             */
             holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 /**
                  * Método que se llama cuando el usuario cambia manualmente el progreso de la barra de progreso.
