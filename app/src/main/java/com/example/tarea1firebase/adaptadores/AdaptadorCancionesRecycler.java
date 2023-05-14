@@ -196,7 +196,6 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
 
         /**
          * Listener que detecta cuando se ha completado la reproducción del audio.
-         * Se utiliza para restablecer los elementos de la interfaz de usuario a su estado inicial, como el botón de reproducción, el SeekBar y los drawables asociados, y para reiniciar la reproducción desde el principio de la canción.
          */
         holder.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             /**
