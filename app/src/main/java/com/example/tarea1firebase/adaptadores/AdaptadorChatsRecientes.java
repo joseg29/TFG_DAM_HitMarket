@@ -1,5 +1,7 @@
 /**
- * Clase que representa el adaptador para la lista de chats recientes.
+ * Clase que representa el adaptador de RecyclerView para mostrar la lista de chats recientes.
+ *
+ * @author Jose Gregorio
  */
 package com.example.tarea1firebase.adaptadores;
 
@@ -31,9 +33,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Adaptador de RecyclerView para mostrar la lista de chats recientes.
- */
+
 public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChatsRecientes.ViewHolder> {
     private List<Chat> listaChats;
     private FirebaseAuth mAuth;
@@ -48,6 +48,11 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
         this.listaChats = listaUsuarios;
     }
 
+    /**
+     * Esta clase define un ViewHolder utilizado por un RecyclerView para mostrar la vista de un chat reciente.
+     * Contiene un conjunto de vistas que muestran el nombre del usuario, la imagen de perfil, el
+     * último mensaje y el gestor de Firestore para almacenar y recuperar información de la base de datos.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView nombreUsuario, ultimoMensaje;
         private CardView cardViewChatReciente;
@@ -74,6 +79,7 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
 
     /**
      * Método que se encarga de inflar la vista de chat reciente.
+     *
      * @param parent   El ViewGroup al que se añadirá la vista.
      * @param viewType El tipo de vista.
      * @return Un ViewHolder que contiene la vista de chat reciente inflada.
@@ -89,27 +95,44 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
 
     /**
      * Método que se encarga de establecer los datos en un ViewHolder.
+     *
      * @param holder   El ViewHolder en el cual se establecerán los datos.
      * @param position La posición del item en la lista de chats recientes.
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        /**
+         Instancia la instancia de FirebaseAuth y obtiene el UID del usuario actualmente autenticado.
+         Luego, obtiene el UID del otro usuario involucrado en la conversación de la lista de chats en una posición específica.
+         @param position posición en la lista de chats.
+         */
         mAuth = FirebaseAuth.getInstance();
         usuarioActualUid = mAuth.getCurrentUser().getUid();
-        // Obtener el UID del otro usuario con quien se mantiene la conversación
         if (listaChats.get(position).getUsuario1().equals(mAuth.getCurrentUser().getUid())) {
             holder.uidOtroUser = listaChats.get(position).getUsuario2();
         } else if (listaChats.get(position).getUsuario2().equals(mAuth.getCurrentUser().getUid())) {
             holder.uidOtroUser = listaChats.get(position).getUsuario1();
         }
-
+        /**
+         * Listener que se encarga de obtener información del usuario con quien se mantiene la conversación,
+         * establecer el nombre y la imagen de perfil en la vista y actualizar el último mensaje enviado.
+         *
+         * @param result Resultado de la consulta a Firestore para obtener información del usuario con quien
+         *               se mantiene la conversación.
+         */
         holder.gestorFirestore.obtenerUsuarioPorId(holder.uidOtroUser, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario result) {
                 holder.otroUser = result;
                 holder.nombreUsuario.setText(holder.otroUser.getNombre());
                 Glide.with(holder.itemView.getContext()).load(holder.otroUser.getFotoPerfil()).override(100, 100).into(holder.imgPerfil);
-
+                /**
+                 * Este bloque de código se utiliza para crear una clave de chat a partir de los IDs de usuario actuales y otro usuario.
+                 *
+                 * @param usuarioActualUid El ID del usuario actual.
+                 * @param holder           Un objeto que contiene información sobre otro usuario.
+                 * @return Una cadena que representa la clave del chat.
+                 */
                 String chatKey;
 
                 if (usuarioActualUid.compareTo(holder.otroUser.getId()) < 0) {
@@ -117,7 +140,14 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
                 } else {
                     chatKey = holder.otroUser.getId() + "_" + usuarioActualUid;
                 }
-
+                /**
+                 * Obtiene la referencia a la lista de mensajes de un chat específico en la base de datos de Firebase Realtime Database.
+                 * Agrega un ValueEventListener al nodo de la lista de mensajes que se activa cuando hay un cambio en los datos del nodo.
+                 * En caso de que haya datos, itera sobre los hijos del DataSnapshot, asigna el último mensaje de la lista a un objeto
+                 * Mensaje y establece el texto de ese último mensaje en el TextView "ultimoMensaje" en el ViewHolder correspondiente.
+                 * Si ocurre un error, maneja el error en el método onCancelled().
+                 * @param chatKey la clave del chat del cual se desea obtener la lista de mensajes.
+                 */
                 FirebaseDatabase.getInstance().getReference("chats").child(chatKey).child("listaMensajes").limitToLast(1).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -133,7 +163,11 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
                         // Maneja el error
                     }
                 });
-
+                /**
+                 * Listener que se ejecuta al hacer click en la vista del chat reciente.
+                 * Abre la ventana del chat con el usuario receptor.
+                 * @param v la vista del chat reciente
+                 */
                 holder.cardViewChatReciente.setOnClickListener(v -> {
                     Intent intent = new Intent(holder.itemView.getContext(), ChatVentana.class);
                     intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
@@ -147,6 +181,7 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
 
     /**
      * Obtiene el número de elementos en la lista de chats recientes.
+     *
      * @return El número de elementos en la lista de chats recientes.
      */
     @Override
@@ -154,6 +189,12 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
         return listaChats.size();
     }
 
+    /**
+     * Método que establece la nueva lista de chats y actualiza el adapter.
+     * Borra la lista actual de chats, agrega los nuevos datos y notifica al adapter para que actualice la vista.
+     *
+     * @param data Nueva lista de chats a establecer en el adapter.
+     */
     public void setData(List<Chat> data) {
         listaChats.clear();
         listaChats.addAll(data);

@@ -4,6 +4,7 @@
  * La clase tiene un ViewHolder que contiene un botón de reproducción, un reproductor de medios y un SeekBar que muestra el progreso de la canción.
  * El adaptador tiene tres métodos: onCreateViewHolder, onBindViewHolder y getItemCount, que son necesarios para implementar un RecyclerView.Adapter.
  * Además, tiene un constructor que toma una lista de URLs de las canciones.
+ *
  * @author Jose Gregorio
  */
 package com.example.tarea1firebase.adaptadores;
@@ -164,6 +165,7 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
                         holder.seekBar.refreshDrawableState();
                     }
                 }
+
                 /**
                  * Método que se llama cuando el usuario comienza a mover manualmente la barra de progreso.
                  * Establece el drawable y el thumb de la barra de progreso para dar retroalimentación visual al usuario de que se está moviendo manualmente.
@@ -172,12 +174,12 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
                  */
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
-                    // Establece el drawable y el thumb de la barra de progreso cuando se empieza a mover manualmente
                     Drawable playingDrawable = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_seekbar_progress_2);
                     Drawable thumb = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_thumb);
                     holder.seekBar.setProgressDrawable(playingDrawable);
                     holder.seekBar.setThumb(thumb);
                 }
+
                 /**
                  Método que se ejecuta cuando se detiene el movimiento manual del seekBar.
                  No se requiere ninguna acción en este caso, por lo que el método está vacío.
