@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -43,14 +44,14 @@ public class PerfilUsuario extends AppCompatActivity {
     private RecyclerView recyclerCanciones, recyclerResenas;
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private AdaptadorResenas adaptadorResenas;
-    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas,lblRecyclerRese;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas, lblRecyclerRese, lblGenero;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button tvEditar;
     private ImageButton btnChat;
     private String uidUsuarioMostrandose;
     private FirebaseAuth mAuth;
-    private ImageView imgFotoPerfil, imgRecyclerVacio,imgResenasVacias;
+    private ImageView imgFotoPerfil, imgRecyclerVacio, imgResenasVacias, imgGenero;
     private GestorFirestore gestorFirebase;
     private AlertDialog dialog;
     private String uidUsuarioActual;
@@ -66,6 +67,7 @@ public class PerfilUsuario extends AppCompatActivity {
         uidUsuarioActual = mAuth.getCurrentUser().getUid();
 
         inicializarUsuario();
+
         inicializarVistas();
 
         esconderBotonesUsuarioPropio();
@@ -187,6 +189,7 @@ public class PerfilUsuario extends AppCompatActivity {
         lblCiudad = findViewById(R.id.tvCiudad);
         imgFotoPerfil = findViewById(R.id.imgFotoPerfil);
         lblNVisitas = findViewById(R.id.lblVisitasAlPerfil);
+        lblGenero = findViewById(R.id.txtGenero);
 
         btnChat = findViewById(R.id.btnChat);
         btnInstagram = findViewById(R.id.btnInstagram);
@@ -222,12 +225,68 @@ public class PerfilUsuario extends AppCompatActivity {
 
         recyclerResenas.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
+        imgGenero = findViewById(R.id.imgGenero1);
+
+
         ArrayList<Resena> arrayResenas = new ArrayList<>();
         adaptadorResenas = new AdaptadorResenas(arrayResenas);
         recyclerResenas.setAdapter(adaptadorResenas);
 
         progressBar = findViewById(R.id.spin_kit);
     }
+
+    private void mostrarGenero() {
+        if (usuario != null) {
+            String genero = usuario.getGenero();
+            System.out.println(genero);
+            if (genero != null) {
+
+                if (genero.equalsIgnoreCase("#Clasica")) {
+                    imgGenero.setImageResource(R.drawable.genero_clasica);
+                    lblGenero.setText("Clasica");
+                } else if (genero.equalsIgnoreCase("#Country")) {
+                    imgGenero.setImageResource(R.drawable.genero_country);
+                    lblGenero.setText("Country");
+                } else if (genero.equalsIgnoreCase("#Electro")) {
+                    imgGenero.setImageResource(R.drawable.genero_electro);
+                    lblGenero.setText("Electro");
+                } else if (genero.equalsIgnoreCase("#Flamenco")) {
+                    imgGenero.setImageResource(R.drawable.genero_flamenco);
+                    lblGenero.setText("Flamenco");
+                } else if (genero.equalsIgnoreCase("#Folk")) {
+                    imgGenero.setImageResource(R.drawable.genero_folk);
+                    lblGenero.setText("Folk");
+                } else if (genero.equalsIgnoreCase("#Jazz")) {
+                    imgGenero.setImageResource(R.drawable.genero_jazz);
+                    lblGenero.setText("Jazz");
+                } else if (genero.equalsIgnoreCase("#Kpop")) {
+                    imgGenero.setImageResource(R.drawable.genero_kpop);
+                    lblGenero.setText("Kpop");
+                } else if (genero.equalsIgnoreCase("#Metal")) {
+                    imgGenero.setImageResource(R.drawable.genero_metal);
+                    lblGenero.setText("Metal");
+                } else if (genero.equalsIgnoreCase("#Pop")) {
+                    imgGenero.setImageResource(R.drawable.genero_pop);
+                    lblGenero.setText("Pop");
+                } else if (genero.equalsIgnoreCase("#Rap")) {
+                    imgGenero.setImageResource(R.drawable.genero_rap);
+                    lblGenero.setText("Rap");
+                } else if (genero.equalsIgnoreCase("#Rock")) {
+                    imgGenero.setImageResource(R.drawable.genero_rock);
+                    lblGenero.setText("Rock");
+                } else if (genero.equalsIgnoreCase("#Trap")) {
+                    imgGenero.setImageResource(R.drawable.genero_trap);
+                    lblGenero.setText("Trap");
+                } else if (genero.equalsIgnoreCase("#Drill")) {
+                    imgGenero.setImageResource(R.drawable.genero_drill);
+                    lblGenero.setText("Drill ");
+                } else {
+                    System.out.println(genero);
+                }
+            }
+        }
+    }
+
 
     public void inicializarUsuario() {
         gestorFirebase.obtenerUsuarioPorId(uidUsuarioMostrandose, new GestorFirestore.Callback<Usuario>() {
@@ -236,6 +295,7 @@ public class PerfilUsuario extends AppCompatActivity {
                 usuario = usuarioDevuelto;
                 obtenerDatosUsuario();
                 setRedesSociales();
+                mostrarGenero();
             }
         }, Usuario.class);
     }
@@ -403,6 +463,7 @@ public class PerfilUsuario extends AppCompatActivity {
         }
         startActivity(intent);
     }
+
     public void abrirSpotify() {
 
         String channelUrl = usuario.getSpotify();
@@ -411,6 +472,7 @@ public class PerfilUsuario extends AppCompatActivity {
         intent.setPackage(null);
         startActivity(intent);
     }
+
     public void abrirSoundCloud() {
 
         String channelUrl = usuario.getSoundCloud();

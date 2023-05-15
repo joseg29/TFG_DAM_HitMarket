@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="generos_musicales">
-        <item>#Trap</item>
+        <item>#Clasica</item>
+        <item>#Country</item>
+        <item>#Electro</item>
+        <item>#Flamenco</item>
+        <item>#Folk</item>
+        <item>#Jazz</item>
+        <item>#Kpop</item>
+        <item>#Metal</item>
+        <item>#Pop</item>
         <item>#Rap</item>
+        <item>#Rock</item>
+        <item>#Trap</item>
         <item>#Drill</item>
-        <item>#Reggaeton</item>
+
+
+
+
+
     </string-array>
 </resources>
