@@ -34,12 +34,28 @@
             android:background="?android:attr/listDivider"
             android:backgroundTint="#959595" />
 
-        <ImageView
-            android:id="@+id/imagenRecyclerMsgVacio"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="165dp"
-            app:srcCompat="@drawable/no_hay_msg" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imagenRecyclerMsgVacio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="165dp"
+                app:srcCompat="@drawable/no_hay_msg" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/spin_kit"
+                style="@style/SpinKitView.Large.Circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-80dp"
+                android:layout_gravity="center"
+                android:elevation="100dp"
+                app:SpinKit_Color="@color/black" />
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/lblRecyclerVacio2"
@@ -50,16 +66,6 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="20sp" />
-
-        <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/spin_kit"
-            style="@style/SpinKitView.Large.Circle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:elevation="100dp"
-            app:SpinKit_Color="@color/black" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerChatsRecientes"

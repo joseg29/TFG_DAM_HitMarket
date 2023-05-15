@@ -247,7 +247,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gotham_bold"
-                        android:text="Este usuario no tiene                canciones de muestra"
+                        android:text="Este usuario no tiene canciones de muestra"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="20sp" />

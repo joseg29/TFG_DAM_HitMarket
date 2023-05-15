@@ -1,6 +1,7 @@
 /**
- CustomSpinnerAdapter es una clase adaptadora que extiende ArrayAdapter para personalizar
- la apariencia de los elementos del spinner.
+ * CustomSpinnerAdapter es una clase adaptadora que extiende ArrayAdapter para personalizar
+ * la apariencia de los elementos del spinner.
+ * @author Alex
  */
 package com.example.tarea1firebase.adaptadores;
 

@@ -1,5 +1,6 @@
 /**
  * Adaptador encargado de manejar la lista de mensajes en el chat y mostrarlos en la interfaz de usuario.
+ * @author
  */
 package com.example.tarea1firebase.adaptadores;
 
@@ -67,19 +68,35 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
 
 
     /**
-     * Método encargado de establecer los objetos en el ViewHolder y configurar su apariencia.
+     * Configura la apariencia de los mensajes dentro del adaptador de RecyclerView según si el
+     * remitente es el usuario actual o no.
      * @param holder   ViewHolder que contiene los elementos de la vista de cada mensaje en el chat.
-     * @param position Posición del mensaje en la lista de mensajes.
+     * @param position La posición del mensaje dentro del adaptador.
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        /**
+         * Establece el texto del mensaje y la fecha y hora del mismo utilizando los valores
+         * almacenados en el objeto de lista de mensajes para la posición dada.
+         *
+         * A continuación, obtiene la UID del usuario actual utilizando Firebase Authentication.
+         *
+         * A continuación, se configura la apariencia del mensaje y su disposición dentro del
+         * ViewHolder según si el remitente es el usuario actual o no.
+         *
+         * Si el remitente es el usuario actual, el mensaje se mostrará alineado a la derecha
+         * con un fondo verde claro. Si el remitente no es el usuario actual,
+         *
+         * el mensaje se mostrará alineado a la izquierda con un fondo gris claro.
+         *
+         * El padding y la gravedad del mensaje y su fecha también se ajustan de acuerdo con la
+         * alineación del mensaje.
+         */
         holder.textoMensaje.setText(listaMensajes.get(position).getTexto());
         holder.fechaMensaje.setText(listaMensajes.get(position).getFechaYHora());
-        //Obtenemos la UID del usuario actual
         mAuth = FirebaseAuth.getInstance();
         String uidActual = mAuth.getCurrentUser().getUid();
 
-        //Configuramos la apariencia del mensaje según si el remitente es el usuario actual o no
         if (listaMensajes.get(position).getRemitente().equals(uidActual)) {
             holder.textoMensaje.setBackgroundResource(R.drawable.corner_mensaje_enviado);
             holder.textoMensaje.setGravity(Gravity.RIGHT);

@@ -1,3 +1,7 @@
+/**
+ * Este adaptador se encarga de mostrar una lista de reseñas en un RecyclerView.
+ * @author
+ */
 package com.example.tarea1firebase.adaptadores;
 
 import android.annotation.SuppressLint;
@@ -67,8 +71,13 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        // Obtener el autor de la reseña a partir de su ID
         holder.gestorFirestore.obtenerUsuarioPorId(listaResenas.get(position).getUidAutor(), new GestorFirestore.Callback<Usuario>() {
+            /**
+             * Este método se llama cuando se obtiene el autor de la reseña de Firestore.
+             * Actualiza la vista del autor de la reseña con la información del autor.
+             *
+             * @param autor El autor de la reseña.
+             */
             @Override
             public void onSuccess(Usuario autor) {
                 holder.nombreUsu.setText(autor.getNombre());
