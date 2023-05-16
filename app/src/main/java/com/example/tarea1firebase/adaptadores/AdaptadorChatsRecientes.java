@@ -101,37 +101,38 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        /**
-         Instancia la instancia de FirebaseAuth y obtiene el UID del usuario actualmente autenticado.
-         Luego, obtiene el UID del otro usuario involucrado en la conversación de la lista de chats en una posición específica.
-         @param position posición en la lista de chats.
-         */
         mAuth = FirebaseAuth.getInstance();
         usuarioActualUid = mAuth.getCurrentUser().getUid();
+        /*
+         * Verifica si el usuario actual está en la posición del Usuario1 en la listaChats.
+         */
         if (listaChats.get(position).getUsuario1().equals(mAuth.getCurrentUser().getUid())) {
+            /*
+             * Si es así, establece el uidOtroUser como Usuario2 en la listaChats.
+             */
             holder.uidOtroUser = listaChats.get(position).getUsuario2();
         } else if (listaChats.get(position).getUsuario2().equals(mAuth.getCurrentUser().getUid())) {
+            /*
+             * De lo contrario, establece el uidOtroUser como Usuario1 en la listaChats.
+             */
             holder.uidOtroUser = listaChats.get(position).getUsuario1();
         }
-        /**
-         * Listener que se encarga de obtener información del usuario con quien se mantiene la conversación,
-         * establecer el nombre y la imagen de perfil en la vista y actualizar el último mensaje enviado.
-         *
-         * @param result Resultado de la consulta a Firestore para obtener información del usuario con quien
-         *               se mantiene la conversación.
+        /*
+         * Realiza una consulta al gestorFirestore para obtener el usuario correspondiente al uidOtroUser.
+         * utilizando el método obtenerUsuarioPorId que fue creado previamente.
+         * Se proporciona un objeto de tipo GestorFirestore.Callback<Usuario> para manejar el resultado de la consulta.
          */
         holder.gestorFirestore.obtenerUsuarioPorId(holder.uidOtroUser, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario result) {
+                /*
+                 * Al recibir el usuario con éxito, actualiza los datos del holder y muestra la información en la interfaz.
+                 */
                 holder.otroUser = result;
                 holder.nombreUsuario.setText(holder.otroUser.getNombre());
                 Glide.with(holder.itemView.getContext()).load(holder.otroUser.getFotoPerfil()).override(100, 100).into(holder.imgPerfil);
-                /**
-                 * Este bloque de código se utiliza para crear una clave de chat a partir de los IDs de usuario actuales y otro usuario.
-                 *
-                 * @param usuarioActualUid El ID del usuario actual.
-                 * @param holder           Un objeto que contiene información sobre otro usuario.
-                 * @return Una cadena que representa la clave del chat.
+                /*
+                 * Crea una clave única para el chat combinando los ids de usuario en orden alfabético.
                  */
                 String chatKey;
 
@@ -140,41 +141,66 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
                 } else {
                     chatKey = holder.otroUser.getId() + "_" + usuarioActualUid;
                 }
-                /**
-                 * Obtiene la referencia a la lista de mensajes de un chat específico en la base de datos de Firebase Realtime Database.
-                 * Agrega un ValueEventListener al nodo de la lista de mensajes que se activa cuando hay un cambio en los datos del nodo.
-                 * En caso de que haya datos, itera sobre los hijos del DataSnapshot, asigna el último mensaje de la lista a un objeto
-                 * Mensaje y establece el texto de ese último mensaje en el TextView "ultimoMensaje" en el ViewHolder correspondiente.
-                 * Si ocurre un error, maneja el error en el método onCancelled().
-                 * @param chatKey la clave del chat del cual se desea obtener la lista de mensajes.
+                /*
+                 * Consulta la base de datos para obtener el último mensaje en el chat utilizando la clave del chat.
                  */
                 FirebaseDatabase.getInstance().getReference("chats").child(chatKey).child("listaMensajes").limitToLast(1).addValueEventListener(new ValueEventListener() {
+                    /**
+                     * Método que se invoca cuando los datos de la referencia de la base de datos han cambiado.
+                     * Itera sobre los hijos de la referencia a los mensajes y asigna el último mensaje obtenido al campo 'ultimoMsj' del holder.
+                     * Luego, establece el texto del campo 'ultimoMensaje' con el texto del último mensaje obtenido.
+                     *
+                     * @param snapshot El objeto DataSnapshot que contiene los datos de la referencia de la base de datos.
+                     */
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        // Itera sobre los hijos de la referencia a los mensajes
+                        /*
+                         * Itera sobre los hijos de la referencia a los mensajes.
+                         */
                         for (DataSnapshot mensajeSnapshot : snapshot.getChildren()) {
                             holder.ultimoMsj = mensajeSnapshot.getValue(Mensaje.class);
                         }
                         holder.ultimoMensaje.setText(holder.ultimoMsj.getTexto());
                     }
-
+                    /**
+                     * Método que se invoca cuando se cancela la operación de consulta a la base de datos.
+                     * Maneja el error producido durante la consulta.
+                     *
+                     * @param error El objeto DatabaseError que contiene la información sobre el error ocurrido.
+                     */
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        // Maneja el error
+                        /*
+                         * Maneja el error si la consulta es cancelada.
+                         */
                     }
                 });
-                /**
-                 * Listener que se ejecuta al hacer click en la vista del chat reciente.
-                 * Abre la ventana del chat con el usuario receptor.
-                 * @param v la vista del chat reciente
+                /*
+                 * Configurar un OnClickListener para el cardViewChatReciente.
+                 * Cuando se hace clic en el card view, se creará un nuevo Intent para abrir la actividad ChatVentana.
+                 * Se agregan datos extra al Intent, como el ID del usuario actual y el ID del usuario receptor.
+                 * Luego, se inicia la actividad utilizando el Intent.
                  */
                 holder.cardViewChatReciente.setOnClickListener(v -> {
+                    /*
+                     * Crear una nueva instancia de Intent para abrir la actividad ChatVentana.
+                     */
                     Intent intent = new Intent(holder.itemView.getContext(), ChatVentana.class);
+                    /*
+                     * Agregar datos extra al Intent, como el ID del usuario actual y el ID del usuario receptor.
+                     */
                     intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
                     intent.putExtra("UidUsuarioReceptor", holder.otroUser.getId());
+                    /*
+                     * Iniciar la actividad utilizando el Intent creado.
+                     */
                     holder.itemView.getContext().startActivity(intent);
                 });
             }
+            /*
+             * Se espera obtener un objeto de la clase Usuario al llamar al método obtenerUsuarioPorId.
+             * El argumento Usuario.class indica el tipo de resultado esperado.
+             */
         }, Usuario.class);
     }
 

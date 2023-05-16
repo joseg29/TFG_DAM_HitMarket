@@ -90,26 +90,39 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
          *                 Debe contener la lógica para alternar entre la reproducción y la pausa del audio.
          */
         holder.btnPlay.setOnClickListener(view -> {
+            /*
+             * Verifica si el reproductor de medios no está reproduciendo actualmente.
+             */
             if (!holder.mediaPlayer.isPlaying()) {
+                /*
+                 * Cambia la imagen del botón a "iconopausa".
+                 */
                 holder.btnPlay.setImageResource(R.drawable.iconopausa);
+                /*
+                * Inicia la reproducción del reproductor de medios.
+                */
                 holder.mediaPlayer.start();
             } else {
+                /*
+                 * Cambia la imagen del botón a play.
+                 */
                 holder.btnPlay.setImageResource(R.drawable.play);
+                /*
+                 * Pausa la reproducción del reproductor de medios.
+                 */
                 holder.mediaPlayer.pause();
             }
-            /**
-             Configura el drawable y el thumb de la barra de progreso cuando se empieza a mover manualmente.
-             @param holder objeto ViewHolder que contiene la vista del elemento de la lista.
+            /*
+             *Configura el drawable y el thumb de la barra de progreso cuando se empieza a mover manualmente.
              */
             Drawable playingDrawable = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_seekbar_progress_2);
             Drawable thumb = ContextCompat.getDrawable(holder.seekBar.getContext(), R.drawable.custom_thumb);
             holder.seekBar.setProgressDrawable(playingDrawable);
             holder.seekBar.setThumb(thumb);
-            /**
-             Ejecuta el código de forma asíncrona en el hilo principal de la actividad.
-             Actualiza el progreso de la canción en el SeekBar de forma continua.
-             @param holder el objeto ViewHolder utilizado para acceder a los elementos de la vista
-             @param mHandler el Handler utilizado para programar la ejecución del código de forma repetitiva
+
+            /*
+             * Ejecuta el código de forma asíncrona en el hilo principal de la actividad.
+             * Actualiza el progreso de la canción en el SeekBar de forma continua.
              */
             Handler mHandler = new Handler();
             ((Activity) holder.itemView.getContext()).runOnUiThread(new Runnable() {
@@ -134,19 +147,21 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
                 }
             });
         });
-        /**
-         * Configura el MediaPlayer y el SeekBar para reproducir el audio de la URL proporcionada en la posición dada de la lista de URLs.
-         * Se establece un listener en el SeekBar para permitir que el usuario mueva manualmente el SeekBar y ajustar la posición de la reproducción de audio.
-         *
-         * @param position La posición de la URL en la lista de URLs que se va a reproducir.
-         * @throws IOException si hay algún problema al configurar el MediaPlayer o el SeekBar.
-         */
         try {
+            /*
+             * Restablece el reproductor de medios a su estado inicial.
+             */
             holder.mediaPlayer.reset();
+            /*
+             * Establece la fuente de datos para el reproductor de medios.
+             */
             holder.mediaPlayer.setDataSource(listaUrls.get(position));
+            /*
+             * Prepara el reproductor de medios para la reproducción.
+             */
             holder.mediaPlayer.prepare();
-            /**
-             Listener para manejar los cambios en una barra de progreso.
+            /*
+             *Listener para manejar los cambios en una barra de progreso.
              */
             holder.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 /**
@@ -190,19 +205,20 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
 
                 }
             });
-
-
+            /*
+            * si hay algún problema al configurar el MediaPlayer o el SeekBar.
+            * */
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        /**
+        /*
          * Listener que detecta cuando se ha completado la reproducción del audio.
          */
         holder.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             /**
              * Método que se llama cuando la canción ha terminado de reproducirse.
-             *
+             * <p>
              * Restablece el botón de reproducción a su estado inicial y la barra de progreso a 0.
              * Establece el drawable y el thumb de la barra de progreso para reflejar el estado de reproducción pausado.
              *

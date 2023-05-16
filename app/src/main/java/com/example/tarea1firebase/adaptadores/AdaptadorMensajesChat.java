@@ -75,40 +75,79 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        /**
-         * Establece el texto del mensaje y la fecha y hora del mismo utilizando los valores
-         * almacenados en el objeto de lista de mensajes para la posición dada.
-         *
-         * A continuación, obtiene la UID del usuario actual utilizando Firebase Authentication.
-         *
-         * A continuación, se configura la apariencia del mensaje y su disposición dentro del
-         * ViewHolder según si el remitente es el usuario actual o no.
-         *
-         * Si el remitente es el usuario actual, el mensaje se mostrará alineado a la derecha
-         * con un fondo verde claro. Si el remitente no es el usuario actual,
-         *
-         * el mensaje se mostrará alineado a la izquierda con un fondo gris claro.
-         *
-         * El padding y la gravedad del mensaje y su fecha también se ajustan de acuerdo con la
-         * alineación del mensaje.
+        /*
+         * Establece el texto del mensaje en el campo de texto correspondiente en el ViewHolder.
+         * El texto se obtiene de la lista de mensajes en la posición indicada.
          */
         holder.textoMensaje.setText(listaMensajes.get(position).getTexto());
+        /*
+         * Establece la fecha y hora del mensaje en el campo de texto correspondiente en el ViewHolder.
+         * La fecha y hora se obtienen de la lista de mensajes en la posición indicada.
+         */
         holder.fechaMensaje.setText(listaMensajes.get(position).getFechaYHora());
+        /*
+         * Obtiene una instancia de FirebaseAuth para autenticar al usuario actual.
+         */
         mAuth = FirebaseAuth.getInstance();
+        /*
+         * Obtiene el UID del usuario actual autenticado.
+         */
         String uidActual = mAuth.getCurrentUser().getUid();
-
+        /*
+         * Si el remitente del mensaje es igual al UID del usuario actual,
+         * se considera que el mensaje fue enviado por el usuario actual.
+         * Ajusta la apariencia del mensaje enviado en el ViewHolder.
+         */
         if (listaMensajes.get(position).getRemitente().equals(uidActual)) {
+            /*
+             * Establece el fondo del campo de texto del mensaje enviado en el ViewHolder.
+             */
             holder.textoMensaje.setBackgroundResource(R.drawable.corner_mensaje_enviado);
+            /*
+             * Alinea el texto del mensaje enviado a la derecha en el ViewHolder.
+             */
             holder.textoMensaje.setGravity(Gravity.RIGHT);
+            /*
+             * Establece el relleno (padding) del campo de texto del mensaje enviado en el ViewHolder.
+             */
             holder.textoMensaje.setPadding(0, 12, 25, 0);
+            /*
+             * Alinea el contenedor del mensaje enviado a la derecha en el ViewHolder.
+             */
             holder.layoutMensaje.setGravity(Gravity.RIGHT);
+            /*
+             * Alinea el contenedor de la fecha del mensaje enviado a la derecha en el ViewHolder.
+             */
             holder.layoutFecha.setGravity(Gravity.RIGHT);
+            /*
+             * Alinea el texto de la fecha del mensaje enviado a la derecha en el ViewHolder.
+             */
             holder.fechaMensaje.setGravity(Gravity.RIGHT);
+            /*
+             * Si el remitente del mensaje no coincide con el UID del usuario actual,
+             * se considera que el mensaje fue recibido.
+             * Ajusta la apariencia del mensaje recibido en el ViewHolder.
+             */
         } else {
+            /*
+             * Establece el fondo del campo de texto del mensaje recibido en el ViewHolder.
+             */
             holder.textoMensaje.setBackgroundResource(R.drawable.corner_mensaje_recibido);
+            /*
+             * Establece el relleno (padding) del campo de texto del mensaje recibido en el ViewHolder.
+             */
             holder.textoMensaje.setPadding(25, 12, 0, 0);
+            /*
+             * Alinea el contenedor del mensaje recibido a la izquierda en el ViewHolder.
+             */
             holder.layoutMensaje.setGravity(Gravity.LEFT);
+            /*
+             * Alinea el contenedor de la fecha del mensaje recibido a la izquierda en el ViewHolder.
+             */
             holder.layoutFecha.setGravity(Gravity.LEFT);
+            /*
+             * Alinea el texto de la fecha del mensaje recibido a la izquierda en el ViewHolder.
+             */
             holder.fechaMensaje.setGravity(Gravity.LEFT);
         }
     }
