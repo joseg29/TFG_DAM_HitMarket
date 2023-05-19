@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -121,12 +120,33 @@ public class PerfilUsuario extends AppCompatActivity {
 
                 Resena resena = new Resena(textoResena, mAuth.getCurrentUser().getUid(), rating, fechaActual);
 
-                gestorFirebase.actualiazarCampoUsuario(usuario.getId(), "listaResenas", resena, new GestorFirestore.Callback<String>() {
-                    @Override
-                    public void onSuccess(String result) {
-                        obtenerDatosUsuario();
+                List<Resena> listaResenas = usuario.getListaResenas();
+                List<String> listaAutores = new ArrayList<>();
+                Resena miResenaExistente = null;
+
+                for (int x = 0; x < listaResenas.size(); x++) {
+                    listaAutores.add(listaResenas.get(x).getUidAutor());
+                    System.out.println(x + "--" + listaResenas.get(x).getUidAutor() + "----" + uidUsuarioActual);
+                    if (listaResenas.get(x).getUidAutor().equals(uidUsuarioActual)) {
+                        miResenaExistente = listaResenas.get(x);
                     }
-                });
+                }
+
+                if (miResenaExistente == null) {
+                    gestorFirebase.anadirValorArray(usuario.getId(), "listaResenas", resena, new GestorFirestore.Callback<String>() {
+                        @Override
+                        public void onSuccess(String result) {
+                            obtenerDatosUsuario();
+                        }
+                    });
+                } else {
+                    gestorFirebase.actualizarValorArray(usuario.getId(), "listaResenas", miResenaExistente, resena, new GestorFirestore.Callback<String>() {
+                        @Override
+                        public void onSuccess(String result) {
+                            obtenerDatosUsuario();
+                        }
+                    });
+                }
 
                 dialogInterface.dismiss(); // Cierra el diálogo
 
@@ -216,7 +236,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
         ArrayList<String> arrayPrueba = new ArrayList<>();
 
-        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba);
+        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba, false);
         recyclerCanciones.setAdapter(adaptadorCanciones);
 
 
@@ -319,7 +339,7 @@ public class PerfilUsuario extends AppCompatActivity {
                 lblDescripcion.setText(usuario.getDescripcion());
                 lblCiudad.setText(usuario.getCiudad());
 
-                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
+                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones, false);
                 recyclerCanciones.setAdapter(adaptadorCanciones);
 
                 adaptadorResenas = new AdaptadorResenas(resenas);

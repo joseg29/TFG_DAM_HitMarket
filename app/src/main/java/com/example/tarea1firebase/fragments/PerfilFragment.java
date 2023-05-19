@@ -209,7 +209,7 @@ public class PerfilFragment extends Fragment {
 
         ArrayList<String> arrayPrueba = new ArrayList<>();
 
-        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba);
+        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba,true);
         recyclerCanciones.setAdapter(adaptadorCanciones);
 
         recyclerResenas = getView().findViewById(R.id.RecyclerResenas);
@@ -260,7 +260,7 @@ public class PerfilFragment extends Fragment {
                 lblDescripcion.setText(usuario.getDescripcion());
                 lblCiudad.setText(usuario.getCiudad());
 
-                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones);
+                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones,true);
                 recyclerCanciones.setAdapter(adaptadorCanciones);
 
                 adaptadorResenas = new AdaptadorResenas(resenas);

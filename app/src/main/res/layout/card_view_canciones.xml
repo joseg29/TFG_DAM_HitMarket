@@ -27,8 +27,9 @@
 
         <SeekBar
             android:id="@+id/seekBar"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight=".3"
             android:background="@android:color/transparent"
             android:progressDrawable="@drawable/custom_seekbar_progress"
             android:thumb="@drawable/custom_thumb"
@@ -40,6 +41,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
+            android:visibility="visible"
             card_view:srcCompat="@drawable/ic_baseline_delete_24" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

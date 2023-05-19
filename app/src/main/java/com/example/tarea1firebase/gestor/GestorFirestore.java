@@ -106,7 +106,7 @@ public class GestorFirestore {
         });
     }
 
-    public void actualiazarCampoUsuario(String idUsuario, String campoAActualizar, Object nuevoValor, Callback<String> callback) {
+    public void anadirValorArray(String idUsuario, String campoAActualizar, Object nuevoValor, Callback<String> callback) {
         db.collection(COLECCION).document(idUsuario).update(campoAActualizar, FieldValue.arrayUnion(nuevoValor)).addOnSuccessListener(documentReference -> {
             callback.onSuccess("Actualizado");
         });
@@ -115,6 +115,16 @@ public class GestorFirestore {
     public void borrarValorArray(String idUsuario, String campoAActualizar, String valorABorrar, Callback<String> callback) {
         db.collection(COLECCION).document(idUsuario).update(campoAActualizar, FieldValue.arrayRemove(valorABorrar)).addOnSuccessListener(documentReference -> {
             callback.onSuccess("Borrado");
+        });
+    }
+
+    public void actualizarValorArray(String idUsuario, String campoAActualizar, Object valorABorrar, Object valorNuevo, Callback<String> callback) {
+        db.collection(COLECCION).document(idUsuario).update(campoAActualizar, FieldValue.arrayRemove(valorABorrar)).addOnSuccessListener(documentReference -> {
+            callback.onSuccess("Borrado");
+        });
+
+        db.collection(COLECCION).document(idUsuario).update(campoAActualizar, FieldValue.arrayUnion(valorNuevo)).addOnSuccessListener(documentReference -> {
+            callback.onSuccess("Añadido");
         });
     }
 

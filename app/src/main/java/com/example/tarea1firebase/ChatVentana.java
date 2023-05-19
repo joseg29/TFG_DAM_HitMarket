@@ -156,13 +156,13 @@ public class ChatVentana extends AppCompatActivity {
                     chat = new Chat(new ArrayList<>(), usuario1Uid, usuario2Uid, "", idChat);
                     chatsRef.setValue(chat);
 
-                    gestorFirebase.actualiazarCampoUsuario(usuario1Uid, "chatsRecientes", idChat, new GestorFirestore.Callback<String>() {
+                    gestorFirebase.anadirValorArray(usuario1Uid, "chatsRecientes", idChat, new GestorFirestore.Callback<String>() {
                         @Override
                         public void onSuccess(String result) {
 
                         }
                     });
-                    gestorFirebase.actualiazarCampoUsuario(usuario2Uid, "chatsRecientes", idChat, new GestorFirestore.Callback<String>() {
+                    gestorFirebase.anadirValorArray(usuario2Uid, "chatsRecientes", idChat, new GestorFirestore.Callback<String>() {
                         @Override
                         public void onSuccess(String result) {
 

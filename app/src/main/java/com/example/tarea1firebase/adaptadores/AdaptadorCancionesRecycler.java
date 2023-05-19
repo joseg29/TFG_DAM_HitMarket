@@ -42,17 +42,19 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
     private FirebaseStorage storage;
     private GestorFirestore gestorFirebase;
     private FirebaseAuth mAuth;
+    private boolean soyAutor;
 
     /**
      * Constructor para el adaptador. Recibe una lista de URLs de las canciones.
      *
-     * @param listaUsuarios Lista de URLs de las canciones.
+     * @param listaCanciones Lista de URLs de las canciones.
      */
-    public AdaptadorCancionesRecycler(List<String> listaUsuarios) {
-        this.listaUrls = listaUsuarios;
+    public AdaptadorCancionesRecycler(List<String> listaCanciones, boolean soyAutor) {
+        this.listaUrls = listaCanciones;
         this.storage = FirebaseStorage.getInstance();
         this.gestorFirebase = new GestorFirestore();
         this.mAuth = FirebaseAuth.getInstance();
+        this.soyAutor = soyAutor;
     }
 
     /**
@@ -256,6 +258,11 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
             }
 
         });
+        if (soyAutor) {
+            holder.btnBorrarCancion.setVisibility(View.VISIBLE);
+        } else {
+            holder.btnBorrarCancion.setVisibility(View.GONE);
+        }
         /*
         Click listener del botón de borrar canciones que elimina la canción de la lista de canciones del usuario y del bucket de storage
          */
