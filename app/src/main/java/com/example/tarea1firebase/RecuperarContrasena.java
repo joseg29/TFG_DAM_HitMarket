@@ -82,4 +82,11 @@ public class RecuperarContrasena extends AppCompatActivity {
                     }
                 });
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(RecuperarContrasena.this, Login.class);
+        startActivity(intent);
+        finish();
+    }
 }
