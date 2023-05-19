@@ -325,12 +325,13 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
                 /*
                  * Actualiza la lista de favoritos en Firestore eliminando el ID del usuario actual de la lista.
                  */
-                db.collection(COLECCION).document(usuarioActualUid).update("listaFavoritos", FieldValue.arrayRemove(listaUsuariosFiltrados.get(position).getId())).addOnSuccessListener(documentReference -> {
-                    /*
-                     * Establece la bandera isFavorite en falso para indicar que el usuario ya no es un favorito.
-                     */
-                    holder.isFavorite = false;
+                gestorFirebase.borrarValorArray(usuarioActualUid, "listaFavoritos", listaUsuariosFiltrados.get(position).getId(), new GestorFirestore.Callback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        holder.isFavorite = false;
+                    }
                 });
+
             } else {
                 /*
                  * Configura la transición del drawable en sentido directo.

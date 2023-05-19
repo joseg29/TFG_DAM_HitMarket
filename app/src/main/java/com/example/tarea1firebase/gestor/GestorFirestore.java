@@ -2,18 +2,11 @@ package com.example.tarea1firebase.gestor;
 
 import static com.example.tarea1firebase.fragments.PerfilFragment.COLECCION;
 
-import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.telecom.Call;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.tarea1firebase.Login;
-import com.example.tarea1firebase.MarcoMenu;
 import com.example.tarea1firebase.Registro;
-import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
 import com.example.tarea1firebase.entidades.Resena;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -116,6 +109,12 @@ public class GestorFirestore {
     public void actualiazarCampoUsuario(String idUsuario, String campoAActualizar, Object nuevoValor, Callback<String> callback) {
         db.collection(COLECCION).document(idUsuario).update(campoAActualizar, FieldValue.arrayUnion(nuevoValor)).addOnSuccessListener(documentReference -> {
             callback.onSuccess("Actualizado");
+        });
+    }
+
+    public void borrarValorArray(String idUsuario, String campoAActualizar, String valorABorrar, Callback<String> callback) {
+        db.collection(COLECCION).document(idUsuario).update(campoAActualizar, FieldValue.arrayRemove(valorABorrar)).addOnSuccessListener(documentReference -> {
+            callback.onSuccess("Borrado");
         });
     }
 

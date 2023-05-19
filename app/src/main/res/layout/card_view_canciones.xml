@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
+    android:background="@android:color/transparent"
     android:backgroundTint="@android:color/transparent"
     android:orientation="horizontal"
     card_view:cardCornerRadius="3dp"
@@ -26,11 +27,19 @@
 
         <SeekBar
             android:id="@+id/seekBar"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:progressDrawable="@drawable/custom_seekbar_progress"
             android:thumb="@drawable/custom_thumb"
             android:thumbTint="@android:color/transparent" />
+
+        <ImageButton
+            android:id="@+id/btnBorrarCancion"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            card_view:srcCompat="@drawable/ic_baseline_delete_24" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

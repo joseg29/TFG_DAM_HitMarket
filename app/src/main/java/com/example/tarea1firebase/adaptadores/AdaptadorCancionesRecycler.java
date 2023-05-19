@@ -9,7 +9,10 @@
  */
 package com.example.tarea1firebase.adaptadores;
 
+import static com.example.tarea1firebase.Registro.COLECCION;
+
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -19,23 +22,37 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tarea1firebase.R;
+import com.example.tarea1firebase.gestor.GestorFirestore;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.util.List;
 
 public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCancionesRecycler.ViewHolder> {
     private List<String> listaUrls;
+    private FirebaseStorage storage;
+    private GestorFirestore gestorFirebase;
+    private FirebaseAuth mAuth;
 
     /**
      * Constructor para el adaptador. Recibe una lista de URLs de las canciones.
+     *
      * @param listaUsuarios Lista de URLs de las canciones.
      */
     public AdaptadorCancionesRecycler(List<String> listaUsuarios) {
         this.listaUrls = listaUsuarios;
+        this.storage = FirebaseStorage.getInstance();
+        this.gestorFirebase = new GestorFirestore();
+        this.mAuth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -43,12 +60,13 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
      * un reproductor de medios y un SeekBar que muestra el progreso de la canción.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageButton btnPlay;
+        private ImageButton btnPlay, btnBorrarCancion;
         private MediaPlayer mediaPlayer;
         private SeekBar seekBar;
 
         /**
          * Constructor del ViewHolder. Toma una vista y busca los elementos necesarios para reproducir la canción.
+         *
          * @param v Vista del elemento del RecyclerView.
          */
         public ViewHolder(View v) {
@@ -56,13 +74,14 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
             btnPlay = v.findViewById(R.id.btnPlay);
             seekBar = v.findViewById(R.id.seekBar);
             mediaPlayer = new MediaPlayer();
-
+            btnBorrarCancion = v.findViewById(R.id.btnBorrarCancion);
         }
     }
 
     /**
      * Crea y devuelve un ViewHolder con el layout seteado que previamente definimos.
-     * @param parent ViewGroup en el que se va a agregar la vista creada.
+     *
+     * @param parent   ViewGroup en el que se va a agregar la vista creada.
      * @param viewType Tipo de la vista.
      * @return ViewHolder con el layout seteado que previamente definimos.
      */
@@ -75,7 +94,8 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
 
     /**
      * Establece los objetos en el ViewHolder. Se encarga de reproducir la canción, establecer el progreso en el SeekBar y controlar la pausa y reproducción.
-     * @param holder ViewHolder que se está estableciendo.
+     *
+     * @param holder   ViewHolder que se está estableciendo.
      * @param position Posición del elemento en el RecyclerView.
      */
     @Override
@@ -99,8 +119,8 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
                  */
                 holder.btnPlay.setImageResource(R.drawable.iconopausa);
                 /*
-                * Inicia la reproducción del reproductor de medios.
-                */
+                 * Inicia la reproducción del reproductor de medios.
+                 */
                 holder.mediaPlayer.start();
             } else {
                 /*
@@ -206,8 +226,8 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
                 }
             });
             /*
-            * si hay algún problema al configurar el MediaPlayer o el SeekBar.
-            * */
+             * si hay algún problema al configurar el MediaPlayer o el SeekBar.
+             * */
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -236,11 +256,74 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
             }
 
         });
+        /*
+        Click listener del botón de borrar canciones que elimina la canción de la lista de canciones del usuario y del bucket de storage
+         */
+        holder.btnBorrarCancion.setOnClickListener(v -> {
+            String url = listaUrls.get(position);
+            crearDialogoConfirmacion(holder, url);
+        });
     }
 
     /**
-     Devuelve la cantidad de elementos en la lista.
-     @return La cantidad de elementos en la lista.
+     * Método que abre un diálogo para solicitar comprobación antes de eliminar la cacnión.
+     * <p>
+     * Elimina la canción de "arrayCanciones" del usuario en FirebaseFirestore
+     * Elimina la canción del bucket de storage de firebase
+     * Actualiza el recycler
+     *
+     * @param holder la referencia del ViewHolder
+     * @param url    la url de la canción a eliminar
+     */
+    public void crearDialogoConfirmacion(ViewHolder holder, String url) {
+        /*
+        Creamos la referencia a la canción a partir de una url de descarga obtenida de la lista pasada anteriormente al adapter.
+         */
+        StorageReference referenciaCancion = storage.getReferenceFromUrl(url);
+
+        /*
+        Creamos el builder del diálogo
+         */
+        AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
+        builder.setMessage("¿Está seguro que desea eliminar esta canción?");
+        builder.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                /*
+                Cuando se presione el botón de confirmar, se llama al bucket de FirebaseStorage para eliminar la canción
+                 */
+                referenciaCancion.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        /**
+                         * Una vez eliminada la canción, se borra la url del arrayCanciones del usuario
+                         * @see gestorFirebase
+                         */
+
+                        gestorFirebase.borrarValorArray(mAuth.getCurrentUser().getUid(), "arrayCanciones", url, new GestorFirestore.Callback<String>() {
+                            @Override
+                            public void onSuccess(String result) {
+                                listaUrls.remove(url);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
+     * Devuelve la cantidad de elementos en la lista.
+     *
+     * @return La cantidad de elementos en la lista.
      */
     @Override
     public int getItemCount() {
