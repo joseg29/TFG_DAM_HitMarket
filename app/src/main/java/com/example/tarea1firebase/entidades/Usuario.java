@@ -12,7 +12,6 @@ public class Usuario implements Serializable {
     private String nombre;
     private String descripcion;
     private String ciudad;
-    private String genero;
     private String instagram;
     private String tiktTok;
     private String email;
@@ -25,6 +24,7 @@ public class Usuario implements Serializable {
     private List<String> listaFavoritos;
     private List<Resena> listaResenas;
     private List<String> visitasAlPerfil;
+    private List<String> listaGeneros;
 
     /**
      * Constructor sin argumentos para la clase Usuario.
@@ -40,7 +40,6 @@ public class Usuario implements Serializable {
      * @param name           El nombre del usuario.
      * @param descripcion    La descripción del usuario.
      * @param ciudad         La ciudad del usuario.
-     * @param genero         El género del usuario.
      * @param canciones      La lista de canciones del usuario.
      * @param instagram      El nombre de usuario de Instagram del usuario.
      * @param tikTok         El nombre de usuario de TikTok del usuario.
@@ -53,12 +52,11 @@ public class Usuario implements Serializable {
      * @param listaResenas   La lista de reseñas del usuario.
      * @param listaVisitas   La lista de identificadores de los perfiles visitados por el usuario.
      */
-    public Usuario(String id, String email, String name, String descripcion, String ciudad, String genero, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<String> chatsRecientes, String fotoPerfil, List<String> listaFavoritos, List<Resena> listaResenas, List<String> listaVisitas) {
+    public Usuario(String id, String email, String name, String descripcion, String ciudad, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<String> chatsRecientes, String fotoPerfil, List<String> listaFavoritos, List<Resena> listaResenas, List<String> listaVisitas, List<String> listaGeneros) {
         this.id = id;
         this.nombre = name;
         this.descripcion = descripcion;
         this.ciudad = ciudad;
-        this.genero = genero;
         this.arrayCanciones = canciones;
         this.instagram = instagram;
         this.email = email;
@@ -71,6 +69,7 @@ public class Usuario implements Serializable {
         this.listaFavoritos = listaFavoritos;
         this.listaResenas = listaResenas;
         this.visitasAlPerfil = listaVisitas;
+        this.listaGeneros = listaGeneros;
     }
 
     /**
@@ -244,23 +243,6 @@ public class Usuario implements Serializable {
         this.ciudad = ciudad;
     }
 
-    /**
-     * Obtiene el género del usuario.
-     *
-     * @return El género del usuario.
-     */
-    public String getGenero() {
-        return genero;
-    }
-
-    /**
-     * Establece el género del usuario.
-     *
-     * @param genero El género del usuario.
-     */
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
 
     /**
      * Establece el nombre del usuario.
@@ -346,7 +328,7 @@ public class Usuario implements Serializable {
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", ciudad='" + ciudad + '\'' +
-                ", genero='" + genero + '\'' +
+                ", genero='" + listaGeneros + '\'' +
                 ", arrayCanciones=" + arrayCanciones +
                 '}';
     }
@@ -385,5 +367,16 @@ public class Usuario implements Serializable {
      */
     public void setListaResenas(List<Resena> listaResenas) {
         this.listaResenas = listaResenas;
+    }
+
+
+    //////////////////
+
+    public List<String> getListaGeneros() {
+        return listaGeneros;
+    }
+
+    public void setListaGeneros(List<String> listaGeneros) {
+        this.listaGeneros = listaGeneros;
     }
 }

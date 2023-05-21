@@ -40,6 +40,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class EditarPerfil extends AppCompatActivity {
     private TextView lblNombre, lblDescripcion, lblInstagram, lblYoutube, lblSpotify, lblTikTok, lblSoundCloud, tvAyuda;
@@ -132,11 +133,11 @@ public class EditarPerfil extends AppCompatActivity {
             usuarioEditando.setTiktTok(etTikTok.getText().toString());
             usuarioEditando.setEmail(etEmailEditar.getText().toString());
             usuarioEditando.setCiudad(spinnerCiudad.getSelectedItem().toString());
-            usuarioEditando.setGenero(spinnerGenero.getSelectedItem().toString());
+            usuarioEditando.setListaGeneros(Collections.singletonList(spinnerGenero.getSelectedItem().toString()));
 
             if (urlImagenPerfil != null) {
-                usuarioEditando.setFotoPerfil(urlImagenPerfil);
-            }
+                         usuarioEditando.setFotoPerfil(urlImagenPerfil);
+             }
 
             CollectionReference refUsuarios = FirebaseFirestore.getInstance().
 
@@ -214,7 +215,7 @@ public class EditarPerfil extends AppCompatActivity {
                         spinnerCiudad.setSelection(adapterCiudad.getPosition(usuario.getCiudad()));
 
                         ArrayAdapter<String> adapterGenero = (ArrayAdapter<String>) spinnerGenero.getAdapter();
-                        spinnerGenero.setSelection(adapterGenero.getPosition(usuario.getGenero()));
+                        spinnerGenero.setSelection(adapterGenero.getPosition(usuario.getListaGeneros().toString()));
 
 
                     } else {

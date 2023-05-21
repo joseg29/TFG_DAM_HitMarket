@@ -17,11 +17,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tarea1firebase.adaptadores.AdaptadorCancionesRecycler;
+import com.example.tarea1firebase.adaptadores.AdaptadorGenerosRecycler;
 import com.example.tarea1firebase.adaptadores.AdaptadorResenas;
 import com.example.tarea1firebase.entidades.Resena;
 import com.example.tarea1firebase.entidades.Usuario;
@@ -35,14 +37,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+
 public class PerfilUsuario extends AppCompatActivity {
     private int PICK_AUDIO_REQUEST = 123120;
     //Este será el nombre de la colección que daremos en la BBDD de Firebase
     public final static String COLECCION = "Usuarios";
     private ProgressBar progressBar;
-    private RecyclerView recyclerCanciones, recyclerResenas;
+    private RecyclerView recyclerCanciones, recyclerResenas, recyclerGeneros;
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private AdaptadorResenas adaptadorResenas;
+    private AdaptadorGenerosRecycler adaptadorGeneros;
     private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas, lblRecyclerRese, lblGenero;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
@@ -209,7 +214,7 @@ public class PerfilUsuario extends AppCompatActivity {
         lblCiudad = findViewById(R.id.tvCiudad);
         imgFotoPerfil = findViewById(R.id.imgFotoPerfil);
         lblNVisitas = findViewById(R.id.lblVisitasAlPerfil);
-        lblGenero = findViewById(R.id.txtGenero);
+
 
         btnChat = findViewById(R.id.btnChat);
         btnInstagram = findViewById(R.id.btnInstagram);
@@ -242,10 +247,14 @@ public class PerfilUsuario extends AppCompatActivity {
 
         recyclerResenas = findViewById(R.id.RecyclerResenas);
         recyclerResenas.setHasFixedSize(true);
-
         recyclerResenas.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-        imgGenero = findViewById(R.id.imgGenero1);
+
+        lblGenero = findViewById(R.id.txtGenero);
+        imgGenero = findViewById(R.id.imgGenero);
+        recyclerGeneros.setHasFixedSize(true);
+        recyclerGeneros.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+
 
 
         ArrayList<Resena> arrayResenas = new ArrayList<>();
@@ -255,57 +264,8 @@ public class PerfilUsuario extends AppCompatActivity {
         progressBar = findViewById(R.id.spin_kit);
     }
 
-    private void mostrarGenero() {
-        if (usuario != null) {
-            String genero = usuario.getGenero();
-            System.out.println(genero);
-            if (genero != null) {
 
-                if (genero.equalsIgnoreCase("#Clasica")) {
-                    imgGenero.setImageResource(R.drawable.genero_clasica);
-                    lblGenero.setText("Clasica");
-                } else if (genero.equalsIgnoreCase("#Country")) {
-                    imgGenero.setImageResource(R.drawable.genero_country);
-                    lblGenero.setText("Country");
-                } else if (genero.equalsIgnoreCase("#Electro")) {
-                    imgGenero.setImageResource(R.drawable.genero_electro);
-                    lblGenero.setText("Electro");
-                } else if (genero.equalsIgnoreCase("#Flamenco")) {
-                    imgGenero.setImageResource(R.drawable.genero_flamenco);
-                    lblGenero.setText("Flamenco");
-                } else if (genero.equalsIgnoreCase("#Folk")) {
-                    imgGenero.setImageResource(R.drawable.genero_folk);
-                    lblGenero.setText("Folk");
-                } else if (genero.equalsIgnoreCase("#Jazz")) {
-                    imgGenero.setImageResource(R.drawable.genero_jazz);
-                    lblGenero.setText("Jazz");
-                } else if (genero.equalsIgnoreCase("#Kpop")) {
-                    imgGenero.setImageResource(R.drawable.genero_kpop);
-                    lblGenero.setText("Kpop");
-                } else if (genero.equalsIgnoreCase("#Metal")) {
-                    imgGenero.setImageResource(R.drawable.genero_metal);
-                    lblGenero.setText("Metal");
-                } else if (genero.equalsIgnoreCase("#Pop")) {
-                    imgGenero.setImageResource(R.drawable.genero_pop);
-                    lblGenero.setText("Pop");
-                } else if (genero.equalsIgnoreCase("#Rap")) {
-                    imgGenero.setImageResource(R.drawable.genero_rap);
-                    lblGenero.setText("Rap");
-                } else if (genero.equalsIgnoreCase("#Rock")) {
-                    imgGenero.setImageResource(R.drawable.genero_rock);
-                    lblGenero.setText("Rock");
-                } else if (genero.equalsIgnoreCase("#Trap")) {
-                    imgGenero.setImageResource(R.drawable.genero_trap);
-                    lblGenero.setText("Trap");
-                } else if (genero.equalsIgnoreCase("#Drill")) {
-                    imgGenero.setImageResource(R.drawable.genero_drill);
-                    lblGenero.setText("Drill ");
-                } else {
-                    System.out.println(genero);
-                }
-            }
-        }
-    }
+
 
 
     public void inicializarUsuario() {
@@ -315,7 +275,6 @@ public class PerfilUsuario extends AppCompatActivity {
                 usuario = usuarioDevuelto;
                 obtenerDatosUsuario();
                 setRedesSociales();
-                mostrarGenero();
             }
         }, Usuario.class);
     }
@@ -344,6 +303,11 @@ public class PerfilUsuario extends AppCompatActivity {
 
                 adaptadorResenas = new AdaptadorResenas(resenas);
                 recyclerResenas.setAdapter(adaptadorResenas);
+
+
+                List<String> generos = usuario.getListaGeneros();
+                adaptadorGeneros = new AdaptadorGenerosRecycler(generos);
+                recyclerGeneros.setAdapter(adaptadorGeneros);
 
 
                 //Establecer foto de perfil

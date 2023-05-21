@@ -226,7 +226,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
          * Convierte el género a mayúsculas utilizando el Locale.ROOT para la configuración regional predeterminada.
          */
         if (holder.lblView3 != null) {
-            holder.lblView3.setText(listaUsuariosFiltrados.get(position).getGenero().toUpperCase(Locale.ROOT));
+            holder.lblView3.setText(listaUsuariosFiltrados.get(position).getListaGeneros().toString().toUpperCase(Locale.ROOT));
         }
 
         /* Verifica si la foto de perfil del usuario en la posición actual de listaUsuariosFiltrados
@@ -386,7 +386,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
             for (Usuario user : listaUsuarios) {
                 if (user.getNombre().toLowerCase().contains(lowercaseQuery)
                         || (user.getCiudad() != null && user.getCiudad().toLowerCase().contains(lowercaseQuery))
-                        || (user.getGenero() != null && user.getGenero().toLowerCase().contains(lowercaseQuery))) {
+                        || (user.getListaGeneros() != null && user.getListaGeneros().toString().toLowerCase().contains(lowercaseQuery))) {
                     listaUsuariosFiltrados.add(user);
                 }
             }

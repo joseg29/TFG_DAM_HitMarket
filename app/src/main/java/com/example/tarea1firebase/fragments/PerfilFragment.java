@@ -27,6 +27,7 @@ import com.example.tarea1firebase.adaptadores.AdaptadorCancionesRecycler;
 import com.example.tarea1firebase.ChatVentana;
 import com.example.tarea1firebase.EditarPerfil;
 import com.example.tarea1firebase.R;
+import com.example.tarea1firebase.adaptadores.AdaptadorGenerosRecycler;
 import com.example.tarea1firebase.adaptadores.AdaptadorResenas;
 import com.example.tarea1firebase.entidades.Resena;
 import com.example.tarea1firebase.entidades.Usuario;
@@ -49,9 +50,10 @@ public class PerfilFragment extends Fragment {
     public final static String COLECCION = "Usuarios";
     private StorageReference storageRef;
     private FirebaseStorage storage;
-    private RecyclerView recyclerCanciones, recyclerResenas;
+    private RecyclerView recyclerCanciones, recyclerResenas,recyclerGeneros;
     private AdaptadorCancionesRecycler adaptadorCanciones;
-    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas,lblSinRese;
+    private AdaptadorGenerosRecycler adaptadorGeneros;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas,lblSinRese,lblGenero;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button btnEditar;
@@ -59,7 +61,7 @@ public class PerfilFragment extends Fragment {
 
     private String uidUsuarioActual;
     private FirebaseAuth mAuth;
-    private ImageView imgFotoPerfil, imgRecyclerVacio,imgRecyclerRese;
+    private ImageView imgFotoPerfil, imgRecyclerVacio,imgRecyclerRese,imgGenero;
     private GestorFirestore gestorFirebase;
     private AdaptadorResenas adaptadorResenas;
 
@@ -221,6 +223,15 @@ public class PerfilFragment extends Fragment {
         adaptadorResenas = new AdaptadorResenas(arrayResenas);
         recyclerResenas.setAdapter(adaptadorResenas);
 
+        lblGenero = getView().findViewById(R.id.txtGenero);
+        imgGenero = getView().findViewById(R.id.imgGenero);
+        recyclerGeneros = getView().findViewById(R.id.RecyclerGeneros);
+        recyclerGeneros.setHasFixedSize(true);
+        recyclerGeneros.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+
+
+
 
     }
 
@@ -266,6 +277,10 @@ public class PerfilFragment extends Fragment {
                 adaptadorResenas = new AdaptadorResenas(resenas);
                 recyclerResenas.setAdapter(adaptadorResenas);
 
+                List<String> generos;
+                generos = usuario.getListaGeneros();
+                adaptadorGeneros = new AdaptadorGenerosRecycler(generos);
+                recyclerGeneros.setAdapter(adaptadorGeneros);
 
                     try {
                         Glide.with(PerfilFragment.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);

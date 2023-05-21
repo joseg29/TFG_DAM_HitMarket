@@ -9,276 +9,288 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="0dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imVideo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY" />
-
-        <View
-            android:id="@+id/overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#866E39BA" />
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="0dp">
+            android:orientation="vertical" >
 
-
-            <ImageView
-                android:id="@+id/blueLogo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/logo_marshmello" />
-
-            <TextView
-                android:id="@+id/lblTitulo"
-                android:layout_width="313dp"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/blueLogo"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/gotham_bold_1"
-                android:text="Crea una cuenta"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
+                android:layout_gravity="center"
+                android:layout_marginTop="0dp">
 
-            <TextView
-                android:id="@+id/lblTituloLogo"
-                android:layout_width="314dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/blueLogo"
-                android:layout_centerHorizontal="true"
-                android:fontFamily="@font/gotham_medium_1"
-                android:text="HitMarket"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                <ImageView
+                    android:id="@+id/imVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
 
+                <View
+                    android:id="@+id/overlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#866E39BA" />
 
-            <TextView
-                android:id="@+id/lblNombre"
-                android:layout_width="313dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lblTitulo"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/gotham_bold_1"
-                android:text="Nombre"
-                android:textAlignment="viewStart"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/etNombre"
-                android:layout_width="313dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/lblNombre"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:alpha=".8"
-                android:background="@drawable/edit_text_redondo"
-                android:inputType="none"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/lblEmail"
-                android:layout_width="313dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etNombre"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/gotham_bold_1"
-                android:text="Email"
-                android:textAlignment="viewStart"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp">
 
 
-            <EditText
-                android:id="@+id/etEmail"
-                android:layout_width="313dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/lblEmail"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:alpha=".8"
-                android:background="@drawable/edit_text_redondo"
-                android:textAlignment="center" />
+                    <ImageView
+                        android:id="@+id/blueLogo"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/logo_marshmello" />
 
-            <TextView
-                android:id="@+id/textViewSeleccionaOpcion"
-                android:layout_width="313dp"
-                android:layout_height="20dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/gotham_bold_1"
-                android:textColor="@color/white"
-                android:layout_below="@id/etEmail"
-                android:text="Ciudad" />
+                    <TextView
+                        android:id="@+id/lblTitulo"
+                        android:layout_width="313dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/blueLogo"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/gotham_bold_1"
+                        android:text="Crea una cuenta"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="25sp" />
 
-            <Spinner
-                android:id="@+id/spinnerOpciones"
-                android:layout_width="313dp"
-                android:layout_height="50dp"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/edit_text_redondo"
-                android:alpha=".8"
-                android:spinnerMode="dropdown"
-                android:layout_below="@id/textViewSeleccionaOpcion"
-                android:prompt="@string/spinner_title"
-                android:entries="@array/autonomous_communities"/>
-
-            <TextView
-                android:id="@+id/textViewSeleccionaOpcionGenero"
-                android:layout_width="313dp"
-                android:layout_height="20dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/gotham_bold_1"
-                android:textColor="@color/white"
-                android:layout_below="@id/spinnerOpciones"
-                android:text="Genero" />
-
-            <Spinner
-                android:id="@+id/spinnerOpcionesGenero"
-                android:layout_width="313dp"
-                android:layout_height="50dp"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/edit_text_redondo"
-                android:alpha=".8"
-                android:spinnerMode="dropdown"
-                android:layout_below="@id/textViewSeleccionaOpcionGenero"
-                android:prompt="@string/spinner_title2"
-                android:entries="@array/generos_musicales"/>
-
-            <TextView
-                android:id="@+id/lblPassword"
-                android:layout_width="313dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/spinnerOpcionesGenero"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/gotham_bold_1"
-                android:text="Contraseña"
-                android:textAlignment="viewStart"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="313dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/lblPassword"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:alpha=".8"
-                android:background="@drawable/edit_text_redondo"
-                android:inputType="textPassword"
-                android:textAlignment="center" />
-            <TextView
-                android:id="@+id/lblConfirmarPassword"
-                android:layout_width="313dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etPassword"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/gotham_bold_1"
-                android:text="Confirmar contraseña"
-                android:textAlignment="viewStart"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <EditText
-                android:id="@+id/etConfirmarPassword"
-                android:layout_width="313dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/lblConfirmarPassword"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:alpha=".8"
-                android:background="@drawable/edit_text_redondo"
-                android:inputType="textPassword"
-                android:textAlignment="center" />
+                    <TextView
+                        android:id="@+id/lblTituloLogo"
+                        android:layout_width="314dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/blueLogo"
+                        android:layout_centerHorizontal="true"
+                        android:fontFamily="@font/gotham_medium_1"
+                        android:text="HitMarket"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
 
 
-            <ImageButton
-                android:id="@+id/btnMostrarContrasena"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/etPassword"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="-37dp"
-                android:layout_marginEnd="60dp"
-                android:background="@android:color/transparent"
-                android:contentDescription="mostrar_password"
-                android:src="@drawable/ojo_abierto" />
+                    <TextView
+                        android:id="@+id/lblNombre"
+                        android:layout_width="313dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/lblTitulo"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/gotham_bold_1"
+                        android:text="Nombre"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
-            <CheckBox
-                android:id="@+id/terminos_checkbox"
-                android:layout_width="313dp"
-                android:layout_height="30dp"
-                android:layout_below="@id/etConfirmarPassword"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:buttonTint="@color/checkbox_selector"
-                android:fontFamily="@font/gotham_medium_1"
-                android:text="Acepto los términos y servicios"
-                android:textAlignment="textStart"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                    <EditText
+                        android:id="@+id/etNombre"
+                        android:layout_width="313dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/lblNombre"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:alpha=".8"
+                        android:background="@drawable/edit_text_redondo"
+                        android:inputType="none"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/lblEmail"
+                        android:layout_width="313dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/etNombre"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/gotham_bold_1"
+                        android:text="Email"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
 
-            <Button
-                android:id="@+id/btnRegistrate"
-                android:layout_width="313dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/terminos_checkbox"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="10dp"
-                android:alpha=".8"
-                android:background="@drawable/boton_redondo"
-                android:fontFamily="@font/gotham_bold_1"
-                android:text="Regístrate" />
+                    <EditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="313dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/lblEmail"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:alpha=".8"
+                        android:background="@drawable/edit_text_redondo"
+                        android:textAlignment="center" />
 
-            <TextView
-                android:id="@+id/linkIniciaSesion"
-                android:layout_width="314dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btnRegistrate"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/gotham_medium_1"
-                android:text="¿Ya tienes cuenta? Inicia sesión"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/textViewSeleccionaOpcion"
+                        android:layout_width="313dp"
+                        android:layout_height="20dp"
+                        android:layout_below="@id/etEmail"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/gotham_bold_1"
+                        android:text="Ciudad"
+                        android:textColor="@color/white" />
 
-            <com.github.ybq.android.spinkit.SpinKitView
-                android:id="@+id/spin_kit"
-                style="@style/SpinKitView.Large.Circle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:elevation="100dp"
-                app:SpinKit_Color="@color/black" />
-        </RelativeLayout>
-    </RelativeLayout>
+                    <Spinner
+                        android:id="@+id/spinnerOpciones"
+                        android:layout_width="313dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/textViewSeleccionaOpcion"
+                        android:layout_centerHorizontal="true"
+                        android:alpha=".8"
+                        android:background="@drawable/edit_text_redondo"
+                        android:entries="@array/autonomous_communities"
+                        android:prompt="@string/spinner_title"
+                        android:spinnerMode="dropdown" />
+
+                    <TextView
+                        android:id="@+id/textViewSeleccionaOpcionGenero"
+                        android:layout_width="313dp"
+                        android:layout_height="20dp"
+                        android:layout_below="@id/spinnerOpciones"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/gotham_bold_1"
+                        android:text="Genero"
+                        android:textColor="@color/white" />
+
+                    <Spinner
+                        android:id="@+id/spinnerOpcionesGenero"
+                        android:layout_width="313dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/textViewSeleccionaOpcionGenero"
+                        android:layout_centerHorizontal="true"
+                        android:alpha=".8"
+                        android:background="@drawable/edit_text_redondo"
+                        android:entries="@array/generos_musicales"
+                        android:prompt="@string/spinner_title2"
+                        android:spinnerMode="dropdown" />
+
+                    <TextView
+                        android:id="@+id/lblPassword"
+                        android:layout_width="313dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/spinnerOpcionesGenero"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/gotham_bold_1"
+                        android:text="Contraseña"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="313dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/lblPassword"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:alpha=".8"
+                        android:background="@drawable/edit_text_redondo"
+                        android:inputType="textPassword"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/lblConfirmarPassword"
+                        android:layout_width="313dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/etPassword"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/gotham_bold_1"
+                        android:text="Confirmar contraseña"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/etConfirmarPassword"
+                        android:layout_width="313dp"
+                        android:layout_height="50dp"
+                        android:layout_below="@id/lblConfirmarPassword"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:alpha=".8"
+                        android:background="@drawable/edit_text_redondo"
+                        android:inputType="textPassword"
+                        android:textAlignment="center" />
+
+
+                    <ImageButton
+                        android:id="@+id/btnMostrarContrasena"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/etPassword"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="-37dp"
+                        android:layout_marginEnd="60dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="mostrar_password"
+                        android:src="@drawable/ojo_abierto" />
+
+                    <CheckBox
+                        android:id="@+id/terminos_checkbox"
+                        android:layout_width="313dp"
+                        android:layout_height="30dp"
+                        android:layout_below="@id/etConfirmarPassword"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:buttonTint="@color/checkbox_selector"
+                        android:fontFamily="@font/gotham_medium_1"
+                        android:text="Acepto los términos y servicios"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+
+                    <Button
+                        android:id="@+id/btnRegistrate"
+                        android:layout_width="313dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/terminos_checkbox"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:alpha=".8"
+                        android:background="@drawable/boton_redondo"
+                        android:fontFamily="@font/gotham_bold_1"
+                        android:text="Regístrate" />
+
+                    <TextView
+                        android:id="@+id/linkIniciaSesion"
+                        android:layout_width="314dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btnRegistrate"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/gotham_medium_1"
+                        android:text="¿Ya tienes cuenta? Inicia sesión"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <com.github.ybq.android.spinkit.SpinKitView
+                        android:id="@+id/spin_kit"
+                        style="@style/SpinKitView.Large.Circle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:elevation="100dp"
+                        app:SpinKit_Color="@color/black" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
