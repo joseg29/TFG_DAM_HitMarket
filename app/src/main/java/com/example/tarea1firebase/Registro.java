@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tarea1firebase.SpinnerMultiGeneros.AdapatadorSpinnerMultiGeneros;
+import com.example.tarea1firebase.SpinnerMultiGeneros.ControladorSpinnerMultiGeneros;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
@@ -34,7 +37,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import pl.droidsonroids.gif.GifDrawable;
 
@@ -56,6 +61,9 @@ public class Registro extends AppCompatActivity {
     private ProgressBar progressBar;
     private ImageView videoMarco;
     private Spinner mySpinner, mySpinnerGenero;
+    private List<String> selectedGeneros;
+    private List<ControladorSpinnerMultiGeneros> listVOs;
+    private AdapatadorSpinnerMultiGeneros myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,10 +113,7 @@ public class Registro extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(adapter);
 
-        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
-                R.array.generos_musicales, android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mySpinnerGenero.setAdapter(adapter2);
+
     }
 
     private void inicializarVistas() {
@@ -165,6 +170,25 @@ public class Registro extends AppCompatActivity {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+
+        final String[] select_qualification = {"Seleccione Generos", "#Clasica", "#Country", "#Electro", "#Flamenco", "#Folk", "#Jazz", "#Kpop", "#Metal", "#Pop", "#Rap", "#Rock", "#Trap", "#Drill"};
+
+
+        listVOs = new ArrayList<>();
+
+        for (int i = 0; i < select_qualification.length; i++) {
+            ControladorSpinnerMultiGeneros stateVO = new ControladorSpinnerMultiGeneros();
+            stateVO.setTitle(select_qualification[i]);
+            stateVO.setSelected(false);
+            listVOs.add(stateVO);
+        }
+
+        selectedGeneros = new ArrayList<>();
+
+        myAdapter = new AdapatadorSpinnerMultiGeneros(Registro.this, 0, listVOs, selectedGeneros);
+        mySpinnerGenero.setAdapter(myAdapter);
+
     }
 
 
@@ -174,8 +198,28 @@ public class Registro extends AppCompatActivity {
         String contrasenaUsuario = etContrasena.getText().toString();
         String confirmarContrasenaUsuario = etConfirmPassword.getText().toString();
         String ciudad = mySpinner.getSelectedItem().toString();
-        String genero = mySpinnerGenero.getSelectedItem().toString();
 
+
+        mySpinnerGenero.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ControladorSpinnerMultiGeneros selectedState = (ControladorSpinnerMultiGeneros) parent.getSelectedItem();
+                String selectedGenre = selectedState.getTitle();
+
+                if (!selectedGenre.equals("Seleccione Generos")) {
+                    if (selectedState.isSelected()) {
+                        selectedGeneros.add(selectedGenre);
+                    } else {
+                        selectedGeneros.remove(selectedGenre);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+       // user.setListaGeneros(selectedGeneros);
         //Se crea el usuario en el authenticator de firebase
         progressBar.setVisibility(View.VISIBLE);
 
@@ -210,11 +254,11 @@ public class Registro extends AppCompatActivity {
                         } else {
                             // Se crea el usuario en collections (FIRESTORE), y se le pasa el id de authenticator como referencia de documento
                             String idUsuario = task.getResult().getUser().getUid();
-                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(), Arrays.asList(),Arrays.asList());
+                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(),selectedGeneros,Arrays.asList());
                             db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(Registro.this, "User creado", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Registro.this, "User creado"+user.getListaGeneros().toString(), Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(Registro.this, MarcoMenu.class);
                                     intent.putExtra("UidUsuario", user.getId());
                                     startActivity(intent);
@@ -239,7 +283,7 @@ public class Registro extends AppCompatActivity {
         String idUsuario = id;
         String ciudad = mySpinner.getSelectedItem().toString();
         String genero = mySpinnerGenero.getSelectedItem().toString();
-        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(),Arrays.asList(),Arrays.asList());
+        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(),selectedGeneros,Arrays.asList());
         db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

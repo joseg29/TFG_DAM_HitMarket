@@ -189,7 +189,7 @@ public class EditarPerfil extends AppCompatActivity {
         final String[] select_qualification = {"Seleccione Generos", "#Clasica", "#Country", "#Electro", "#Flamenco", "#Folk", "#Jazz", "#Kpop", "#Metal", "#Pop", "#Rap", "#Rock", "#Trap", "#Drill"};
         Spinner spinner = findViewById(R.id.spinnerOpcionesGeneroMusical);
 
-       listVOs = new ArrayList<>();
+        listVOs = new ArrayList<>();
 
         for (int i = 0; i < select_qualification.length; i++) {
             ControladorSpinnerMultiGeneros stateVO = new ControladorSpinnerMultiGeneros();
