@@ -38,7 +38,7 @@
                 <TextView
                     android:id="@+id/txtGenero"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="32dp"
                     android:fontFamily="@font/gotham_bold"
                     android:text="No hay genros filtrados"
                     android:textAlignment="center"

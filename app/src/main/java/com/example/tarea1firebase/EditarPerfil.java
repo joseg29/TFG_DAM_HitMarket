@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tarea1firebase.SpinnerMultiGeneros.AdapatadorSpinnerMultiGeneros;
+import com.example.tarea1firebase.SpinnerMultiGeneros.ControladorSpinnerMultiGeneros;
 import com.example.tarea1firebase.adaptadores.CustomSpinnerAdapter;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -40,7 +41,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditarPerfil extends AppCompatActivity {
     private TextView lblNombre, lblDescripcion, lblInstagram, lblYoutube, lblSpotify, lblTikTok, lblSoundCloud, tvAyuda;
@@ -59,6 +61,8 @@ public class EditarPerfil extends AppCompatActivity {
     private String urlImagenPerfil;
     private FirebaseAuth mAuth;
     private Spinner spinnerCiudad, spinnerGenero;
+    private List<String> selectedGeneros;
+    private List<ControladorSpinnerMultiGeneros> listVOs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,11 +137,11 @@ public class EditarPerfil extends AppCompatActivity {
             usuarioEditando.setTiktTok(etTikTok.getText().toString());
             usuarioEditando.setEmail(etEmailEditar.getText().toString());
             usuarioEditando.setCiudad(spinnerCiudad.getSelectedItem().toString());
-            usuarioEditando.setListaGeneros(Collections.singletonList(spinnerGenero.getSelectedItem().toString()));
+            usuarioEditando.setListaGeneros(selectedGeneros);
 
             if (urlImagenPerfil != null) {
-                         usuarioEditando.setFotoPerfil(urlImagenPerfil);
-             }
+                usuarioEditando.setFotoPerfil(urlImagenPerfil);
+            }
 
             CollectionReference refUsuarios = FirebaseFirestore.getInstance().
 
@@ -181,9 +185,45 @@ public class EditarPerfil extends AppCompatActivity {
         CustomSpinnerAdapter adapterCiudad = new CustomSpinnerAdapter(this, ciudad);
         spinnerCiudad.setAdapter(adapterCiudad);
 
-        String[] genero = getResources().getStringArray(R.array.generos_musicales);
-        CustomSpinnerAdapter adapterGenero = new CustomSpinnerAdapter(this, genero);
-        spinnerGenero.setAdapter(adapterGenero);
+
+        final String[] select_qualification = {"Seleccione Generos", "#Clasica", "#Country", "#Electro", "#Flamenco", "#Folk", "#Jazz", "#Kpop", "#Metal", "#Pop", "#Rap", "#Rock", "#Trap", "#Drill"};
+        Spinner spinner = findViewById(R.id.spinnerOpcionesGeneroMusical);
+
+       listVOs = new ArrayList<>();
+
+        for (int i = 0; i < select_qualification.length; i++) {
+            ControladorSpinnerMultiGeneros stateVO = new ControladorSpinnerMultiGeneros();
+            stateVO.setTitle(select_qualification[i]);
+            stateVO.setSelected(false);
+            listVOs.add(stateVO);
+        }
+
+        selectedGeneros = new ArrayList<>();
+
+        AdapatadorSpinnerMultiGeneros myAdapter = new AdapatadorSpinnerMultiGeneros(EditarPerfil.this, 0, listVOs, selectedGeneros);
+        spinner.setAdapter(myAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ControladorSpinnerMultiGeneros selectedState = (ControladorSpinnerMultiGeneros) parent.getSelectedItem();
+                String selectedGenre = selectedState.getTitle();
+
+                if (!selectedGenre.equals("Seleccione Generos")) {
+                    if (selectedState.isSelected()) {
+                        selectedGeneros.add(selectedGenre);
+                    } else {
+                        selectedGeneros.remove(selectedGenre);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
     }
 
 
