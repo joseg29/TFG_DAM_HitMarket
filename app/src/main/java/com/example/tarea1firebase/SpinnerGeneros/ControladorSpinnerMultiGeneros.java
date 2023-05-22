@@ -1,6 +1,6 @@
-package com.example.tarea1firebase;
+package com.example.tarea1firebase.SpinnerGeneros;
 
-public class StateVO {
+public class ControladorSpinnerMultiGeneros {
     private String title;
     private boolean selected;
 

@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tarea1firebase.SpinnerGeneros.AdapatadorSpinnerMultiGeneros;
+import com.example.tarea1firebase.SpinnerGeneros.ControladorSpinnerMultiGeneros;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
@@ -60,8 +62,8 @@ public class Registro extends AppCompatActivity {
     private ImageView videoMarco;
     private Spinner mySpinner, mySpinnerGenero;
     private List<String> selectedGeneros;
-    private List<StateVO> listVOs;
-    private MyAdapter myAdapter;
+    private List<ControladorSpinnerMultiGeneros> listVOs;
+    private AdapatadorSpinnerMultiGeneros myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +178,7 @@ public class Registro extends AppCompatActivity {
         listVOs = new ArrayList<>();
 
         for (int i = 0; i < select_qualification.length; i++) {
-            StateVO stateVO = new StateVO();
+            ControladorSpinnerMultiGeneros stateVO = new ControladorSpinnerMultiGeneros();
             stateVO.setTitle(select_qualification[i]);
             stateVO.setSelected(false);
             listVOs.add(stateVO);
@@ -184,7 +186,7 @@ public class Registro extends AppCompatActivity {
 
         selectedGeneros = new ArrayList<>();
 
-        myAdapter = new MyAdapter(Registro.this, 0, listVOs, selectedGeneros);
+        myAdapter = new AdapatadorSpinnerMultiGeneros(Registro.this, 0, listVOs, selectedGeneros);
         mySpinnerGenero.setAdapter(myAdapter);
 
     }
@@ -201,7 +203,7 @@ public class Registro extends AppCompatActivity {
         mySpinnerGenero.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                StateVO selectedState = (StateVO) parent.getSelectedItem();
+                ControladorSpinnerMultiGeneros selectedState = (ControladorSpinnerMultiGeneros) parent.getSelectedItem();
                 String selectedGenre = selectedState.getTitle();
 
                 if (!selectedGenre.equals("Seleccione Generos")) {

@@ -1,4 +1,4 @@
-package com.example.tarea1firebase;
+package com.example.tarea1firebase.SpinnerGeneros;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,19 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.example.tarea1firebase.R;
+
 import java.util.List;
 
-public class MyAdapter extends ArrayAdapter<StateVO> {
+public class AdapatadorSpinnerMultiGeneros extends ArrayAdapter<ControladorSpinnerMultiGeneros> {
     private Context mContext;
-    private List<StateVO> listState;
+    private List<ControladorSpinnerMultiGeneros> listState;
     private List<String> selectedGeneros;
     private boolean isFromView = false;
 
-    public MyAdapter(Context context, int resource, List<StateVO> objects, List<String> selectedGeneros) {
+    public AdapatadorSpinnerMultiGeneros(Context context, int resource, List<ControladorSpinnerMultiGeneros> objects, List<String> selectedGeneros) {
         super(context, resource, objects);
         this.mContext = context;
         this.listState = objects;
@@ -48,7 +48,7 @@ public class MyAdapter extends ArrayAdapter<StateVO> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        final StateVO stateVO = listState.get(position);
+        final ControladorSpinnerMultiGeneros stateVO = listState.get(position);
         holder.mTextView.setText(stateVO.getTitle());
 
         // To check whether checked event is fired from getView() or user input
@@ -74,7 +74,7 @@ public class MyAdapter extends ArrayAdapter<StateVO> {
 
     private void updateSelectedGeneros() {
         selectedGeneros.clear();
-        for (StateVO stateVO : listState) {
+        for (ControladorSpinnerMultiGeneros stateVO : listState) {
             if (stateVO.isSelected()) {
                 selectedGeneros.add(stateVO.getTitle());
             }

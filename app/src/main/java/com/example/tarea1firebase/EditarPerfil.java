@@ -6,12 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tarea1firebase.SpinnerGeneros.AdapatadorSpinnerMultiGeneros;
+import com.example.tarea1firebase.SpinnerGeneros.ControladorSpinnerMultiGeneros;
 import com.example.tarea1firebase.adaptadores.CustomSpinnerAdapter;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -42,7 +42,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class EditarPerfil extends AppCompatActivity {
@@ -63,7 +62,7 @@ public class EditarPerfil extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Spinner spinnerCiudad, spinnerGenero;
     private List<String> selectedGeneros;
-    private List<StateVO> listVOs;
+    private List<ControladorSpinnerMultiGeneros> listVOs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,9 +185,6 @@ public class EditarPerfil extends AppCompatActivity {
         CustomSpinnerAdapter adapterCiudad = new CustomSpinnerAdapter(this, ciudad);
         spinnerCiudad.setAdapter(adapterCiudad);
 
-        String[] genero = getResources().getStringArray(R.array.generos_musicales);
-        CustomSpinnerAdapter adapterGenero = new CustomSpinnerAdapter(this, genero);
-        spinnerGenero.setAdapter(adapterGenero);
 
         final String[] select_qualification = {"Seleccione Generos", "#Clasica", "#Country", "#Electro", "#Flamenco", "#Folk", "#Jazz", "#Kpop", "#Metal", "#Pop", "#Rap", "#Rock", "#Trap", "#Drill"};
         Spinner spinner = findViewById(R.id.spinnerOpcionesGeneroMusical);
@@ -196,7 +192,7 @@ public class EditarPerfil extends AppCompatActivity {
        listVOs = new ArrayList<>();
 
         for (int i = 0; i < select_qualification.length; i++) {
-            StateVO stateVO = new StateVO();
+            ControladorSpinnerMultiGeneros stateVO = new ControladorSpinnerMultiGeneros();
             stateVO.setTitle(select_qualification[i]);
             stateVO.setSelected(false);
             listVOs.add(stateVO);
@@ -204,13 +200,13 @@ public class EditarPerfil extends AppCompatActivity {
 
         selectedGeneros = new ArrayList<>();
 
-        MyAdapter myAdapter = new MyAdapter(EditarPerfil.this, 0, listVOs, selectedGeneros);
+        AdapatadorSpinnerMultiGeneros myAdapter = new AdapatadorSpinnerMultiGeneros(EditarPerfil.this, 0, listVOs, selectedGeneros);
         spinner.setAdapter(myAdapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                StateVO selectedState = (StateVO) parent.getSelectedItem();
+                ControladorSpinnerMultiGeneros selectedState = (ControladorSpinnerMultiGeneros) parent.getSelectedItem();
                 String selectedGenre = selectedState.getTitle();
 
                 if (!selectedGenre.equals("Seleccione Generos")) {
