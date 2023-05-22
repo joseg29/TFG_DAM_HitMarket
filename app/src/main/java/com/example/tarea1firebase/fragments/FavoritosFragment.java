@@ -1,10 +1,7 @@
 package com.example.tarea1firebase.fragments;
 
-import static com.example.tarea1firebase.Registro.COLECCION;
-
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
 import com.example.tarea1firebase.R;
@@ -24,19 +20,13 @@ import com.example.tarea1firebase.entidades.Usuario;
 import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.FadingCircle;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class NoticiasFragment extends Fragment {
+public class FavoritosFragment extends Fragment {
 
     private RecyclerView recyclerViewUsu;
     private AdaptadorUsuariosRecycler adaptadorUsuariosRecycler;
@@ -50,7 +40,7 @@ public class NoticiasFragment extends Fragment {
     private ImageView imgFavsVacios;
     private TextView lblFavsVacios;
 
-    public NoticiasFragment() {
+    public FavoritosFragment() {
         // Required empty public constructor
     }
 
@@ -72,8 +62,7 @@ public class NoticiasFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         gestorFirebase = new GestorFirestore();
-        imgFavsVacios = view.findViewById(R.id.imagenRecyclerVacioFavsVacio);
-        lblFavsVacios = view.findViewById(R.id.lblRecyclerVacioFavsVacio);
+
 
         inicializarVistas(view);
         incializarUsuarioActual();
@@ -153,6 +142,8 @@ public class NoticiasFragment extends Fragment {
 
         barraBusqueda = view.findViewById(R.id.barraBusqueda);
 
+        imgFavsVacios = view.findViewById(R.id.imagenRecyclerVacioFavsVacio);
+        lblFavsVacios = view.findViewById(R.id.lblRecyclerVacioFavsVacio);
 
     }
 }

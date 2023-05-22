@@ -9,7 +9,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.tarea1firebase.fragments.ExploraFragment;
 import com.example.tarea1firebase.fragments.ChatsRecientesFragment;
-import com.example.tarea1firebase.fragments.NoticiasFragment;
+import com.example.tarea1firebase.fragments.MuroFragment;
+import com.example.tarea1firebase.fragments.FavoritosFragment;
 import com.example.tarea1firebase.fragments.PerfilFragment;
 import com.example.tarea1firebase.databinding.ActivityMarcoMenuBinding;
 
@@ -28,13 +29,13 @@ public class MarcoMenu extends AppCompatActivity {
         if (abrirPerfil) {
             replaceFragment(new PerfilFragment());
         } else {
-            replaceFragment(new NoticiasFragment());
+            replaceFragment(new MuroFragment());
         }
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()) {
                 case R.id.menu_noticias:
-                    replaceFragment(new NoticiasFragment());
+                    replaceFragment(new FavoritosFragment());
                     break;
                 case R.id.menu_explora:
                     replaceFragment(new ExploraFragment());
@@ -45,7 +46,9 @@ public class MarcoMenu extends AppCompatActivity {
                 case R.id.menu_perfil:
                     replaceFragment(new PerfilFragment());
                     break;
-
+                case R.id.menu_publicaciones:
+                    replaceFragment(new MuroFragment());
+                    break;
             }
 
             return true;

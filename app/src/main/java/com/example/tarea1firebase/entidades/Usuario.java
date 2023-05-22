@@ -25,6 +25,7 @@ public class Usuario implements Serializable {
     private List<Resena> listaResenas;
     private List<String> visitasAlPerfil;
     private List<String> listaGeneros;
+    private List<Publicacion> listaPublicaciones;
 
     /**
      * Constructor sin argumentos para la clase Usuario.
@@ -32,27 +33,30 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
+
     /**
      * Constructor con argumentos para la clase Usuario.
      *
-     * @param id             El identificador del usuario.
-     * @param email          El correo electrónico del usuario.
-     * @param name           El nombre del usuario.
-     * @param descripcion    La descripción del usuario.
-     * @param ciudad         La ciudad del usuario.
-     * @param canciones      La lista de canciones del usuario.
-     * @param instagram      El nombre de usuario de Instagram del usuario.
-     * @param tikTok         El nombre de usuario de TikTok del usuario.
-     * @param youtube        El enlace al canal de YouTube del usuario.
-     * @param spotify        El enlace a la cuenta de Spotify del usuario.
-     * @param soundCloud     El enlace a la cuenta de SoundCloud del usuario.
-     * @param chatsRecientes La lista de identificadores de los chats recientes del usuario.
-     * @param fotoPerfil     El enlace a la foto de perfil del usuario.
-     * @param listaFavoritos La lista de identificadores de las canciones favoritas del usuario.
-     * @param listaResenas   La lista de reseñas del usuario.
-     * @param listaVisitas   La lista de identificadores de los perfiles visitados por el usuario.
+     * @param id                 El identificador del usuario.
+     * @param email              El correo electrónico del usuario.
+     * @param name               El nombre del usuario.
+     * @param descripcion        La descripción del usuario.
+     * @param ciudad             La ciudad del usuario.
+     * @param canciones          La lista de canciones del usuario.
+     * @param instagram          El nombre de usuario de Instagram del usuario.
+     * @param tikTok             El nombre de usuario de TikTok del usuario.
+     * @param youtube            El enlace al canal de YouTube del usuario.
+     * @param spotify            El enlace a la cuenta de Spotify del usuario.
+     * @param soundCloud         El enlace a la cuenta de SoundCloud del usuario.
+     * @param chatsRecientes     La lista de identificadores de los chats recientes del usuario.
+     * @param fotoPerfil         El enlace a la foto de perfil del usuario.
+     * @param listaFavoritos     La lista de identificadores de las canciones favoritas del usuario.
+     * @param listaResenas       La lista de reseñas del usuario.
+     * @param listaVisitas       La lista de identificadores de los perfiles visitados por el usuario.
+     * @param listaPublicaciones La lista de publicaciones que ha hecho este usuario
+     * @param listaGeneros       La lista de géneros musicales del artista
      */
-    public Usuario(String id, String email, String name, String descripcion, String ciudad, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<String> chatsRecientes, String fotoPerfil, List<String> listaFavoritos, List<Resena> listaResenas, List<String> listaVisitas, List<String> listaGeneros) {
+    public Usuario(String id, String email, String name, String descripcion, String ciudad, List<String> canciones, String instagram, String tikTok, String youtube, String spotify, String soundCloud, List<String> chatsRecientes, String fotoPerfil, List<String> listaFavoritos, List<Resena> listaResenas, List<String> listaVisitas, List<String> listaGeneros, List<Publicacion> listaPublicaciones) {
         this.id = id;
         this.nombre = name;
         this.descripcion = descripcion;
@@ -70,6 +74,7 @@ public class Usuario implements Serializable {
         this.listaResenas = listaResenas;
         this.visitasAlPerfil = listaVisitas;
         this.listaGeneros = listaGeneros;
+        this.listaPublicaciones = listaPublicaciones;
     }
 
     /**
@@ -369,14 +374,31 @@ public class Usuario implements Serializable {
         this.listaResenas = listaResenas;
     }
 
-
-    //////////////////
-
     public List<String> getListaGeneros() {
         return listaGeneros;
     }
 
+    /**
+     * Establece la lista de géneros del usuario.
+     *
+     * @param listaGeneros La URL de la foto de perfil del usuario.
+     */
+
     public void setListaGeneros(List<String> listaGeneros) {
         this.listaGeneros = listaGeneros;
     }
+
+    public List<Publicacion> getListaPublicaciones() {
+        return listaPublicaciones;
+    }
+
+    /**
+     * Establece la lista de publicaciones del usuario.
+     *
+     * @param listaPublicaciones La URL de la foto de perfil del usuario.
+     */
+    public void setListaPublicaciones(List<Publicacion> listaPublicaciones) {
+        this.listaPublicaciones = listaPublicaciones;
+    }
+
 }
