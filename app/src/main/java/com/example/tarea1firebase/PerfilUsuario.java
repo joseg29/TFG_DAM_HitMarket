@@ -252,6 +252,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
         lblGenero = findViewById(R.id.txtGenero);
         imgGenero = findViewById(R.id.imgGenero);
+        recyclerGeneros = findViewById(R.id.RecyclerGeneros);
         recyclerGeneros.setHasFixedSize(true);
         recyclerGeneros.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
 

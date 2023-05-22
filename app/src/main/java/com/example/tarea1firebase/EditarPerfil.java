@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +41,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class EditarPerfil extends AppCompatActivity {
     private TextView lblNombre, lblDescripcion, lblInstagram, lblYoutube, lblSpotify, lblTikTok, lblSoundCloud, tvAyuda;
@@ -59,6 +62,8 @@ public class EditarPerfil extends AppCompatActivity {
     private String urlImagenPerfil;
     private FirebaseAuth mAuth;
     private Spinner spinnerCiudad, spinnerGenero;
+    private List<String> selectedGeneros;
+    private List<StateVO> listVOs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,11 +138,11 @@ public class EditarPerfil extends AppCompatActivity {
             usuarioEditando.setTiktTok(etTikTok.getText().toString());
             usuarioEditando.setEmail(etEmailEditar.getText().toString());
             usuarioEditando.setCiudad(spinnerCiudad.getSelectedItem().toString());
-            usuarioEditando.setListaGeneros(Collections.singletonList(spinnerGenero.getSelectedItem().toString()));
+            usuarioEditando.setListaGeneros(selectedGeneros);
 
             if (urlImagenPerfil != null) {
-                         usuarioEditando.setFotoPerfil(urlImagenPerfil);
-             }
+                usuarioEditando.setFotoPerfil(urlImagenPerfil);
+            }
 
             CollectionReference refUsuarios = FirebaseFirestore.getInstance().
 
@@ -184,6 +189,45 @@ public class EditarPerfil extends AppCompatActivity {
         String[] genero = getResources().getStringArray(R.array.generos_musicales);
         CustomSpinnerAdapter adapterGenero = new CustomSpinnerAdapter(this, genero);
         spinnerGenero.setAdapter(adapterGenero);
+
+        final String[] select_qualification = {"Seleccione Generos", "#Clasica", "#Country", "#Electro", "#Flamenco", "#Folk", "#Jazz", "#Kpop", "#Metal", "#Pop", "#Rap", "#Rock", "#Trap", "#Drill"};
+        Spinner spinner = findViewById(R.id.spinnerOpcionesGeneroMusical);
+
+       listVOs = new ArrayList<>();
+
+        for (int i = 0; i < select_qualification.length; i++) {
+            StateVO stateVO = new StateVO();
+            stateVO.setTitle(select_qualification[i]);
+            stateVO.setSelected(false);
+            listVOs.add(stateVO);
+        }
+
+        selectedGeneros = new ArrayList<>();
+
+        MyAdapter myAdapter = new MyAdapter(EditarPerfil.this, 0, listVOs, selectedGeneros);
+        spinner.setAdapter(myAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                StateVO selectedState = (StateVO) parent.getSelectedItem();
+                String selectedGenre = selectedState.getTitle();
+
+                if (!selectedGenre.equals("Seleccione Generos")) {
+                    if (selectedState.isSelected()) {
+                        selectedGeneros.add(selectedGenre);
+                    } else {
+                        selectedGeneros.remove(selectedGenre);
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
     }
 
 
