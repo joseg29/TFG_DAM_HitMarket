@@ -1,4 +1,4 @@
-package com.example.tarea1firebase.SpinnerGeneros;
+package com.example.tarea1firebase.SpinnerMultiGeneros;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -21,8 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tarea1firebase.SpinnerGeneros.AdapatadorSpinnerMultiGeneros;
-import com.example.tarea1firebase.SpinnerGeneros.ControladorSpinnerMultiGeneros;
+import com.example.tarea1firebase.SpinnerMultiGeneros.AdapatadorSpinnerMultiGeneros;
+import com.example.tarea1firebase.SpinnerMultiGeneros.ControladorSpinnerMultiGeneros;
 import com.example.tarea1firebase.adaptadores.CustomSpinnerAdapter;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

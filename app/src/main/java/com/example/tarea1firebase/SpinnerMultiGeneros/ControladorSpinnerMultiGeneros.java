@@ -1,4 +1,4 @@
-package com.example.tarea1firebase.SpinnerGeneros;
+package com.example.tarea1firebase.SpinnerMultiGeneros;
 
 public class ControladorSpinnerMultiGeneros {
     private String title;
