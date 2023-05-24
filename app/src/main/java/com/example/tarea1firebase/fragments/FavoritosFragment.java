@@ -26,6 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Fragmento para mostrar la lista de usuarios favoritos.
+ */
 public class FavoritosFragment extends Fragment {
 
     private RecyclerView recyclerViewUsu;
@@ -41,7 +44,7 @@ public class FavoritosFragment extends Fragment {
     private TextView lblFavsVacios;
 
     public FavoritosFragment() {
-        // Required empty public constructor
+        // Constructor público requerido
     }
 
     @Override
@@ -53,7 +56,7 @@ public class FavoritosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflar el diseño para este fragmento
         return inflater.inflate(R.layout.activity_vista_explora, container, false);
     }
 
@@ -63,15 +66,14 @@ public class FavoritosFragment extends Fragment {
 
         gestorFirebase = new GestorFirestore();
 
-
         inicializarVistas(view);
         incializarUsuarioActual();
-
         setListenerBarraBusqueda();
-
-
     }
 
+    /**
+     * Establece el listener para la barra de búsqueda.
+     */
     private void setListenerBarraBusqueda() {
         barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -87,6 +89,9 @@ public class FavoritosFragment extends Fragment {
         });
     }
 
+    /**
+     * Inicializa el usuario actual obteniendo su información de la base de datos.
+     */
     private void incializarUsuarioActual() {
         gestorFirebase.obtenerUsuarioPorId(mAuth.getCurrentUser().getUid(), new GestorFirestore.Callback<Usuario>() {
             @Override
@@ -100,7 +105,6 @@ public class FavoritosFragment extends Fragment {
                         @Override
                         public void onSuccess(Usuario result) {
                             Usuario usuario = result;
-                            //Obtenemos el usuario de la base de datos con todos sus campos
                             if (favoritos != null) {
                                 if (favoritos.contains(usuario.getId())) {
                                     listaUsuarios.add(usuario);
@@ -116,8 +120,6 @@ public class FavoritosFragment extends Fragment {
                                     lblFavsVacios.setVisibility(View.VISIBLE);
                                 }
                             }
-
-
                         }
                     }, Usuario.class);
                 }
@@ -125,6 +127,10 @@ public class FavoritosFragment extends Fragment {
         }, Usuario.class);
     }
 
+    /**
+     * Inicializa las vistas y componentes del fragmento.
+     * @param view La vista raíz del fragmento.
+     */
     private void inicializarVistas(View view) {
         recyclerViewUsu = view.findViewById(R.id.recyclerUsuarios);
         recyclerViewUsu.setHasFixedSize(true);
@@ -144,7 +150,5 @@ public class FavoritosFragment extends Fragment {
 
         imgFavsVacios = view.findViewById(R.id.imagenRecyclerVacioFavsVacio);
         lblFavsVacios = view.findViewById(R.id.lblRecyclerVacioFavsVacio);
-
     }
 }
-
