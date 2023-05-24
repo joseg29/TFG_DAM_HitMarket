@@ -19,6 +19,11 @@ public class MarcoMenu extends AppCompatActivity {
 
     ActivityMarcoMenuBinding binding;
 
+    /**
+     * Método llamado cuando se crea la actividad.
+     *
+     * @param savedInstanceState Objeto Bundle que contiene el estado anteriormente guardado de la actividad.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,17 +58,17 @@ public class MarcoMenu extends AppCompatActivity {
 
             return true;
         });
-
-
     }
 
+    /**
+     * Reemplaza el fragmento actual por el fragmento especificado.
+     *
+     * @param fragment Fragmento a reemplazar.
+     */
     private void replaceFragment(Fragment fragment) {
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_menu, fragment);
-        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-
     }
 }
