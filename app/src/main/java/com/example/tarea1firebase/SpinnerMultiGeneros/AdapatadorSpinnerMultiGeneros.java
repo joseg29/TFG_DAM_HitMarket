@@ -18,6 +18,14 @@ public class AdapatadorSpinnerMultiGeneros extends ArrayAdapter<ControladorSpinn
     private List<String> selectedGeneros;
     private boolean isFromView = false;
 
+    /**
+     * Constructor de la clase AdapatadorSpinnerMultiGeneros.
+     *
+     * @param context          Contexto de la aplicación.
+     * @param resource         ID del recurso del layout de cada elemento del spinner.
+     * @param objects          Lista de elementos del spinner.
+     * @param selectedGeneros  Lista de géneros seleccionados.
+     */
     public AdapatadorSpinnerMultiGeneros(Context context, int resource, List<ControladorSpinnerMultiGeneros> objects, List<String> selectedGeneros) {
         super(context, resource, objects);
         this.mContext = context;
@@ -35,6 +43,14 @@ public class AdapatadorSpinnerMultiGeneros extends ArrayAdapter<ControladorSpinn
         return getCustomView(position, convertView, parent);
     }
 
+    /**
+     * Devuelve la vista personalizada para cada elemento del spinner.
+     *
+     * @param position     Posición del elemento en el spinner.
+     * @param convertView  Vista convertida.
+     * @param parent       Vista principal.
+     * @return             Vista personalizada para el elemento del spinner.
+     */
     public View getCustomView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
@@ -72,6 +88,9 @@ public class AdapatadorSpinnerMultiGeneros extends ArrayAdapter<ControladorSpinn
         return convertView;
     }
 
+    /**
+     * Actualiza la lista de géneros seleccionados.
+     */
     private void updateSelectedGeneros() {
         selectedGeneros.clear();
         for (ControladorSpinnerMultiGeneros stateVO : listState) {
@@ -81,6 +100,9 @@ public class AdapatadorSpinnerMultiGeneros extends ArrayAdapter<ControladorSpinn
         }
     }
 
+    /**
+     * Clase ViewHolder para almacenar las vistas de cada elemento del spinner.
+     */
     private static class ViewHolder {
         private TextView mTextView;
         private CheckBox mCheckBox;
