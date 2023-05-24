@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 
 import com.example.tarea1firebase.ActivityNuevaPublicacion;
 import com.example.tarea1firebase.R;
-importcom.example.tarea1firebase.adaptadores.AdaptadorPublicaciones;
+import com.example.tarea1firebase.adaptadores.AdaptadorPublicaciones;
 import com.example.tarea1firebase.entidades.Publicacion;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.example.tarea1firebase.gestor.GestorFirestore;

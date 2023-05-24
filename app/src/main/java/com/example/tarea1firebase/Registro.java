@@ -83,7 +83,13 @@ public class Registro extends AppCompatActivity {
 
     }
 
+    /**
+     * Este método inicializa los listeners de los botones
+     */
     private void inicializarListenerBotones() {
+        /**
+         * Botón que te envía a la activity de login
+         */
         tvIniciarSesion.setOnClickListener(v -> {
             //Cambio a activity de login
             Intent intent = new Intent(Registro.this, Login.class);
@@ -91,9 +97,16 @@ public class Registro extends AppCompatActivity {
             finish();
         });
 
+        /**
+         * Listener para el botón btnRegistrar.
+         */
         btnRegistrar.setOnClickListener(v -> {
             crearUsuario();
         });
+
+        /**
+         *Botón para ocultar/mostrar contraseña
+         */
         btnMostrarContrasena.setOnClickListener(view -> {
             mostrarContrasena = !mostrarContrasena;
             int cursorPosition = etContrasena.getSelectionStart();
@@ -108,16 +121,20 @@ public class Registro extends AppCompatActivity {
             etContrasena.setSelection(cursorPosition);
         });
 
+        /**
+         * Inicialización del spinner mySpinner.
+         */
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.autonomous_communities, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mySpinner.setAdapter(adapter);
-
-
     }
 
+
     private void inicializarVistas() {
-        //Fondo animado
+        /**
+         Fondo animado
+         */
         videoMarco = findViewById(R.id.imVideo);
         try {
             GifDrawable gifDrawable = new GifDrawable(getResources(), R.raw.humobackground);
@@ -145,22 +162,45 @@ public class Registro extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etContrasena = findViewById(R.id.etPassword);
 
+        /**
+         * Verificación de inicio de sesión con Google.
+         */
         googleAccount = null;
-        //Verificamos si se ha iniciado sesión con google o no.
+
         try {
+            /**
+             * Obtención del objeto Bundle CUENTAGOOGLE del Intent, para luego comprobar si existe o no.
+             */
             googleAccount = getIntent().getBundleExtra("CUENTAGOOGLE");
+
+            /**
+             Verificamos si se ha obtenido la cuenta de google. En caso de que no sea null, es porque el usuario ha elegido iniciar sesión con google.
+             */
             if (googleAccount != null) {
+                /**
+                 * Obtención de los valores NOMBRE, EMAIL e ID del objeto Bundle.
+                 */
                 nombre = googleAccount.getString("NOMBRE");
                 email = googleAccount.getString("EMAIL");
                 id = googleAccount.getString("ID");
 
+                /**
+                 * Establecimiento de los valores de los campos etEmail y etNombre.
+                 */
                 etEmail.setText(email);
                 etNombre.setText(nombre);
 
+                /**
+                 * Deshabilitación de la edición de los campos etEmail y etNombre.
+                 */
                 etEmail.setFocusable(false);
                 etNombre.setFocusable(false);
                 etNombre.setCursorVisible(false);
                 etEmail.setCursorVisible(false);
+
+                /**
+                 * Ocultamos de los campos relacionados con la contraseña.
+                 */
                 etContrasena.setVisibility(View.GONE);
                 lblContrasena.setVisibility(View.GONE);
                 btnMostrarContrasena.setVisibility(View.GONE);
@@ -168,10 +208,12 @@ public class Registro extends AppCompatActivity {
                 lblConfirmarContrasena.setVisibility(View.GONE);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
 
 
+        /**
+         Lista de géneros seleccionables
+         */
         final String[] select_qualification = {"Seleccione Generos", "#Clasica", "#Country", "#Electro", "#Flamenco", "#Folk", "#Jazz", "#Kpop", "#Metal", "#Pop", "#Rap", "#Rock", "#Trap", "#Drill"};
 
 
@@ -192,13 +234,20 @@ public class Registro extends AppCompatActivity {
     }
 
 
+    /**
+     * Este método crea un nuevo usuario en la aplicación.
+     */
     public void crearUsuario() {
+        /**
+         * Obtención de los valores en los campos de texto ingresados por el usuario
+         * */
         String nombreUsuario = etNombre.getText().toString();
         String emailUsuario = etEmail.getText().toString();
         String contrasenaUsuario = etContrasena.getText().toString();
         String confirmarContrasenaUsuario = etConfirmPassword.getText().toString();
         String ciudad = mySpinner.getSelectedItem().toString();
 
+        /** Listener para el spinner mySpinnerGenero*/
 
         mySpinnerGenero.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -206,10 +255,13 @@ public class Registro extends AppCompatActivity {
                 ControladorSpinnerMultiGeneros selectedState = (ControladorSpinnerMultiGeneros) parent.getSelectedItem();
                 String selectedGenre = selectedState.getTitle();
 
+                /** Si el género seleccionado no es "Seleccione Generos"*/
                 if (!selectedGenre.equals("Seleccione Generos")) {
+                    /** Si el género está seleccionado, se agrega a la lista de géneros seleccionados*/
                     if (selectedState.isSelected()) {
                         selectedGeneros.add(selectedGenre);
                     } else {
+                        /**Si el género no está seleccionado, se elimina de la lista de géneros seleccionados*/
                         selectedGeneros.remove(selectedGenre);
                     }
                 }
@@ -219,46 +271,76 @@ public class Registro extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-       // user.setListaGeneros(selectedGeneros);
-        //Se crea el usuario en el authenticator de firebase
+
+        // Mostrar la barra de progreso
         progressBar.setVisibility(View.VISIBLE);
 
+        /**
+         * Si el usuario ha elegido el inicio de sesión con google, se obtienen solo los campos necesarios.
+         */
         if (googleAccount != null) {
             registrarConGoogle(emailUsuario, nombreUsuario);
         } else {
+
+            /**Verificación de campos vacíos en caso de que no se inicie sesión con google, sino de manera normal*/
             if (contrasenaUsuario.isEmpty() || confirmarContrasenaUsuario.isEmpty()) {
                 Toast.makeText(this, "Debe completar ambos campos de contraseña", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            /** Verificación de coincidencia entre la contraseña y su confirmación*/
             if (!contrasenaUsuario.equals(confirmarContrasenaUsuario)) {
                 Toast.makeText(this, "La contraseña y su confirmación no coinciden", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            /** Verificación de campo de email vacío*/
             if (!emailUsuario.isEmpty()) {
+                /**
+                 Si todos los campos están correctos, se hace la llamada al authenticator para que registre el usuario
+                 */
                 mAuth.createUserWithEmailAndPassword(emailUsuario, contrasenaUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        /**
+                         * Si NO se ha podido crear el usuario en authenticator
+                         */
                         if (!task.isSuccessful()) {
                             try {
                                 throw task.getException();
-                            } catch (FirebaseAuthWeakPasswordException e) {
+                            }
+                            /**
+                             * Contraseña debil
+                             */ catch (FirebaseAuthWeakPasswordException e) {
                                 Toast.makeText(Registro.this, "Clave débil. Mínimo 6 caracteres", Toast.LENGTH_LONG).show();
-                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                            }
+                            /**
+                             *Formato de email invalido
+                             */ catch (FirebaseAuthInvalidCredentialsException e) {
                                 Toast.makeText(Registro.this, "Formato de email inválido.", Toast.LENGTH_LONG).show();
-                            } catch (FirebaseAuthUserCollisionException e) {
+                            }
+                            /**
+                             *Correo en uso
+                             */ catch (FirebaseAuthUserCollisionException e) {
                                 Toast.makeText(Registro.this, "Este correo ya está en uso.", Toast.LENGTH_LONG).show();
-                            } catch (Exception e) {
+                            }
+                            /**
+                             *Otras excepciones
+                             */ catch (Exception e) {
                                 Toast.makeText(Registro.this, e.getMessage(), Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            // Se crea el usuario en collections (FIRESTORE), y se le pasa el id de authenticator como referencia de documento
+                        }
+                        /**
+                         * En caso de que la creación del usuario en authenticator haya sido exitosa
+                         */
+                        else {
+                            // Creación del usuario en Firebase Authentication y Firestore
                             String idUsuario = task.getResult().getUser().getUid();
-                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(),selectedGeneros,Arrays.asList());
+                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(), selectedGeneros, Arrays.asList());
                             db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(Registro.this, "User creado"+user.getListaGeneros().toString(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Registro.this, "User creado" + user.getListaGeneros().toString(), Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(Registro.this, MarcoMenu.class);
                                     intent.putExtra("UidUsuario", user.getId());
                                     startActivity(intent);
@@ -275,15 +357,27 @@ public class Registro extends AppCompatActivity {
                 });
             }
         }
+
+        // Ocultar la barra de progreso
         progressBar.setVisibility(View.GONE);
     }
 
+
+    /**
+     * Este método registra un nuevo usuario en la aplicación utilizando una cuenta de Google.
+     *
+     * @param emailUsuario  El email del usuario.
+     * @param nombreUsuario El nombre del usuario.
+     */
     private void registrarConGoogle(String emailUsuario, String nombreUsuario) {
-        //Ya existe el email
+        /** Obtención del ID de usuario y la ciudad seleccionada*/
         String idUsuario = id;
         String ciudad = mySpinner.getSelectedItem().toString();
-        String genero = mySpinnerGenero.getSelectedItem().toString();
-        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(),selectedGeneros,Arrays.asList());
+
+        /** Creación del objeto Usuario*/
+        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(), selectedGeneros, Arrays.asList());
+
+        /** Creación del usuario en Firestore*/
         db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -299,5 +393,6 @@ public class Registro extends AppCompatActivity {
             }
         });
     }
+
 
 }

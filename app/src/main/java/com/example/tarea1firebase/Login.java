@@ -62,26 +62,32 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        gestorFirestore = new GestorFirestore();
-        inicializarVistas();
 
+        gestorFirestore = new GestorFirestore();
         mAuth = FirebaseAuth.getInstance();
 
+        inicializarVistas();
         inicializarListenersBotones();
 
-        // Configurar Google Sign-In
+        /** Configurar Google Sign-In
+         * @see https://firebase.google.com/docs/auth/android/google-signin?hl=es-419
+         * */
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
     }
 
     private void inicializarListenersBotones() {
+        /**
+         * Botón que te envía a la activity de registro
+         */
         tvRegistrar.setOnClickListener(v -> {
             //Cambio a activity de registro
             Intent intent = new Intent(Login.this, Registro.class);
             startActivity(intent);
             finish();
         });
+
 
         btnIniciarSesion.setOnClickListener(v -> {
             validarLogin();
@@ -102,11 +108,17 @@ public class Login extends AppCompatActivity {
             etPassword.setSelection(cursorPosition);
         });
 
+        /**
+         * Botón que abre la api de google para iniciar sesión.
+         */
         btnGoogleLogin.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
 
+        /**
+         * Botón para proceso de cambio de clave
+         */
         tvForgetPassword.setOnClickListener(v -> {
             Intent intent = new Intent(Login.this, RecuperarContrasena.class);
             startActivity(intent);
@@ -115,13 +127,13 @@ public class Login extends AppCompatActivity {
     }
 
     private void inicializarVistas() {
-        //Icono de carga
+        /**Icono de carga*/
         progressBar = findViewById(R.id.spin_kit);
         Sprite doubleBounce = new FadingCircle();
         progressBar.setIndeterminateDrawable(doubleBounce);
         progressBar.setVisibility(View.GONE);
 
-        //Fondo animado
+        /**Fondo animado*/
         videoMarco = findViewById(R.id.imVideo);
         try {
             GifDrawable gifDrawable = new GifDrawable(getResources(), R.raw.humobackground);
@@ -141,94 +153,131 @@ public class Login extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
     }
 
-    //Este método se ejecuta una vez termina el intentForResult
+    /**
+     * Este método se llama cuando una actividad lanza un intent y devuelve un resultado.
+     *
+     * @param requestCode El código de solicitud originalmente suministrado a startActivityForResult(),
+     *                    lo que permite identificar de quién proviene este resultado.
+     * @param resultCode  El código de resultado devuelto por la actividad secundaria a través de su setResult().
+     * @param data        Un Intent, que puede devolver datos de resultados a la persona que llama.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Resultado devuelto por Google Sign-In
+        /** Verificación del código de solicitud*/
         if (requestCode == RC_SIGN_IN) {
+            /** Obtención del resultado del inicio de sesión con Google*/
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Iniciar sesión con Firebase Authentication
+                /** Inicio de sesión con Firebase Authentication
+                 * @see https://firebase.google.com/docs/auth/android/google-signin?hl=es-419*/
+
                 googleAccount = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(googleAccount.getIdToken());
             } catch (ApiException e) {
-                // Manejar errores de inicio de sesión
+                /** Manejo de errores de inicio de sesión*/
             }
         }
     }
 
+
+    /**
+     * Este método inicia sesión en Firebase Authentication utilizando una cuenta de Google.
+     *
+     * @param idToken El token de ID de la cuenta de Google.
+     */
     private void firebaseAuthWithGoogle(String idToken) {
+        /** Creación de credenciales de inicio de sesión con Google*/
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+
+        /** Inicio de sesión con Firebase Authentication*/
         mAuth.signInWithCredential(credential).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
-                // Inicio de sesión exitoso
+                /** Validación de sesión exitosa*/
                 progressBar.setVisibility(View.VISIBLE);
+
+                /**Se llama al método que da acceso a la app*/
                 iniciarSesion();
             } else {
-                // Error en inicio de sesión
+                /** Error en inicio de sesión*/
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(Login.this, "Error al iniciar sesión con Google", Toast.LENGTH_LONG).show();
             }
         });
     }
 
+
+    /**
+     * Este método valida el inicio de sesión del usuario en la aplicación.
+     */
     public void validarLogin() {
+        /** Obtención de los valores ingresados por el usuario*/
         String emailUsuario = etEmail.getText().toString();
         String claveUsuario = etPassword.getText().toString();
 
+        /** Verificación de campos vacíos*/
         if (!emailUsuario.isEmpty() && !claveUsuario.isEmpty()) {
+            /**Intento de inicio de sesión*/
             mAuth.signInWithEmailAndPassword(emailUsuario, claveUsuario).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
+                    /**Ha habido algún error*/
                     if (!task.isSuccessful()) {
                         try {
                             throw task.getException();
                         } catch (FirebaseAuthInvalidUserException e) {
-                            // El usuario no existe
+                            /** El usuario no existe*/
                             progressBar.setVisibility(View.GONE);
                             Toast.makeText(Login.this, "Email o contraseña incorrecta", Toast.LENGTH_LONG).show();
                         } catch (FirebaseAuthInvalidCredentialsException e) {
-                            // Credenciales inválidas (correo electrónico incorrecto o contraseña incorrecta)
+                            /** Credenciales inválidas (correo electrónico incorrecto o contraseña incorrecta)*/
                             progressBar.setVisibility(View.GONE);
                             Toast.makeText(Login.this, "Email o contraseña incorrecta", Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
-                            //Otros problemas
+                            /** Otros problemas*/
                             Toast.makeText(Login.this, "No se ha podido iniciar sesión.", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    //Si no ha habido ningún problema con los campos, se procede a iniciar sesión
+                    /** Si no ha habido ningún problema con los campos, se procede a iniciar sesión*/
                     else {
                         progressBar.setVisibility(View.VISIBLE);
                         iniciarSesion();
                     }
                 }
             });
-        } else {
+        }
+        /**
+         * Hay algún campo vacío
+         */
+        else {
             progressBar.setVisibility(View.GONE);
             Toast.makeText(Login.this, "Hay algún campo vacío.", Toast.LENGTH_LONG).show();
         }
     }
 
+
     public void iniciarSesion() {
         String idDocumento = mAuth.getCurrentUser().getUid();
 
-        //Verificamos si se ha iniciado sesión con una cuenta de google. De ser así, 'googleAccount' no será null.
+        /**Verificamos si se ha iniciado sesión con una cuenta de google. De ser así, 'googleAccount' no será null.*/
         if (googleAccount != null) {
             gestorFirestore.verificarSiUsuarioYaExisteEnFirestore(idDocumento, new GestorFirestore.Callback<Boolean>() {
                 @Override
                 public void onSuccess(Boolean existe) {
                     Intent intent;
-                    //Si el usuario ya existe en firestore, se envía directamente al inicio.
+                    /**Si el usuario ya existe en firestore, se envía directamente al inicio.*/
                     if (existe) {
                         intent = new Intent(Login.this, MarcoMenu.class);
                         intent.putExtra("UidUsuario", idDocumento);
                     }
-                    //Si el usuario solo se ha registrado en authenticator con google pero no en firestore, se envía a registro para que rellene los campos que faltan
+                    /**Si el usuario solo se ha registrado en authenticator con google pero no en firestore, se envía a registro para que rellene los campos que faltan*/
                     else {
                         intent = new Intent(Login.this, Registro.class);
 
+                        /**
+                         * Lo enviamos a registro para que rellene los datos que faltan, pero le enviamos los que ya tenemos, como el correo, el nombre y el id
+                         */
                         Bundle userBundle = new Bundle();
                         userBundle.putString("NOMBRE", googleAccount.getDisplayName());
                         userBundle.putString("EMAIL", googleAccount.getEmail());
@@ -240,7 +289,7 @@ public class Login extends AppCompatActivity {
                 }
             });
         }
-        //Si 'googleAccount' es null, quiere decir que inicio sesíon con usuario y contraseña, y se envía a la siguiente activity.
+        /**Si 'googleAccount' es null, quiere decir que inicio sesíon con usuario y contraseña, y se envía a la siguiente activity.*/
         else {
             Intent intent = new Intent(Login.this, MarcoMenu.class);
             intent.putExtra("UidUsuario", idDocumento);
