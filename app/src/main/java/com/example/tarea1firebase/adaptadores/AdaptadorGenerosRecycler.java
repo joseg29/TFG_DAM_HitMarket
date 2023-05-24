@@ -13,18 +13,34 @@ import com.example.tarea1firebase.R;
 
 import java.util.List;
 
+/**
+ * El adaptador para el RecyclerView de géneros musicales.
+ */
 public class AdaptadorGenerosRecycler extends RecyclerView.Adapter<AdaptadorGenerosRecycler.ViewHolder> {
 
     private List<String> listaGeneros;
 
+    /**
+     * Constructor de la clase AdaptadorGenerosRecycler.
+     *
+     * @param listaGeneros La lista de géneros musicales.
+     */
     public AdaptadorGenerosRecycler(List<String> listaGeneros) {
         this.listaGeneros = listaGeneros;
     }
 
+    /**
+     * ViewHolder para los elementos del RecyclerView.
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtGenero;
         private ImageView imgGenero;
 
+        /**
+         * Constructor de la clase ViewHolder.
+         *
+         * @param v La vista del elemento del RecyclerView.
+         */
         public ViewHolder(View v) {
             super(v);
             txtGenero = v.findViewById(R.id.txtGenero);
@@ -57,10 +73,21 @@ public class AdaptadorGenerosRecycler extends RecyclerView.Adapter<AdaptadorGene
         return listaGeneros.size();
     }
 
+    /**
+     * Agrega un nuevo elemento a la lista de géneros.
+     *
+     * @param newItem El nuevo elemento a agregar.
+     */
     public void addItem(String newItem) {
         listaGeneros.add(newItem);
     }
 
+    /**
+     * Obtiene la imagen correspondiente a un género musical.
+     *
+     * @param genero El género musical.
+     * @return El ID de la imagen correspondiente al género.
+     */
     private int obtenerImagenGenero(String genero) {
 
         if (genero.equalsIgnoreCase("#Rap")) {
@@ -90,9 +117,7 @@ public class AdaptadorGenerosRecycler extends RecyclerView.Adapter<AdaptadorGene
         } else if (genero.equalsIgnoreCase("#Drill")) {
             return R.drawable.genero_drill;
         } else {
-
             return R.drawable.sin_genero_musical;
         }
-
     }
 }
