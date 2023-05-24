@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 
 import com.example.tarea1firebase.ActivityNuevaPublicacion;
 import com.example.tarea1firebase.R;
-import com.example.tarea1firebase.adaptadores.AdaptadorPublicaciones;
+importcom.example.tarea1firebase.adaptadores.AdaptadorPublicaciones;
 import com.example.tarea1firebase.entidades.Publicacion;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.example.tarea1firebase.gestor.GestorFirestore;
@@ -23,6 +23,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Fragmento para mostrar el muro de publicaciones.
+ */
 public class MuroFragment extends Fragment {
     private RecyclerView recyclerPublicaciones;
     private AdaptadorPublicaciones adaptadorPublicaciones;
@@ -34,6 +37,7 @@ public class MuroFragment extends Fragment {
     private List<Usuario> listaUsuariosFavoritos;
 
     public MuroFragment() {
+        // Constructor público requerido
     }
 
     @Override
@@ -45,9 +49,7 @@ public class MuroFragment extends Fragment {
             Intent i = new Intent(this.getActivity(), ActivityNuevaPublicacion.class);
             startActivity(i);
         });
-
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,9 +58,14 @@ public class MuroFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflar el diseño para este fragmento
         return inflater.inflate(R.layout.fragment_muro, container, false);
     }
 
+    /**
+     * Inicializa las vistas y componentes del fragmento.
+     * @param view La vista raíz del fragmento.
+     */
     private void inicializarVistas(View view) {
         gestorFirestore = new GestorFirestore();
         mAuth = FirebaseAuth.getInstance();
@@ -77,6 +84,9 @@ public class MuroFragment extends Fragment {
         recyclerPublicaciones.setAdapter(adaptadorPublicaciones);
     }
 
+    /**
+     * Obtiene las publicaciones de los usuarios favoritos del usuario actual.
+     */
     private void obtenerPublicacionesDeFavoritos() {
         listaPublicaciones = new ArrayList<>();
         listaUsuariosFavoritos = new ArrayList<>();
@@ -95,7 +105,6 @@ public class MuroFragment extends Fragment {
                     gestorFirestore.obtenerUsuarioPorId(favoritos.get(i), new GestorFirestore.Callback<Usuario>() {
                         @Override
                         public void onSuccess(Usuario usuarioFavorito) {
-                            //Obtenemos el usuario de la base de datos con todos sus campos
                             listaUsuariosFavoritos.add(usuarioFavorito);
                             listaPublicaciones.addAll(usuarioFavorito.getListaPublicaciones());
                             adaptadorPublicaciones = new AdaptadorPublicaciones(listaPublicaciones);
@@ -103,9 +112,7 @@ public class MuroFragment extends Fragment {
                         }
                     }, Usuario.class);
                 }
-
             }
         }, Usuario.class);
     }
-
 }
