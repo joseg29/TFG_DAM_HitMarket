@@ -43,7 +43,6 @@ public class InicioApp extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // Se crea un objeto Handler y se usa su método postDelayed para agregar una pausa de 3 segundos
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -60,13 +59,10 @@ public class InicioApp extends AppCompatActivity {
      * Si no hay una sesión iniciada, redirige a la actividad de inicio de sesión.
      */
     public void iniciarSesion() {
-        // Se revisa si hay alguna sesión abierta (currentUser / usuarioActual).
 
-        // Si hay alguna sesión iniciada, se envía directamente a la ventana siguiente.
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             String idDocumento = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            // Se hace un get de Firestore a partir del uid del currentUser. Su id se pasa como referencia de documento, para obtener el objeto Usuario y pasarlo a la siguiente activity.
             gestorFirebase.obtenerUsuarioPorId(idDocumento, new GestorFirestore.Callback<Usuario>() {
                 @Override
                 public void onSuccess(Usuario result) {
@@ -79,7 +75,6 @@ public class InicioApp extends AppCompatActivity {
                 }
             }, Usuario.class);
         }
-        // Si no hay ninguna sesión iniciada, se envía a la ventana de Login.
         else {
             Intent intent = new Intent(InicioApp.this, Login.class);
             startActivity(intent);
