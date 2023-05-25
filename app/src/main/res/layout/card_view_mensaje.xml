@@ -27,10 +27,14 @@
 
                 <TextView
                     android:id="@+id/lblMensajeTexto"
-                    android:layout_width="250dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="#92F886"
                     android:fontFamily="@font/gotham_bold"
+                    android:lineSpacingExtra="8sp"
+                    android:maxWidth="256dp"
+                    android:padding="5dp"
+                    android:text="adsdasdasd"
                     android:textColor="#FFFFFF"
                     android:textSize="17sp" />
 
