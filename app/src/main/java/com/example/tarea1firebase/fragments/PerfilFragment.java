@@ -50,10 +50,10 @@ public class PerfilFragment extends Fragment {
     public final static String COLECCION = "Usuarios";
     private StorageReference storageRef;
     private FirebaseStorage storage;
-    private RecyclerView recyclerCanciones, recyclerResenas,recyclerGeneros;
+    private RecyclerView recyclerCanciones, recyclerResenas, recyclerGeneros;
     private AdaptadorCancionesRecycler adaptadorCanciones;
     private AdaptadorGenerosRecycler adaptadorGeneros;
-    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas,lblSinRese,lblGenero;
+    private TextView lblUsername, lblDescripcion, lblCiudad, lblRecyclerVacio, lblMediaEstrellas, lblNVisitas, lblSinRese, lblGenero;
     private Usuario usuario;
     private ImageButton btnInstagram, btnTiktok, btnYoutube, btnSpotify, btnSoundCloud, btnAnadirCancion;
     private Button btnEditar;
@@ -61,11 +61,19 @@ public class PerfilFragment extends Fragment {
 
     private String uidUsuarioActual;
     private FirebaseAuth mAuth;
-    private ImageView imgFotoPerfil, imgRecyclerVacio,imgRecyclerRese,imgGenero;
+    private ImageView imgFotoPerfil, imgRecyclerVacio, imgRecyclerRese, imgGenero;
     private GestorFirestore gestorFirebase;
     private AdaptadorResenas adaptadorResenas;
 
 
+    /**
+     * Fragmento utilizado para mostrar el perfil de usuario.
+     */
+
+
+    /**
+     * Constructor por defecto de la clase PerfilFragment.
+     */
     public PerfilFragment() {
 
     }
@@ -79,6 +87,7 @@ public class PerfilFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflar el diseño de perfil_usuario en el contenedor proporcionado.
         return inflater.inflate(R.layout.perfil_usuario, container, false);
     }
 
@@ -86,36 +95,48 @@ public class PerfilFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        // Inicializar el gestor de Firebase y obtener la instancia de FirebaseAuth.
         gestorFirebase = new GestorFirestore();
         mAuth = FirebaseAuth.getInstance();
         uidUsuarioActual = mAuth.getCurrentUser().getUid();
 
+        // Configurar la barra de progreso y establecer su visibilidad en GONE.
         progressBar = view.findViewById(R.id.spin_kit);
         Sprite doubleBounce = new FadingCircle();
         progressBar.setIndeterminateDrawable(doubleBounce);
         progressBar.setVisibility(View.GONE);
 
+        // Inicializar el usuario y las vistas.
         inicializarUsuario();
         inicializarVistas();
 
+        // Añadir listeners a los botones.
         añadirListenerBotones();
 
+        // Ocultar vistas ajenas.
         esconderVistasAjenas();
-
     }
 
+
+    /**
+     * Método utilizado para ocultar las vistas que no pertenecen al usuario actual.
+     */
     private void esconderVistasAjenas() {
-        if (!uidUsuarioActual.equals(mAuth.getCurrentUser().
-                getUid())) {
+        if (!uidUsuarioActual.equals(mAuth.getCurrentUser().getUid())) {
+            // Ocultar el botón de añadir canción y el botón de editar perfil.
             btnAnadirCancion.setVisibility(View.GONE);
             btnEditar.setVisibility(View.GONE);
 
+            // Mostrar el botón de chat.
             btnChat.setVisibility(View.VISIBLE);
         }
     }
 
+    /**
+     * Método utilizado para añadir listeners a los botones.
+     */
     private void añadirListenerBotones() {
+        // Listener para el botón de añadir canción.
         btnAnadirCancion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,20 +144,25 @@ public class PerfilFragment extends Fragment {
             }
         });
 
-        btnChat.setOnClickListener(v ->
-        {
+        // Listener para el botón de chat.
+        btnChat.setOnClickListener(v -> {
+            // Crear una nueva instancia de la actividad ChatVentana.
             Intent intent = new Intent(getContext(), ChatVentana.class);
+            // Pasar el ID del usuario actual y el ID del usuario receptor como parámetros.
             intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
             intent.putExtra("UidUsuarioReceptor", uidUsuarioActual);
             startActivity(intent);
         });
 
+        // Listener para el botón de editar perfil.
         btnEditar.setOnClickListener(v -> {
+            // Crear una nueva instancia de la actividad EditarPerfil.
             Intent intent = new Intent(getContext(), EditarPerfil.class);
             gestorFirebase.obtenerUsuarioPorId(uidUsuarioActual, new GestorFirestore.Callback<Usuario>() {
                 @Override
                 public void onSuccess(Usuario usuarioDevuelto) {
                     usuario = usuarioDevuelto;
+                    // Pasar el objeto Usuario y el ID del usuario actual como parámetros.
                     intent.putExtra("UsuarioAEditar", usuario);
                     intent.putExtra("UidUsuario", mAuth.getCurrentUser().getUid());
                     startActivity(intent);
@@ -145,37 +171,28 @@ public class PerfilFragment extends Fragment {
             }, Usuario.class);
         });
 
-
-        btnInstagram.setOnClickListener(v ->
-
-        {
+        // Listeners para los botones de redes sociales.
+        btnInstagram.setOnClickListener(v -> {
             abrirInstagram();
         });
-        btnTiktok.setOnClickListener(v ->
-
-        {
+        btnTiktok.setOnClickListener(v -> {
             abrirTikTok();
         });
-        btnYoutube.setOnClickListener(v ->
-
-        {
+        btnYoutube.setOnClickListener(v -> {
             abrirYoutube();
         });
-        btnSpotify.setOnClickListener(v ->
-
-        {
+        btnSpotify.setOnClickListener(v -> {
             abrirSpotify();
         });
-        btnSoundCloud.setOnClickListener(v ->
-
-        {
+        btnSoundCloud.setOnClickListener(v -> {
             abrirSoundCloud();
         });
-
-
     }
 
 
+    /**
+     * Método utilizado para inicializar las vistas del perfil de usuario.
+     */
     public void inicializarVistas() {
         lblDescripcion = getView().findViewById(R.id.tvDescripcion);
         lblUsername = getView().findViewById(R.id.tvNombre);
@@ -211,7 +228,7 @@ public class PerfilFragment extends Fragment {
 
         ArrayList<String> arrayPrueba = new ArrayList<>();
 
-        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba,true);
+        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba, true);
         recyclerCanciones.setAdapter(adaptadorCanciones);
 
         recyclerResenas = getView().findViewById(R.id.RecyclerResenas);
@@ -230,11 +247,11 @@ public class PerfilFragment extends Fragment {
         recyclerGeneros.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
 
-
-
-
     }
 
+    /**
+     * Método utilizado para inicializar el usuario actual obteniendo sus datos y configurando las vistas correspondientes.
+     */
     private void inicializarUsuario() {
         gestorFirebase.obtenerUsuarioPorId(uidUsuarioActual, new GestorFirestore.Callback<Usuario>() {
             @Override
@@ -245,14 +262,18 @@ public class PerfilFragment extends Fragment {
             }
         }, Usuario.class);
     }
-
+    /**
+     * Método utilizado para seleccionar un archivo de audio.
+     */
     @SuppressLint("NonConstantResourceId")
     public void seleccionarAudio() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("audio/mpeg");
         startActivityForResult(intent, PICK_AUDIO_REQUEST);
     }
-
+    /**
+     * Método utilizado para obtener los datos del usuario actual y configurar las vistas correspondientes.
+     */
     public void obtenerDatosUsuario() {
         progressBar.setVisibility(View.VISIBLE);
         gestorFirebase.obtenerUsuarioPorId(uidUsuarioActual, new GestorFirestore.Callback<Usuario>() {
@@ -271,7 +292,7 @@ public class PerfilFragment extends Fragment {
                 lblDescripcion.setText(usuario.getDescripcion());
                 lblCiudad.setText(usuario.getCiudad());
 
-                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones,true);
+                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones, true);
                 recyclerCanciones.setAdapter(adaptadorCanciones);
 
                 adaptadorResenas = new AdaptadorResenas(resenas);
@@ -282,10 +303,10 @@ public class PerfilFragment extends Fragment {
                 adaptadorGeneros = new AdaptadorGenerosRecycler(generos);
                 recyclerGeneros.setAdapter(adaptadorGeneros);
 
-                    try {
-                        Glide.with(PerfilFragment.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
-                    } catch (Exception e) {
-                    }
+                try {
+                    Glide.with(PerfilFragment.this).load(usuario.getFotoPerfil()).into(imgFotoPerfil);
+                } catch (Exception e) {
+                }
 
                 if (adaptadorCanciones.getItemCount() > 0) {
                     imgRecyclerVacio.setVisibility(View.GONE);
@@ -316,7 +337,11 @@ public class PerfilFragment extends Fragment {
 
     }
 
-
+    /**
+     * Configura la disponibilidad y opacidad de los botones de redes sociales en función de las redes sociales asociadas al usuario.
+     * Si el usuario tiene una cuenta en una red social específica, el botón correspondiente se activa y se muestra completamente visible.
+     * De lo contrario, el botón se desactiva y se muestra con una opacidad reducida.
+     */
     public void setRedesSociales() {
         //Revisa si tiene instagram
         if (usuario.getInstagram() != "") {
@@ -360,7 +385,10 @@ public class PerfilFragment extends Fragment {
         }
 
     }
-
+    /**
+     * Abre la página de YouTube del usuario en la aplicación correspondiente o en el navegador web.
+     * El método construye la URL del canal de YouTube utilizando el nombre de usuario del usuario y la abre mediante una intención.
+     */
     public void abrirYoutube() {
         String username = usuario.getYoutube();
         String channelUrl = "https://www.youtube.com/user/" + username;
@@ -369,7 +397,11 @@ public class PerfilFragment extends Fragment {
         intent.setPackage(null);
         startActivity(intent);
     }
-
+    /**
+     * Abre el perfil de Instagram del usuario en la aplicación de Instagram o en el navegador web.
+     * El método construye la URL del perfil de Instagram utilizando el nombre de usuario del usuario y la abre mediante una intención.
+     * Si la aplicación de Instagram está instalada, se abrirá directamente en la aplicación, de lo contrario, se abrirá en el navegador web.
+     */
     private void abrirInstagram() {
 
         String url = "https://www.instagram.com/" + usuario.getInstagram();
@@ -387,6 +419,11 @@ public class PerfilFragment extends Fragment {
         startActivity(intent);
     }
 
+    /**
+     * Abre el perfil de TikTok del usuario en la aplicación de TikTok o en el navegador web.
+     * El método construye la URL del perfil de TikTok utilizando el nombre de usuario del usuario y la abre mediante una intención.
+     * Si la aplicación de TikTok está instalada, se abrirá directamente en la aplicación, de lo contrario, se abrirá en el navegador web.
+     */
     public void abrirTikTok() {
         String username = usuario.getTiktTok();
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tiktok.com/@" + username));
@@ -397,6 +434,11 @@ public class PerfilFragment extends Fragment {
         }
         startActivity(intent);
     }
+
+    /**
+     * Abre el enlace de Spotify del usuario en la aplicación correspondiente o en el navegador web.
+     * El método abre el enlace de Spotify mediante una intención.
+     */
     public void abrirSpotify() {
 
         String channelUrl = usuario.getSpotify();
@@ -405,6 +447,12 @@ public class PerfilFragment extends Fragment {
         intent.setPackage(null);
         startActivity(intent);
     }
+
+    /**
+     * Abre el enlace de SoundCloud del usuario en la aplicación correspondiente o en el navegador web.
+     * El método abre el enlace de SoundCloud mediante una intención.
+     */
+
     public void abrirSoundCloud() {
 
         String channelUrl = usuario.getSoundCloud();
@@ -414,7 +462,14 @@ public class PerfilFragment extends Fragment {
         startActivity(intent);
     }
 
-
+    /**
+     * Método que se llama cuando se recibe un resultado de una actividad lanzada para seleccionar un archivo de audio.
+     * Se utiliza para procesar el archivo seleccionado y subirlo a Firebase Storage.
+     *
+     * @param requestCode Código de solicitud enviado al iniciar la actividad.
+     * @param resultCode  Código de resultado devuelto por la actividad.
+     * @param data        Intent que contiene los datos de retorno de la actividad.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
