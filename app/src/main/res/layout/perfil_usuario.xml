@@ -45,6 +45,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="0dp"
                     android:fontFamily="@font/gotham_bold_1"
+                    android:shadowColor="#FFFFFF"
+                    android:shadowRadius="8"
                     android:textColor="@color/white"
                     android:textSize="34sp" />
 
@@ -161,6 +163,8 @@
                     android:background="@drawable/fondo_titulos_perfil"
                     android:fontFamily="@font/gotham_bold_1"
                     android:gravity="center"
+                    android:shadowColor="#FFFFFF"
+                    android:shadowRadius="8"
                     android:text="¡Conoce mi música!"
                     android:textColor="@color/white"
                     android:textSize="34sp" />
@@ -283,18 +287,12 @@
                     android:background="@drawable/fondo_titulos_perfil"
                     android:fontFamily="@font/gotham_bold_1"
                     android:padding="10dp"
+                    android:shadowColor="#FFFFFF"
+                    android:shadowRadius="8"
                     android:text="Mis géneros"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="34sp"></TextView>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:layout_below="@+id/tvGeneros"
-                    android:layout_marginTop="-5dp"
-                    android:layout_marginBottom="14dp"
-                    android:background="#616161" />
 
 
                 <LinearLayout
@@ -341,14 +339,6 @@
 
                 </TableLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp"
-                    android:layout_below="@+id/tvConoceMiMusica"
-                    android:layout_marginTop="-10dp"
-                    android:layout_marginBottom="14dp"
-                    android:background="#616161" />
-
             </RelativeLayout>
 
             <TextView
@@ -360,19 +350,12 @@
                 android:background="@drawable/fondo_titulos_perfil"
                 android:fontFamily="@font/gotham_bold_1"
                 android:padding="10dp"
+                android:shadowColor="#FFFFFF"
+                android:shadowRadius="8"
                 android:text="Reseñas"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="34sp" />
-
-            <View
-                android:id="@+id/view3"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_below="@+id/txtResenas"
-                android:layout_marginTop="-5dp"
-                android:layout_marginBottom="14dp"
-                android:background="#616161" />
 
             <LinearLayout
                 android:id="@+id/layoutRecyclerRese"
