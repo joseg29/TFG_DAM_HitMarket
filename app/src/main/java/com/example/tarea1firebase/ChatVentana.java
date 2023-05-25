@@ -98,15 +98,27 @@ public class ChatVentana extends AppCompatActivity {
         lblNombreContacto = findViewById(R.id.lblNombreContacto);
     }
 
+    /**
+     * Crea un chat entre dos usuarios en firebase realtime database en caso de que no exista, u obtiene el chat existente.
+     */
     private void inicializarChat() {
-        // Crea una clave única para el chat a partir de los UIDs de los usuarios
+        /**
+         Crea una clave única para el chat a partir de los UIDs de los usuarios. Ordena los id de ambos usuarios alfabeticamente para que siempre la clave sea la misma.
+         */
         if (usuarioActualUid.compareTo(usuario2Uid) < 0) {
             idChat = usuarioActualUid + "_" + usuario2Uid;
         } else {
             idChat = usuario2Uid + "_" + usuarioActualUid;
         }
+
+        /**
+         * Busca el chat en la base de datos
+         */
         chatsRef = chatsRef.child(idChat);
 
+        /**
+         * Método que se llama cada vez que se escribe una letra, para verificar si el mensaje no está vacío
+         */
         etMensaje.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -134,28 +146,40 @@ public class ChatVentana extends AppCompatActivity {
             @Override
             public void onSuccess(Usuario result) {
                 otroUsuarioReceptor = result;
+                /**Establece la foto de perfil y el nombre del otro usuario*/
                 lblNombreContacto.setText(otroUsuarioReceptor.getNombre());
-                    try {
-                        Glide.with(ChatVentana.this).load(otroUsuarioReceptor.getFotoPerfil()).into(fotoPerfil);
-                    } catch (Exception e) {
-                    }
+                try {
+                    Glide.with(ChatVentana.this).load(otroUsuarioReceptor.getFotoPerfil()).into(fotoPerfil);
+                } catch (Exception e) {
+                }
 
             }
         }, Usuario.class);
     }
 
 
+    /**
+     * Crea el chat si no ha encontrado uno existente con la clave compuesta de id de usuarios.
+     *
+     * @param usuario1Uid id de usuario1
+     * @param usuario2Uid id de usuario 2
+     */
     private void crearChat(String usuario1Uid, String usuario2Uid) {
         // Verifica si el chat ya existe antes de crear uno nuevo
         chatsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    //Existe
                     chat = snapshot.getValue(Chat.class);
                 } else {
+                    //No existe
                     chat = new Chat(new ArrayList<>(), usuario1Uid, usuario2Uid, "", idChat);
                     chatsRef.setValue(chat);
 
+                    /**
+                     * Añade el nuevo chat al array de chats recientes de ambos usuarios
+                     */
                     gestorFirebase.anadirValorArray(usuario1Uid, "chatsRecientes", idChat, new GestorFirestore.Callback<String>() {
                         @Override
                         public void onSuccess(String result) {
@@ -180,6 +204,12 @@ public class ChatVentana extends AppCompatActivity {
         });
     }
 
+    /**
+     * Envía un mensaje al otro usuario, y lo sube a la base de datos de tiempo real.
+     * @param chatId clave compuesta del chat
+     * @param remitente usuario que envía el mensaje
+     * @param texto cuerpo del mensaje
+     */
     private void enviarMensaje(String chatId, String remitente, String texto) {
         //Obtenemos la fecha y hora del mensaje
         Date date = null;
@@ -190,21 +220,31 @@ public class ChatVentana extends AppCompatActivity {
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
         String strDate = formatter.format(date);
 
+        //Creamos el objeto Mensaje
         Mensaje msj = new Mensaje(remitente, texto, strDate);
 
+
+        //Añadimos el mensaje al objeto de chat que lo contiene
         chat.añadirMensaje(msj);
+        //Seteamos la fecha del último mensaje enviado en el chat, con la fecha del mensaje recién enviado
         chat.setFechaUltimoMsj(msj.getFechaYHora());
 
+        //Hacemos el push a la base de datos
         chatsRef.setValue(chat);
     }
 
+    /**
+     * Obtiene todos los mensajes existentes del chat y los añade al recyclerview
+     */
     private void obtenerMensajes() {
         FirebaseDatabase.getInstance().getReference("chats").child(idChat).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    //Ya existe el chat, por lo que lo obtiene
                     chat = snapshot.getValue(Chat.class);
                 } else {
+                    //No existe el chat, por lo que lo crea
                     chat = new Chat(new ArrayList<>(), usuarioActualUid, usuario2Uid, "", idChat);
                 }
                 listaMensajes = new ArrayList<>();
@@ -213,7 +253,7 @@ public class ChatVentana extends AppCompatActivity {
                 for (DataSnapshot mensajeSnapshot : snapshot.child("listaMensajes").getChildren()) {
                     // Obtener los datos del mensaje
                     Mensaje mensaje = mensajeSnapshot.getValue(Mensaje.class);
-                    // Agregar el mensaje al ArrayList
+                    // Agregar el mensaje al ArrayList para luego pasárselo al adaptador
                     listaMensajes.add(mensaje);
                 }
                 adaptadorCanciones = new AdaptadorMensajesChat(listaMensajes);
@@ -227,6 +267,9 @@ public class ChatVentana extends AppCompatActivity {
         });
     }
 
+    /**
+     * Obtiene los datos de ambos usuarios e inicializa los objetos
+     */
     public void inicializarUsuariosChat() {
         gestorFirebase.obtenerUsuarioPorId(usuarioActualUid, new GestorFirestore.Callback<Usuario>() {
             @Override

@@ -90,13 +90,14 @@ public class ChatsRecientesFragment extends Fragment {
 
         imgMsgVacios = view.findViewById(R.id.imagenRecyclerMsgVacio);
         lblMsgVacios = view.findViewById(R.id.lblRecyclerVacio2);
-// Obtén la referencia de la base de datos
+
+        // Obtiene la referencia de la base de datos
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
 
-// Define la referencia a la lista de chats
+        // Define la referencia a la lista de chats
         DatabaseReference chatsRef = ref.child("chats");
 
-// Define el ID del usuario para el que quieres obtener los chats
+        // Define el ID del usuario para el que quieres obtener los chats
         userId = mAuth.getCurrentUser().getUid();
         obtenerChats();
 
@@ -107,21 +108,36 @@ public class ChatsRecientesFragment extends Fragment {
     // Ordenar la lista por fecha de último mensaje
 
 
+    /**
+     * Método que itera sobre todos los chats recientes del usuario actual para pintarlos en el recycler
+     */
     public void obtenerChats() {
         progressBar.setVisibility(View.VISIBLE);
+
+        //Limpia la lista de chats
         listaChatsRecientes = new ArrayList<>();
         listaChatsRecientes.clear();
+
+        //Obtiene
         db.collection(COLECCION).document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot document = task.getResult();
+                //Obtiene los datos del usuario
                 Usuario usuarioActual = document.toObject(Usuario.class);
+
+                //Obtiene la lista de chats
                 chats = usuarioActual.getChatsRecientes();
                 listaChatsRecientes.clear();
+
+                //Itera sobre todos los chats para pintar cada uno en el recycler view
                 for (int i = 0; i < chats.size(); i++) {
                     chatKey = chats.get(i);
+                    //Obtiene la referencia a cada chat
                     DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatKey);
+
                     chatRef.addValueEventListener(new ValueEventListener() {
+                        //Listener que escucha cualquier cambio en la base de datos dentro del chat que hemos especificado
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Chat chat = snapshot.getValue(Chat.class);
@@ -149,6 +165,8 @@ public class ChatsRecientesFragment extends Fragment {
                             }
 
                             ordenarChats();
+
+                            //Comprobamos si existen chats recientes
                             if (adaptadorMensajes.getItemCount() > 0) {
                                 imgMsgVacios.setVisibility(View.GONE);
                                 lblMsgVacios.setVisibility(View.GONE);
@@ -171,6 +189,9 @@ public class ChatsRecientesFragment extends Fragment {
     }
 
 
+    /**
+     * Método que ordena los chats recientes según la fecha del último mensaje
+     */
     public void ordenarChats() {
         Collections.sort(listaChatsRecientes, new Comparator<Chat>() {
             @Override
