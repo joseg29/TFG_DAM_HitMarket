@@ -46,7 +46,6 @@
                     android:layout_marginBottom="0dp"
                     android:fontFamily="@font/gotham_bold_1"
                     android:shadowColor="#FFFFFF"
-                    android:shadowRadius="8"
                     android:textColor="@color/white"
                     android:textSize="34sp" />
 
