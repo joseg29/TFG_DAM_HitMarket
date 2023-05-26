@@ -174,6 +174,7 @@ public class ChatsRecientesFragment extends Fragment {
                                 imgMsgVacios.setVisibility(View.VISIBLE);
                                 lblMsgVacios.setVisibility(View.VISIBLE);
                             }
+                            progressBar.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -185,7 +186,6 @@ public class ChatsRecientesFragment extends Fragment {
 
             }
         });
-        progressBar.setVisibility(View.GONE);
     }
 
 

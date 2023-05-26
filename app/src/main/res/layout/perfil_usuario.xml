@@ -236,14 +236,29 @@
                     android:layout_below="@id/layoutLogos"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/imagenRecyclerVacioFavsVacio"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/lupanotamusical"
-                        android:visibility="visible" />
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/imagenRecyclerVacioFavsVacio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/lupanotamusical"
+                            android:visibility="visible" />
+
+                        <com.github.ybq.android.spinkit.SpinKitView
+                            android:id="@+id/spin_kit"
+                            style="@style/SpinKitView.Large.Circle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_gravity="center"
+                            android:elevation="100dp"
+                            app:SpinKit_Color="@color/black" />
+                    </FrameLayout>
 
                     <TextView
                         android:id="@+id/lblRecyclerVacioFavsVacio"
@@ -265,15 +280,7 @@
 
                     </androidx.recyclerview.widget.RecyclerView>
 
-                    <com.github.ybq.android.spinkit.SpinKitView
-                        android:id="@+id/spin_kit"
-                        style="@style/SpinKitView.Large.Circle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
-                        android:elevation="100dp"
-                        app:SpinKit_Color="@color/black" />
+
                 </LinearLayout>
 
                 <TextView
