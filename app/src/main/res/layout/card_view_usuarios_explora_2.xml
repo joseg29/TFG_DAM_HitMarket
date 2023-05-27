@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="20dp"
+    android:background="#676767"
+    android:backgroundTint="#676767"
+    app:cardBackgroundColor="#00B6B6B6">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/corners_imagen_usuario_explora"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="129dp"
+            android:orientation="vertical">
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+
+                android:id="@+id/fotoPerfilExplora"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clipToOutline="true"
+                android:elevation="2dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/mandado"
+                app:shapeAppearanceOverlay="@style/RoundedSquare" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/corners_imagen_usuario_explora"
+                android:backgroundTint="#3C454545"
+                android:elevation="2dp" />
+
+            <TextView
+                android:id="@+id/txtNombreUsu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="0dp"
+                android:elevation="10dp"
+                android:fontFamily="@font/gotham_bold"
+                android:gravity="center_vertical"
+                android:shadowColor="#FFFFFF"
+                android:shadowRadius="6"
+                android:text="DJ MARIANO"
+                android:textColor="@color/white"
+                android:textSize="40sp" />
+
+            <Button
+                android:id="@+id/btnVerPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.6"
+                android:background="@android:color/transparent"
+                android:elevation="10dp"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/btnCoraVacio"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:background="#00FFFFFF"
+                android:elevation="20dp"
+                android:foreground="@drawable/corazon_favoritos_vacio"
+                android:shadowColor="#FFFFFF"
+                android:shadowRadius="15"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/carta_redonda_usuario"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtUbicacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="9dp"
+                android:elevation="10dp"
+                android:fontFamily="@font/gotham_bold"
+                android:gravity="center_vertical"
+                android:text="MADRID"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <TextView
+
+                android:id="@+id/textView3"
+                android:layout_width="202dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="6dp"
+                android:layout_marginBottom="11dp"
+                android:layout_toEndOf="@+id/txtUbicacion"
+                android:fontFamily="@font/gotham_bold"
+                android:text="#TRAP"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="9dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtValoracion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/gotham_bold"
+                    android:text="0.0"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/estrella" />
+            </LinearLayout>
+
+
+            <!--
+        AQUI HAY QUE AÑADIR ALGO SOBRE LAS VALOARCIONES
+        -->
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

@@ -103,7 +103,7 @@ public class AdaptadorUsuariosRecycler extends RecyclerView.Adapter<AdaptadorUsu
      */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_usuarios_explora, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_usuarios_explora_2, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }

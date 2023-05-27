@@ -7,19 +7,33 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/gotham_bold_1"
+        android:gravity="top"
+        android:shadowColor="#FFFFFF"
+        android:shadowRadius="8"
+        android:text="¡Explora!"
+        android:textColor="@color/white"
+        android:textSize="35sp" />
+
+
     <SearchView
         android:id="@+id/barraBusqueda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="80dp"
         android:layout_marginRight="15dp"
         android:background="@drawable/fondo_boton_play"
         android:fontFamily="@font/gotham_medium"
-        android:gravity="start">
+        android:gravity="">
 
     </SearchView>
-
 
     <LinearLayout
         android:id="@+id/layoutRecyclerFavsVacio"
@@ -59,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/barraBusqueda"
-                android:layout_marginTop="45dp">
+                android:layout_marginTop="5dp">
 
             </androidx.recyclerview.widget.RecyclerView>
 
