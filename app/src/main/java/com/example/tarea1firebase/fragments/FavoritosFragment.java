@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosRecycler;
 import com.example.tarea1firebase.R;
+import com.example.tarea1firebase.adaptadores.AdaptadorUsuariosFavoritos;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.github.ybq.android.spinkit.sprite.Sprite;
@@ -32,7 +33,7 @@ import java.util.List;
 public class FavoritosFragment extends Fragment {
 
     private RecyclerView recyclerViewUsu;
-    private AdaptadorUsuariosRecycler adaptadorUsuariosRecycler;
+    private AdaptadorUsuariosFavoritos adaptadorUsuariosFavoritos;
     private FirebaseFirestore db;
     private Usuario user;
     private ArrayList<Usuario> listaUsuarios;
@@ -57,7 +58,7 @@ public class FavoritosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflar el diseño para este fragmento
-        return inflater.inflate(R.layout.activity_vista_explora, container, false);
+        return inflater.inflate(R.layout.explora_fragment_favoritos, container, false);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class FavoritosFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adaptadorUsuariosRecycler.filter(newText, progressBar);
+                adaptadorUsuariosFavoritos.filter(newText, progressBar);
                 return false;
             }
         });
@@ -109,10 +110,10 @@ public class FavoritosFragment extends Fragment {
                                 if (favoritos.contains(usuario.getId())) {
                                     listaUsuarios.add(usuario);
                                 }
-                                adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);
-                                recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
+                                adaptadorUsuariosFavoritos = new AdaptadorUsuariosFavoritos((ArrayList<Usuario>) listaUsuarios);
+                                recyclerViewUsu.setAdapter(adaptadorUsuariosFavoritos);
 
-                                if (adaptadorUsuariosRecycler.getItemCount() > 0) {
+                                if (adaptadorUsuariosFavoritos.getItemCount() > 0) {
                                     imgFavsVacios.setVisibility(View.GONE);
                                     lblFavsVacios.setVisibility(View.GONE);
                                 } else {
@@ -143,8 +144,8 @@ public class FavoritosFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
 
         listaUsuarios = new ArrayList<>();
-        adaptadorUsuariosRecycler = new AdaptadorUsuariosRecycler((ArrayList<Usuario>) listaUsuarios);
-        recyclerViewUsu.setAdapter(adaptadorUsuariosRecycler);
+        adaptadorUsuariosFavoritos = new AdaptadorUsuariosFavoritos((ArrayList<Usuario>) listaUsuarios);
+        recyclerViewUsu.setAdapter(adaptadorUsuariosFavoritos);
 
         barraBusqueda = view.findViewById(R.id.barraBusqueda);
 
