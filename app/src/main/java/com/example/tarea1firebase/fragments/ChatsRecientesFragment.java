@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,60 +131,73 @@ public class ChatsRecientesFragment extends Fragment {
                 chats = usuarioActual.getChatsRecientes();
                 listaChatsRecientes.clear();
 
-                //Itera sobre todos los chats para pintar cada uno en el recycler view
-                for (int i = 0; i < chats.size(); i++) {
-                    chatKey = chats.get(i);
-                    //Obtiene la referencia a cada chat
-                    DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatKey);
+                if (chats.isEmpty()) {
+                    // No hay chats, ocultar progressBar y mostrar mensaje de "sin chats"
+                    progressBar.setVisibility(View.GONE);
+                    imgMsgVacios.setVisibility(View.VISIBLE);
+                    lblMsgVacios.setVisibility(View.VISIBLE);
+                } else {
+                    //Itera sobre todos los chats para pintar cada uno en el recycler view
+                    for (int i = 0; i < chats.size(); i++) {
+                        chatKey = chats.get(i);
+                        //Obtiene la referencia a cada chat
+                        DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("chats").child(chatKey);
 
-                    chatRef.addValueEventListener(new ValueEventListener() {
-                        //Listener que escucha cualquier cambio en la base de datos dentro del chat que hemos especificado
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Chat chat = snapshot.getValue(Chat.class);
+                        chatRef.addValueEventListener(new ValueEventListener() {
+                            //Listener que escucha cualquier cambio en la base de datos dentro del chat que hemos especificado
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Chat chat = snapshot.getValue(Chat.class);
 
-                            // Buscamos si ya existe el chat en la lista
-                            boolean existeChat = false;
-                            for (Chat c : listaChatsRecientes) {
-                                if (c.getChatId().equals(chat.getChatId())) {
-                                    existeChat = true;
-                                    break;
-                                }
-                            }
-
-                            if (existeChat) {
-                                // Si el chat ya existe en la lista, lo reemplazamos
-                                for (int i = 0; i < listaChatsRecientes.size(); i++) {
-                                    if (listaChatsRecientes.get(i).getChatId().equals(chat.getChatId())) {
-                                        listaChatsRecientes.set(i, chat);
+                                // Buscamos si ya existe el chat en la lista
+                                boolean existeChat = false;
+                                for (Chat c : listaChatsRecientes) {
+                                    if (c.getChatId().equals(chat.getChatId())) {
+                                        existeChat = true;
                                         break;
                                     }
                                 }
-                            } else {
-                                // Si el chat no existe en la lista, lo añadimos
-                                listaChatsRecientes.add(chat);
+
+                                if (existeChat) {
+                                    // Si el chat ya existe en la lista, lo reemplazamos
+                                    for (int i = 0; i < listaChatsRecientes.size(); i++) {
+                                        if (listaChatsRecientes.get(i).getChatId().equals(chat.getChatId())) {
+                                            listaChatsRecientes.set(i, chat);
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    // Si el chat no existe en la lista, lo añadimos
+                                    listaChatsRecientes.add(chat);
+                                }
+
+                                ordenarChats();
+
+                                //Comprobamos si existen chats recientes
+                                if (adaptadorMensajes.getItemCount() > 0) {
+                                    imgMsgVacios.setVisibility(View.GONE);
+                                    lblMsgVacios.setVisibility(View.GONE);
+                                } else {
+                                    imgMsgVacios.setVisibility(View.VISIBLE);
+                                    lblMsgVacios.setVisibility(View.VISIBLE);
+                                }
                             }
 
-                            ordenarChats();
-
-                            //Comprobamos si existen chats recientes
-                            if (adaptadorMensajes.getItemCount() > 0) {
-                                imgMsgVacios.setVisibility(View.GONE);
-                                lblMsgVacios.setVisibility(View.GONE);
-                            } else {
-                                imgMsgVacios.setVisibility(View.VISIBLE);
-                                lblMsgVacios.setVisibility(View.VISIBLE);
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                // Manejar errores
                             }
+                        });
+                    }
+
+                    // Agregar retardo de 1 segundo antes de ocultar el progressBar
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
                             progressBar.setVisibility(View.GONE);
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            // Manejar errores
-                        }
-                    });
+                    }, 90000);
                 }
-
             }
         });
     }
