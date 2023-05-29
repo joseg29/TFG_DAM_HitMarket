@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:backgroundTint="@android:color/transparent">
+    android:backgroundTint="@android:color/transparent"
+    android:outlineProvider="none">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +13,7 @@
         android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +34,7 @@
                     android:fontFamily="@font/gotham_bold"
                     android:lineSpacingExtra="8sp"
                     android:maxWidth="256dp"
-                    android:padding="5dp"
+                    android:padding="10dp"
                     android:text="adsdasdasd"
                     android:textColor="#FFFFFF"
                     android:textSize="17sp" />

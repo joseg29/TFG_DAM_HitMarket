@@ -1,5 +1,6 @@
 /**
  * Adaptador encargado de manejar la lista de mensajes en el chat y mostrarlos en la interfaz de usuario.
+ *
  * @author
  */
 package com.example.tarea1firebase.adaptadores;
@@ -26,6 +27,7 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
 
     /**
      * Constructor de la clase AdaptadorMensajesChat.
+     *
      * @param listaUsuarios Lista de mensajes a mostrar en el chat.
      */
     public AdaptadorMensajesChat(ArrayList<Mensaje> listaUsuarios) {
@@ -41,6 +43,7 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
 
         /**
          * Constructor de la clase ViewHolder.
+         *
          * @param v Vista que contiene los elementos de la vista de cada mensaje en el chat.
          */
         public ViewHolder(View v) {
@@ -55,6 +58,7 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
 
     /**
      * Método encargado de crear la vista de cada mensaje en el chat.
+     *
      * @param parent   Grupo al que se va a agregar la vista del mensaje.
      * @param viewType Tipo de vista que se está creando.
      * @return Retorna el ViewHolder con el layout seteado que previamente definimos.
@@ -70,6 +74,7 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
     /**
      * Configura la apariencia de los mensajes dentro del adaptador de RecyclerView según si el
      * remitente es el usuario actual o no.
+     *
      * @param holder   ViewHolder que contiene los elementos de la vista de cada mensaje en el chat.
      * @param position La posición del mensaje dentro del adaptador.
      */
@@ -108,10 +113,6 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
              */
             holder.textoMensaje.setGravity(Gravity.RIGHT);
             /*
-             * Establece el relleno (padding) del campo de texto del mensaje enviado en el ViewHolder.
-             */
-            holder.textoMensaje.setPadding(0, 12, 25, 0);
-            /*
              * Alinea el contenedor del mensaje enviado a la derecha en el ViewHolder.
              */
             holder.layoutMensaje.setGravity(Gravity.RIGHT);
@@ -136,7 +137,6 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
             /*
              * Establece el relleno (padding) del campo de texto del mensaje recibido en el ViewHolder.
              */
-            holder.textoMensaje.setPadding(25, 12, 0, 0);
             /*
              * Alinea el contenedor del mensaje recibido a la izquierda en el ViewHolder.
              */
@@ -155,6 +155,7 @@ public class AdaptadorMensajesChat extends RecyclerView.Adapter<AdaptadorMensaje
 
     /**
      * Método que devuelve la cantidad de elementos en la lista de mensajes.
+     *
      * @return La cantidad de mensajes en la lista.
      */
     @Override

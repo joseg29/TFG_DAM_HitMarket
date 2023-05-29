@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.tarea1firebase.SpinnerMultiGeneros.AdapatadorSpinnerMultiGeneros;
 import com.example.tarea1firebase.SpinnerMultiGeneros.ControladorSpinnerMultiGeneros;
 import com.example.tarea1firebase.adaptadores.CustomSpinnerAdapter;
@@ -94,8 +95,8 @@ public class EditarPerfil extends AppCompatActivity {
         btnMostrarTextoAyuda = findViewById(R.id.btnMostrarAyuda);
         tvAyuda = findViewById(R.id.tvAyuda);
         /*
-        * Obtener el ID de usuario y el objeto Usuario a editar
-        * */
+         * Obtener el ID de usuario y el objeto Usuario a editar
+         * */
         uid = getIntent().getStringExtra("UidUsuario");
         usuarioEditando = (Usuario) getIntent().getSerializableExtra("UsuarioAEditar");
         /*
@@ -152,6 +153,14 @@ public class EditarPerfil extends AppCompatActivity {
          * Configurar el listener para guardar los cambios en Firestore
          * */
         btnGuardarCambios.setOnClickListener(v -> {
+            /**
+             * Sube la nueva imagen a storage
+             */
+            if (mImageUri != null) {
+                cargarArchivo(mImageUri);
+                System.out.println(mImageUri);
+                usuarioEditando.setFotoPerfil(mImageUri.toString());
+            }
             /*
              * Actualizar los datos del objeto Usuario con los valores de los campos de entrada
              * */
@@ -201,6 +210,7 @@ public class EditarPerfil extends AppCompatActivity {
                     });
         });
         btnCambiarFotoPerfil = findViewById(R.id.btnCambiarFotoPerfil);
+        Glide.with(this).load(usuarioEditando.getFotoPerfil()).into(btnCambiarFotoPerfil);
         /*
          * Listener para cambiar la foto de perfil
          * */
@@ -315,6 +325,7 @@ public class EditarPerfil extends AppCompatActivity {
                     }
                 }
             }
+
             /**
              * Maneja el evento cuando no se selecciona ningún elemento en el AdapterView.
              *
@@ -377,6 +388,7 @@ public class EditarPerfil extends AppCompatActivity {
                          * */
                         ArrayAdapter<String> adapterGenero = (ArrayAdapter<String>) spinnerGenero.getAdapter();
                         spinnerGenero.setSelection(adapterGenero.getPosition(usuario.getListaGeneros().toString()));
+                        Glide.with(EditarPerfil.this).load(usuarioEditando.getFotoPerfil()).into(btnCambiarFotoPerfil);
 
 
                     } else {
@@ -387,12 +399,13 @@ public class EditarPerfil extends AppCompatActivity {
         });
 
     }
+
     /**
      * Metodo Callback que invoca cuando el resultado de una actividad es recibida.
      *
      * @param requestCode El código de solicitud pasado a startActivityForResult().
-     * @param resultCode El código de resultado devuelto por la actividad secundaria.
-     * @param data Un Intent que lleva los datos de resultado.
+     * @param resultCode  El código de resultado devuelto por la actividad secundaria.
+     * @param data        Un Intent que lleva los datos de resultado.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -400,71 +413,58 @@ public class EditarPerfil extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             mImageUri = data.getData();
-            try {
-                /*
-                 * Obtener el bitmap de la imagen seleccionada
-                 * */
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageUri);
-                /*
-                 * Establecer el bitmap en el botón de cambiar foto de perfil
-                 * */
-                btnCambiarFotoPerfil.setImageBitmap(bitmap);
-                /*
-                * Carga el archivo de la imagen
-                * */
-                cargarArchivo();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (mImageUri != null) {
+                Glide.with(this).load(mImageUri).into(btnCambiarFotoPerfil);
             }
+
         }
     }
+
     /**
      * Carga el archivo seleccionado en el almacenamiento y obtiene la URL de descarga de la imagen.
      * Si no se ha seleccionado ninguna imagen, se muestra un mensaje de error.
      */
-    private void cargarArchivo() {
-        if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(mImageUri));
-            fileReference.putFile(mImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        /**
-                         * Método de devolución de llamada invocado cuando la carga de la imagen es exitosa.
-                         *
-                         * @param taskSnapshot El objeto TaskSnapshot que contiene información sobre la imagen cargada.
-                         */
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(EditarPerfil.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
-                            Task<Uri> uriImagenPerfil = taskSnapshot.getStorage().getDownloadUrl();
-                            uriImagenPerfil.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                /**
-                                 * Método de callBack que se invoca cuando se obtiene la URI de la imagen de manera exitosa.
-                                 *
-                                 * @param uri La URI de la imagen obtenida.
-                                 */
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    urlImagenPerfil = uri.toString();
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        /**
-                         * Metodo Callback que se invoca cuando la carga de la imagen falla
-                         *
-                         * @param e The exception indicating the reason for the failure.
-                         */
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(EditarPerfil.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "No se ha seleccionado ninguna imagen", Toast.LENGTH_SHORT).show();
-        }
+    private void cargarArchivo(Uri uri) {
+        StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                + "." + getFileExtension(uri));
+        fileReference.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    /**
+                     * Método de devolución de llamada invocado cuando la carga de la imagen es exitosa.
+                     *
+                     * @param taskSnapshot El objeto TaskSnapshot que contiene información sobre la imagen cargada.
+                     */
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Toast.makeText(EditarPerfil.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
+                        Task<Uri> uriImagenPerfil = taskSnapshot.getStorage().getDownloadUrl();
+                        uriImagenPerfil.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            /**
+                             * Método de callBack que se invoca cuando se obtiene la URI de la imagen de manera exitosa.
+                             *
+                             * @param uri La URI de la imagen obtenida.
+                             */
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                urlImagenPerfil = uri.toString();
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    /**
+                     * Metodo Callback que se invoca cuando la carga de la imagen falla
+                     *
+                     * @param e The exception indicating the reason for the failure.
+                     */
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(EditarPerfil.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
+
+
     /**
      * Obtiene la extensión del archivo a partir de la URI especificada.
      *
