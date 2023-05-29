@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,12 +43,11 @@ public class ChatVentana extends AppCompatActivity {
     private String idChat;
     private ArrayList<Mensaje> listaMensajes;
     private String usuarioActualUid, usuario2Uid;
-    private DatabaseReference mensajesRef, fechaUltimoMensajeRef;
     private Usuario otroUsuarioReceptor;
     private TextView lblNombreContacto;
     private ImageView fotoPerfil;
+    private ImageButton btnVolverAtras;
     private Chat chat;
-    private Usuario usuario1, usuario2;
     private GestorFirestore gestorFirebase;
 
     @Override
@@ -63,8 +63,6 @@ public class ChatVentana extends AppCompatActivity {
 
         inicializarUsuariosChat();
         inicializarChat();
-
-
         obtenerMensajes();
     }
 
@@ -72,13 +70,17 @@ public class ChatVentana extends AppCompatActivity {
         usuarioActualUid = getIntent().getStringExtra("UsuarioActual");
         usuario2Uid = getIntent().getStringExtra("UidUsuarioReceptor");
         chatsRef = database.getReference("chats");
-        mensajesRef = chatsRef.child(chatsRef.getKey()).child("mensajes");
-        fechaUltimoMensajeRef = chatsRef.child(chatsRef.getKey()).child("fechaUltimoMensaje");
+        DatabaseReference mensajesRef = chatsRef.child(chatsRef.getKey()).child("mensajes");
+        DatabaseReference fechaUltimoMensajeRef = chatsRef.child(chatsRef.getKey()).child("fechaUltimoMensaje");
     }
 
     private void inicializarListenerBotones() {
         btnEnviarMensaje.setOnClickListener(v -> {
             crearChat(usuarioActualUid, usuario2Uid);
+        });
+
+        btnVolverAtras.setOnClickListener(v -> {
+            finish();
         });
     }
 
@@ -96,6 +98,7 @@ public class ChatVentana extends AppCompatActivity {
         etMensaje = findViewById(R.id.etMensaje);
         fotoPerfil = findViewById(R.id.fotoPerfilChat);
         lblNombreContacto = findViewById(R.id.lblNombreContacto);
+        btnVolverAtras = findViewById(R.id.btnVolverChat);
     }
 
     /**
@@ -206,9 +209,10 @@ public class ChatVentana extends AppCompatActivity {
 
     /**
      * Envía un mensaje al otro usuario, y lo sube a la base de datos de tiempo real.
-     * @param chatId clave compuesta del chat
+     *
+     * @param chatId    clave compuesta del chat
      * @param remitente usuario que envía el mensaje
-     * @param texto cuerpo del mensaje
+     * @param texto     cuerpo del mensaje
      */
     private void enviarMensaje(String chatId, String remitente, String texto) {
         //Obtenemos la fecha y hora del mensaje
@@ -216,7 +220,7 @@ public class ChatVentana extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             date = Date.from(Instant.now());
         }
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM HH:mm");
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
         String strDate = formatter.format(date);
 
@@ -258,6 +262,8 @@ public class ChatVentana extends AppCompatActivity {
                 }
                 adaptadorCanciones = new AdaptadorMensajesChat(listaMensajes);
                 recyclerMensajes.setAdapter(adaptadorCanciones);
+                if (recyclerMensajes.getAdapter().getItemCount()>0){
+                recyclerMensajes.smoothScrollToPosition(recyclerMensajes.getAdapter().getItemCount() - 1);}
             }
 
             @Override
@@ -274,14 +280,12 @@ public class ChatVentana extends AppCompatActivity {
         gestorFirebase.obtenerUsuarioPorId(usuarioActualUid, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario result) {
-                usuario1 = result;
             }
         }, Usuario.class);
 
         gestorFirebase.obtenerUsuarioPorId(usuario2Uid, new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario result) {
-                usuario2 = result;
             }
         }, Usuario.class);
 
