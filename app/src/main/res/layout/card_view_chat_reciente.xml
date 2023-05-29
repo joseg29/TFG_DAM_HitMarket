@@ -5,31 +5,36 @@
     android:id="@+id/cardViewChatReciente"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_marginBottom="5dp"
+    android:orientation="vertical"
     app:cardBackgroundColor="@android:color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/carta_redonda_usuario"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgPerfilChat"
             android:layout_width="58dp"
             android:layout_height="56dp"
-            android:scaleType="fitXY" />
+            android:layout_marginLeft="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/mandado"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/carta_redonda_usuario"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/lblNombreChat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/gotham_bold"
                 android:text="Josemari"
@@ -40,6 +45,7 @@
                 android:id="@+id/lblPreviewUltimoMensajeChat"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:textColor="#D1D1D1" />
         </LinearLayout>
 

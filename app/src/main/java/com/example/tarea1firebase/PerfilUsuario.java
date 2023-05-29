@@ -131,7 +131,6 @@ public class PerfilUsuario extends AppCompatActivity {
 
                 for (int x = 0; x < listaResenas.size(); x++) {
                     listaAutores.add(listaResenas.get(x).getUidAutor());
-                    System.out.println(x + "--" + listaResenas.get(x).getUidAutor() + "----" + uidUsuarioActual);
                     if (listaResenas.get(x).getUidAutor().equals(uidUsuarioActual)) {
                         miResenaExistente = listaResenas.get(x);
                     }

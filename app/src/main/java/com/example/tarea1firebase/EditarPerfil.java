@@ -26,6 +26,7 @@ import com.example.tarea1firebase.SpinnerMultiGeneros.AdapatadorSpinnerMultiGene
 import com.example.tarea1firebase.SpinnerMultiGeneros.ControladorSpinnerMultiGeneros;
 import com.example.tarea1firebase.adaptadores.CustomSpinnerAdapter;
 import com.example.tarea1firebase.entidades.Usuario;
+import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -44,6 +45,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.security.auth.callback.Callback;
 
 public class EditarPerfil extends AppCompatActivity {
     private TextView lblNombre, lblDescripcion, lblInstagram, lblYoutube, lblSpotify, lblTikTok, lblSoundCloud, tvAyuda;
@@ -153,13 +156,7 @@ public class EditarPerfil extends AppCompatActivity {
          * Configurar el listener para guardar los cambios en Firestore
          * */
         btnGuardarCambios.setOnClickListener(v -> {
-            /**
-             * Sube la nueva imagen a storage
-             */
-            if (mImageUri != null) {
-                cargarArchivo(mImageUri);
-                usuarioEditando.setFotoPerfil(mImageUri.toString());
-            }
+
             /*
              * Actualizar los datos del objeto Usuario con los valores de los campos de entrada
              * */
@@ -176,9 +173,7 @@ public class EditarPerfil extends AppCompatActivity {
             /*
              * Si hay una URL de imagen de perfil, establecerla en el objeto Usuario
              * */
-            if (urlImagenPerfil != null) {
-                usuarioEditando.setFotoPerfil(urlImagenPerfil);
-            }
+
             /*
              * Obtener una referencia a la colección "usuarios" en Firestore
              * */
@@ -188,25 +183,23 @@ public class EditarPerfil extends AppCompatActivity {
             /*
              * Guardar los cambios en Firestore
              * */
-            refUsuarios.document(uid).set(usuarioEditando)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        /**
-                         * Método invocado cuando la operación de guardado en Firestore se completa exitosamente.
-                         * Muestra un mensaje de "Cambios guardados" a través de un Toast, crea un intent para abrir
-                         * la actividad MarcoMenu con un extra "abrir_perfil" establecido en true, inicia la actividad
-                         * MarcoMenu y finaliza la actividad actual.
-                         *
-                         * @param aVoid objeto Void que indica que la operación se completó con éxito y no devuelve ningún valor.
-                         */
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(EditarPerfil.this, "Cambios guardados.", Toast.LENGTH_LONG);
-                            Intent intent = new Intent(EditarPerfil.this, MarcoMenu.class);
-                            intent.putExtra("abrir_perfil", true);
-                            startActivity(intent);
-                            finish();
-                        }
-                    });
+
+            /**
+             * Revisa si hemos modificado la imagen
+             */
+            if (mImageUri != null) {
+                cargarArchivo(mImageUri, result -> {
+                    refUsuarios.document(uid).set(usuarioEditando)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    cerrar();
+                                }
+                            });
+                });
+            } else {
+                cerrar();
+            }
         });
         btnCambiarFotoPerfil = findViewById(R.id.btnCambiarFotoPerfil);
         Glide.with(this).load(usuarioEditando.getFotoPerfil()).into(btnCambiarFotoPerfil);
@@ -342,6 +335,20 @@ public class EditarPerfil extends AppCompatActivity {
     }
 
     /**
+     * Método invocado cuando la operación de guardado en Firestore se completa exitosamente.
+     * Muestra un mensaje de "Cambios guardados" a través de un Toast, crea un intent para abrir
+     * la actividad MarcoMenu con un extra "abrir_perfil" establecido en true, inicia la actividad
+     * MarcoMenu y finaliza la actividad actual.
+     */
+    private void cerrar() {
+        Toast.makeText(EditarPerfil.this, "Cambios guardados.", Toast.LENGTH_LONG);
+        Intent intent = new Intent(EditarPerfil.this, MarcoMenu.class);
+        intent.putExtra("abrir_perfil", true);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
      * Obtiene los datos de un usuario a partir de su identificador único (uid).
      *
      * @param uid El identificador único del usuario.
@@ -388,8 +395,6 @@ public class EditarPerfil extends AppCompatActivity {
                         ArrayAdapter<String> adapterGenero = (ArrayAdapter<String>) spinnerGenero.getAdapter();
                         spinnerGenero.setSelection(adapterGenero.getPosition(usuario.getListaGeneros().toString()));
                         Glide.with(EditarPerfil.this).load(usuarioEditando.getFotoPerfil()).into(btnCambiarFotoPerfil);
-
-
                     } else {
                         Toast.makeText(getApplicationContext(), "Error al obtener datos", Toast.LENGTH_LONG);
                     }
@@ -422,10 +427,13 @@ public class EditarPerfil extends AppCompatActivity {
     /**
      * Carga el archivo seleccionado en el almacenamiento y obtiene la URL de descarga de la imagen.
      * Si no se ha seleccionado ninguna imagen, se muestra un mensaje de error.
+     * @param uri uri de archivo a subir a storage
+     * @param callback callback que avisa cuando se ha subido la imagen correctamente
      */
-    private void cargarArchivo(Uri uri) {
+    private void cargarArchivo(Uri uri, GestorFirestore.Callback callback) {
         StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
                 + "." + getFileExtension(uri));
+
         fileReference.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     /**
@@ -435,17 +443,12 @@ public class EditarPerfil extends AppCompatActivity {
                      */
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(EditarPerfil.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
-                        Task<Uri> uriImagenPerfil = taskSnapshot.getStorage().getDownloadUrl();
-                        uriImagenPerfil.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            /**
-                             * Método de callBack que se invoca cuando se obtiene la URI de la imagen de manera exitosa.
-                             *
-                             * @param uri La URI de la imagen obtenida.
-                             */
+                        fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
+                                usuarioEditando.setFotoPerfil(uri.toString());
                                 urlImagenPerfil = uri.toString();
+                                callback.onSuccess("");
                             }
                         });
                     }
