@@ -427,7 +427,8 @@ public class EditarPerfil extends AppCompatActivity {
     /**
      * Carga el archivo seleccionado en el almacenamiento y obtiene la URL de descarga de la imagen.
      * Si no se ha seleccionado ninguna imagen, se muestra un mensaje de error.
-     * @param uri uri de archivo a subir a storage
+     *
+     * @param uri      uri de archivo a subir a storage
      * @param callback callback que avisa cuando se ha subido la imagen correctamente
      */
     private void cargarArchivo(Uri uri, GestorFirestore.Callback callback) {
@@ -479,4 +480,11 @@ public class EditarPerfil extends AppCompatActivity {
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(EditarPerfil.this, MarcoMenu.class);
+        intent.putExtra("abrir_perfil", true);
+        startActivity(intent);
+        finish();
+    }
 }

@@ -23,9 +23,10 @@
 
             <Button
                 android:id="@+id/btnCancelarEditarPerfil"
-                android:layout_width="100dp"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginEnd="40dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/gotham_bold_1"
                 android:text="Cancelar"
@@ -33,18 +34,20 @@
 
             <Button
                 android:id="@+id/btnMasAjustesEditarPerfil"
-                android:layout_width="120dp"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginEnd="40dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/gotham_bold_1"
-                android:text="editar perfil"
+                android:text="Editar perfil"
                 android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btnGuardarEditarPerfil"
-                android:layout_width="100dp"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/gotham_bold_1"
                 android:text="Guardar"
@@ -88,7 +91,7 @@
             android:background="#616161" />
 
         <LinearLayout
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="center"
@@ -96,8 +99,9 @@
 
             <TextView
                 android:id="@+id/lblNombreEditar"
-                android:layout_width="90dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.2"
                 android:fontFamily="@font/gotham_bold_1"
                 android:text="Nombre"
                 android:textColor="@color/white"
@@ -105,37 +109,37 @@
 
             <EditText
                 android:id="@+id/etNombreEditar"
-                android:layout_width="153dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="100dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
                 android:backgroundTint="@color/white"
                 android:inputType="textPersonName"
                 android:textColor="@color/white" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/lblEmailEditar"
-                android:layout_width="90dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.2"
                 android:fontFamily="@font/gotham_bold_1"
                 android:text="Email"
-                android:textAlignment="viewStart"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
 
             <EditText
                 android:id="@+id/etEmailEditar"
-                android:layout_width="153dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="100dp"
-                android:alpha=".8"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
                 android:backgroundTint="@color/white"
                 android:inputType="textPersonName"
                 android:textColor="@color/white" />
@@ -143,7 +147,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="center"
@@ -151,8 +155,9 @@
 
             <TextView
                 android:id="@+id/tvOpcionCiudad"
-                android:layout_width="90dp"
-                android:layout_height="20dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
                 android:fontFamily="@font/gotham_bold_1"
                 android:text="Ciudad"
                 android:textColor="@color/white"
@@ -160,9 +165,9 @@
 
             <Spinner
                 android:id="@+id/spinnerOpcionesEditarCiudades"
-                android:layout_width="153dp"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="100dp"
+                android:layout_weight="0.8"
                 android:backgroundTint="@color/white"
                 android:entries="@array/autonomous_communities"
                 android:prompt="@string/spinner_title"
@@ -171,16 +176,16 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
+            android:layout_margin="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvOpcionGeneroMusical"
-                android:layout_width="160dp"
-                android:layout_height="20dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="@font/gotham_bold_1"
                 android:text="Genero musical"
                 android:textColor="@color/white"
@@ -188,10 +193,9 @@
 
             <Spinner
                 android:id="@+id/spinnerOpcionesGeneroMusical"
-                android:layout_width="153dp"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="30dp"
-                android:alpha=".8"
+                android:layout_weight="1"
                 android:backgroundTint="@color/white"
                 android:entries="@array/generos_musicales"
                 android:prompt="@string/spinner_title2"
