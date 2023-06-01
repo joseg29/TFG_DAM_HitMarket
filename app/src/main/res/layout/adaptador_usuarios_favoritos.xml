@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="15dp"
     android:background="@android:color/transparent"
     app:cardBackgroundColor="@android:color/transparent">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -15,8 +16,9 @@
             android:id="@+id/btnCoraVacio"
             android:layout_width="38dp"
             android:layout_height="38dp"
-            android:layout_marginStart="325dp"
-            android:layout_marginTop="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
             android:background="#00FFFFFF"
             android:elevation="20dp"
             android:foreground="@drawable/corazon_favoritos_vacio"
@@ -26,10 +28,6 @@
             android:id="@+id/viewSombra"
             android:layout_width="match_parent"
             android:layout_height="135dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="-7dp"
             android:background="@drawable/sombra_carta_usuario_explora"
             android:backgroundTint="#7C7B7E" />
 
@@ -58,19 +56,17 @@
             android:text="MADRID"
             android:textColor="@color/white"
             android:textSize="20sp" />
-    </FrameLayout>
+    </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="100dp"
-        android:layout_height="130dp"
-        android:layout_margin="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/carta_redonda_usuario"
         android:orientation="vertical">
 
 
-
-
         <RelativeLayout
+            android:id="@+id/RelativeAbajo"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:orientation="vertical">
@@ -110,28 +106,32 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="43dp"
-            android:layout_height="19dp"
-            android:layout_marginTop="104dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RelativeAbajo"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/txtValoracion"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_below="@id/RelativeAbajo"
+                android:layout_centerInParent="true"
                 android:fontFamily="@font/gotham_bold"
+                android:gravity="center"
                 android:text="0.0"
+                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
-
 
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/RelativeAbajo"
+                android:layout_toRightOf="@id/txtValoracion"
                 android:padding="2dp"
                 app:srcCompat="@drawable/estrella" />
         </LinearLayout>
