@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
+
 /**
  * Actividad para crear una nueva publicación.
  */
@@ -39,6 +40,7 @@ public class ActivityNuevaPublicacion extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private StorageReference mStorageRef;
     private String usuarioActualUid;
+
     /**
      * Método que se ejecuta al crear la actividad.
      *
@@ -69,8 +71,8 @@ public class ActivityNuevaPublicacion extends AppCompatActivity {
         btnImagen = findViewById(R.id.btnSeleccionarImagenPublicacion);
         etTexto = findViewById(R.id.etTextoPublicacion);
         /*
-        *  Listener para seleccionar una imagen de la galería
-        * */
+         *  Listener para seleccionar una imagen de la galería
+         * */
         btnImagen.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setType("image/*");
@@ -135,6 +137,7 @@ public class ActivityNuevaPublicacion extends AppCompatActivity {
                                                  * Muestra un mensaje de "Publicado"
                                                  * */
                                                 Toast.makeText(ActivityNuevaPublicacion.this, "Publicado", Toast.LENGTH_SHORT).show();
+                                                setResult(1);
                                                 /*
                                                  * Finaliza la actividad
                                                  * */
@@ -155,11 +158,11 @@ public class ActivityNuevaPublicacion extends AppCompatActivity {
                 Publicacion publicacion = null;
                 publicacion = new Publicacion(usuarioActualUid, etTexto.getText().toString(), fechaYHora, "");
                 /*
-                * Agrega la publicación al array "listaPublicaciones" del usuario en Firestore
-                * utilizando el método anadirValorArray() del gestorFirestore.
-                * Se proporciona un nuevo objeto de tipo GestorFirestore.Callback<String>() como argumento,
-                * que implementa el método onSuccess() del callback.
-                * */
+                 * Agrega la publicación al array "listaPublicaciones" del usuario en Firestore
+                 * utilizando el método anadirValorArray() del gestorFirestore.
+                 * Se proporciona un nuevo objeto de tipo GestorFirestore.Callback<String>() como argumento,
+                 * que implementa el método onSuccess() del callback.
+                 * */
                 gestorFirestore.anadirValorArray(usuarioActualUid, "listaPublicaciones", publicacion, new GestorFirestore.Callback<String>() {
                     /**
                      * Método de callback que se ejecuta cuando se completa exitosamente la operación en Firestore.
@@ -174,17 +177,26 @@ public class ActivityNuevaPublicacion extends AppCompatActivity {
                     }
                 });
             }
+            /**
+             * Decimos que se ha subido algo
+             */
+            setResult(1);
         });
         /*
-        * Establece un OnClickListener para el botón btnCancelar.
-        * */
+         * Establece un OnClickListener para el botón btnCancelar.
+         * */
         btnCancelar.setOnClickListener(v -> {
+            /**
+             * Decimos que no se ha subido nada
+             */
+            setResult(0);
             /*
              * Finaliza la actividad
              * */
             finish();
         });
     }
+
     /**
      * Método que se ejecuta cuando se obtiene un resultado de otra actividad.
      *
@@ -210,6 +222,7 @@ public class ActivityNuevaPublicacion extends AppCompatActivity {
             btnImagen.setScaleType(ImageView.ScaleType.FIT_XY);
         }
     }
+
     /**
      * Obtiene la extensión del archivo a partir de su URI.
      *

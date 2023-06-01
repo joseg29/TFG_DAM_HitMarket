@@ -1,8 +1,14 @@
 package com.example.tarea1firebase.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,12 +21,15 @@ import android.widget.ImageButton;
 import com.example.tarea1firebase.ActivityNuevaPublicacion;
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.adaptadores.AdaptadorPublicaciones;
+import com.example.tarea1firebase.entidades.Chat;
 import com.example.tarea1firebase.entidades.Publicacion;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.example.tarea1firebase.gestor.GestorFirestore;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -47,7 +56,7 @@ public class MuroFragment extends Fragment {
 
         btnNuevaPublicacion.setOnClickListener(v -> {
             Intent i = new Intent(this.getActivity(), ActivityNuevaPublicacion.class);
-            startActivity(i);
+            activityResultNuevaPublicacion.launch(i);
         });
     }
 
@@ -64,6 +73,7 @@ public class MuroFragment extends Fragment {
 
     /**
      * Inicializa las vistas y componentes del fragmento.
+     *
      * @param view La vista raíz del fragmento.
      */
     private void inicializarVistas(View view) {
@@ -94,13 +104,18 @@ public class MuroFragment extends Fragment {
         gestorFirestore.obtenerUsuarioPorId(mAuth.getCurrentUser().getUid(), new GestorFirestore.Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario result) {
+                listaPublicaciones.addAll(result.getListaPublicaciones());
+                ordenarPublicaciones();
+            }
+        }, Usuario.class);
+
+        gestorFirestore.obtenerUsuarioPorId(mAuth.getCurrentUser().getUid(), new GestorFirestore.Callback<Usuario>() {
+            @Override
+            public void onSuccess(Usuario result) {
                 usuarioActual = result;
 
                 List<String> favoritos;
                 favoritos = usuarioActual.getListaFavoritos();
-
-                System.out.println("Favoritos --- " + favoritos);
-
                 for (int i = 0; i < favoritos.size(); i++) {
                     gestorFirestore.obtenerUsuarioPorId(favoritos.get(i), new GestorFirestore.Callback<Usuario>() {
                         @Override
@@ -109,10 +124,34 @@ public class MuroFragment extends Fragment {
                             listaPublicaciones.addAll(usuarioFavorito.getListaPublicaciones());
                             adaptadorPublicaciones = new AdaptadorPublicaciones(listaPublicaciones);
                             recyclerPublicaciones.setAdapter(adaptadorPublicaciones);
+                            ordenarPublicaciones();
                         }
                     }, Usuario.class);
                 }
             }
         }, Usuario.class);
+    }
+
+    ActivityResultLauncher<Intent> activityResultNuevaPublicacion = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                /**
+                 * Se ha publicado algo nuevo
+                 */
+                if (result.getResultCode() == 1) {
+                    obtenerPublicacionesDeFavoritos();
+                }
+            });
+
+    /**
+     * Método que ordena los chats recientes según la fecha del último mensaje
+     */
+    public void ordenarPublicaciones() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Collections.sort(listaPublicaciones, Comparator.comparing(Publicacion::getFecha));
+        }
+        Collections.reverse(listaPublicaciones);
+        adaptadorPublicaciones = new AdaptadorPublicaciones(listaPublicaciones);
+        recyclerPublicaciones.setAdapter(adaptadorPublicaciones);
     }
 }
