@@ -38,7 +38,6 @@ import java.util.Date;
 import java.util.List;
 
 
-
 public class PerfilUsuario extends AppCompatActivity {
     private int PICK_AUDIO_REQUEST = 123120;
     //Este será el nombre de la colección que daremos en la BBDD de Firebase
@@ -204,6 +203,12 @@ public class PerfilUsuario extends AppCompatActivity {
             btnAnadirCancion.setVisibility(View.GONE);
             tvEditar.setVisibility(View.GONE);
             btnChat.setVisibility(View.VISIBLE);
+            boolean vieneDeChat = getIntent().getExtras().getBoolean("vieneDeChat");
+            if (vieneDeChat) {
+                btnChat.setVisibility(View.GONE);
+            } else {
+                btnChat.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -256,16 +261,14 @@ public class PerfilUsuario extends AppCompatActivity {
         recyclerGeneros.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
 
 
-
         ArrayList<Resena> arrayResenas = new ArrayList<>();
         adaptadorResenas = new AdaptadorResenas(arrayResenas);
         recyclerResenas.setAdapter(adaptadorResenas);
 
         progressBar = findViewById(R.id.spin_kit);
+
+
     }
-
-
-
 
 
     public void inicializarUsuario() {

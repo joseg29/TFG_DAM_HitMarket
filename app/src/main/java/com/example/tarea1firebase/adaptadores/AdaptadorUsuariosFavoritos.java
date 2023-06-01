@@ -26,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -75,6 +76,7 @@ public class AdaptadorUsuariosFavoritos extends RecyclerView.Adapter<AdaptadorUs
         private Button btnFav, btnVerPerf;
         private boolean isFavorite;
         private ImageView fotoPerfil;
+        private CardView cardViewFav;
 
         /**
          * Constructor para la clase ViewHolder.
@@ -90,7 +92,7 @@ public class AdaptadorUsuariosFavoritos extends RecyclerView.Adapter<AdaptadorUs
             btnVerPerf = v.findViewById(R.id.btnVerPerfil);
             fotoPerfil = v.findViewById(R.id.fotoPerfilExplora);
             lblMediaEstrellas = v.findViewById(R.id.txtValoracion);
-
+            cardViewFav = v.findViewById(R.id.cardViewFavorito);
         }
     }
 
@@ -103,7 +105,7 @@ public class AdaptadorUsuariosFavoritos extends RecyclerView.Adapter<AdaptadorUs
      */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adaptador_usuarios_favoritos, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_usuarios_favoritos, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -357,6 +359,25 @@ public class AdaptadorUsuariosFavoritos extends RecyclerView.Adapter<AdaptadorUs
 
         });
 
+        /**
+         * Listener para abrir perfil
+         */
+        holder.cardViewFav.setOnClickListener(v -> {
+            /*
+             * Crea un Intent para abrir la actividad PerfilUsuario.
+             */
+            Intent intent = new Intent(v.getContext(), PerfilUsuario.class);
+            /*
+             * Agrega un extra al Intent con el UidUsuario obtenido del usuario en la posición
+             * actual de listaUsuariosFiltrados.
+             */
+
+            intent.putExtra("UidUsuario", listaUsuariosFiltrados.get(position).getId());
+            /*
+             * Inicia la actividad PerfilUsuario utilizando el contexto de la vista actual.
+             */
+            v.getContext().startActivity(intent);
+        });
 
     }
 

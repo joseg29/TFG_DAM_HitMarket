@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -49,6 +51,7 @@ public class ChatVentana extends AppCompatActivity {
     private ImageButton btnVolverAtras;
     private Chat chat;
     private GestorFirestore gestorFirebase;
+    private RelativeLayout layoutFotoYNombre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,12 @@ public class ChatVentana extends AppCompatActivity {
     }
 
     private void inicializarListenerBotones() {
+        layoutFotoYNombre.setOnClickListener(v -> {
+            Intent intent = new Intent(this, PerfilUsuario.class);
+            intent.putExtra("UidUsuario", usuario2Uid);
+            intent.putExtra("vieneDeChat", true);
+            startActivity(intent);
+        });
         btnEnviarMensaje.setOnClickListener(v -> {
             crearChat(usuarioActualUid, usuario2Uid);
         });
@@ -85,6 +94,7 @@ public class ChatVentana extends AppCompatActivity {
     }
 
     private void inicializarVistas() {
+        layoutFotoYNombre = findViewById(R.id.relativeLayoutChatVentana);
         recyclerMensajes = findViewById(R.id.recyclerMensajesChat);
         recyclerMensajes.setHasFixedSize(true);
 
@@ -262,8 +272,9 @@ public class ChatVentana extends AppCompatActivity {
                 }
                 adaptadorCanciones = new AdaptadorMensajesChat(listaMensajes);
                 recyclerMensajes.setAdapter(adaptadorCanciones);
-                if (recyclerMensajes.getAdapter().getItemCount()>0){
-                recyclerMensajes.smoothScrollToPosition(recyclerMensajes.getAdapter().getItemCount() - 1);}
+                if (recyclerMensajes.getAdapter().getItemCount() > 0) {
+                    recyclerMensajes.smoothScrollToPosition(recyclerMensajes.getAdapter().getItemCount() - 1);
+                }
             }
 
             @Override
