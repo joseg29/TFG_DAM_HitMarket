@@ -130,7 +130,11 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
                  */
                 holder.otroUser = result;
                 holder.nombreUsuario.setText(holder.otroUser.getNombre());
-                Glide.with(holder.itemView.getContext()).load(holder.otroUser.getFotoPerfil()).override(100, 100).into(holder.imgPerfil);
+                if (!result.getFotoPerfil().equals("")) {
+                    Glide.with(holder.itemView.getContext()).load(holder.otroUser.getFotoPerfil()).override(100, 100).into(holder.imgPerfil);
+                } else {
+                    Glide.with(holder.itemView.getContext()).load(holder.itemView.getContext().getString(R.string.urlImagenPerfilPorDefecto)).override(100, 100).into(holder.imgPerfil);
+                }
                 /*
                  * Crea una clave única para el chat combinando los ids de usuario en orden alfabético.
                  */
@@ -162,6 +166,7 @@ public class AdaptadorChatsRecientes extends RecyclerView.Adapter<AdaptadorChats
                         }
                         holder.ultimoMensaje.setText(holder.ultimoMsj.getTexto());
                     }
+
                     /**
                      * Método que se invoca cuando se cancela la operación de consulta a la base de datos.
                      * Maneja el error producido durante la consulta.

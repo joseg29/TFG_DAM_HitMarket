@@ -5,6 +5,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="spinner_title">Ciudad</string>
     <string name="spinner_title2">Géneros musicales</string>
-    <string name="urlImagenPerfilPorDefecto">https://firebasestorage.googleapis.com/v0/b/tarea-d7eb7.appspot.com/o/default-user.png?alt=media&amp;token=976f0c11-2497-4f20-a584-75905fdab2a5</string>
+    <string name="urlImagenPerfilPorDefecto">https://firebasestorage.googleapis.com/v0/b/tarea-d7eb7.appspot.com/o/default-user.png?alt=media&amp;token=dd74da5d-7af8-47f4-ad1a-3492ec361753&amp;_gl=1*1j8gn7o*_ga*MjAwNjAxMDYxNi4xNjc3MTY0Mjgw*_ga_CW55HF8NVT*MTY4NTcxNzkzMC42OC4xLjE2ODU3MTgyNjUuMC4wLjA.</string>
     <string name="tvAyuda">El texto de ayuda te muestra cómo debes escribir tus nombres de usuario de redes sociales en los campos de entrada de texto. Por ejemplo @usuario o http://ejemplo.com</string>
 </resources>

@@ -92,7 +92,11 @@ public class AdaptadorResenas extends RecyclerView.Adapter<AdaptadorResenas.View
                 holder.texto.setText(listaResenas.get(position).getTexto());
                 holder.estrellas.setText(String.valueOf(listaResenas.get(position).getValoracion()));
                 holder.fecha.setText(listaResenas.get(position).getFecha());
-                Glide.with(holder.itemView.getContext()).load(autor.getFotoPerfil()).into(holder.imgUsu);
+                if (!autor.getFotoPerfil().equals("")) {
+                    Glide.with(holder.itemView.getContext()).load(autor.getFotoPerfil()).override(100, 100).into(holder.imgUsu);
+                } else {
+                    Glide.with(holder.itemView.getContext()).load(holder.itemView.getContext().getString(R.string.urlImagenPerfilPorDefecto)).override(100, 100).into(holder.imgUsu);
+                }
 
             }
         }, Usuario.class);

@@ -336,7 +336,7 @@ public class Registro extends AppCompatActivity {
                         else {
                             // Creación del usuario en Firebase Authentication y Firestore
                             String idUsuario = task.getResult().getUser().getUid();
-                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(), selectedGeneros, Arrays.asList());
+                            user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), "", Arrays.asList(), Arrays.asList(), Arrays.asList(), selectedGeneros, Arrays.asList());
                             db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -375,7 +375,7 @@ public class Registro extends AppCompatActivity {
         String ciudad = mySpinner.getSelectedItem().toString();
 
         /** Creación del objeto Usuario*/
-        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), getString(R.string.urlImagenPerfilPorDefecto), Arrays.asList(), Arrays.asList(), Arrays.asList(), selectedGeneros, Arrays.asList());
+        user = new Usuario(idUsuario, emailUsuario, nombreUsuario, null, ciudad, Arrays.asList(), "", "", "", "", "", Arrays.asList(), "", Arrays.asList(), Arrays.asList(), Arrays.asList(), selectedGeneros, Arrays.asList());
 
         /** Creación del usuario en Firestore*/
         db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {

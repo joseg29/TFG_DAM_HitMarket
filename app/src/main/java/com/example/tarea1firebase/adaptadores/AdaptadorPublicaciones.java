@@ -98,7 +98,11 @@ public class AdaptadorPublicaciones extends RecyclerView.Adapter<AdaptadorPublic
             @Override
             public void onSuccess(Usuario result) {
                 holder.autor.setText(result.getNombre());
-                Glide.with(holder.itemView.getContext()).load(result.getFotoPerfil()).fitCenter().into(holder.imgPerfil);
+                if (!result.getFotoPerfil().equals("")) {
+                    Glide.with(holder.itemView.getContext()).load(result.getFotoPerfil()).fitCenter().into(holder.imgPerfil);
+                } else {
+                    Glide.with(holder.itemView.getContext()).load(holder.itemView.getContext().getString(R.string.urlImagenPerfilPorDefecto)).override(100, 100).into(holder.imgPerfil);
+                }
             }
         }, Usuario.class);
         /*
