@@ -1,10 +1,13 @@
 package com.example.tarea1firebase.adaptadores;
 
+import static com.example.tarea1firebase.fragments.PerfilFragment.COLECCION;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +20,11 @@ import com.example.tarea1firebase.entidades.Chat;
 import com.example.tarea1firebase.entidades.Publicacion;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.example.tarea1firebase.gestor.GestorFirestore;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.json.JSONStringer;
 
 import java.util.List;
 
@@ -26,6 +34,7 @@ import java.util.List;
 public class AdaptadorPublicaciones extends RecyclerView.Adapter<AdaptadorPublicaciones.ViewHolder> {
     private List<Publicacion> listaPublicaciones;
     private GestorFirestore gestorFirestore;
+    private FirebaseAuth mAuth;
 
     /**
      * Constructor de la clase AdaptadorPublicaciones.
@@ -35,6 +44,7 @@ public class AdaptadorPublicaciones extends RecyclerView.Adapter<AdaptadorPublic
     public AdaptadorPublicaciones(List<Publicacion> listaPublicaciones) {
         this.listaPublicaciones = listaPublicaciones;
         this.gestorFirestore = new GestorFirestore();
+        this.mAuth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -43,6 +53,7 @@ public class AdaptadorPublicaciones extends RecyclerView.Adapter<AdaptadorPublic
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView autor, texto, fecha, likes;
         private ImageView imgPerfil, imgPublicacion;
+        private View divider;
 
         /**
          * Constructor de la clase ViewHolder.
@@ -57,7 +68,7 @@ public class AdaptadorPublicaciones extends RecyclerView.Adapter<AdaptadorPublic
             imgPerfil = v.findViewById(R.id.foto_perfil_publicacion);
             imgPublicacion = v.findViewById(R.id.img_publicacion);
             fecha = v.findViewById(R.id.fecha_publicacion);
-            likes = v.findViewById(R.id.txtLikes);
+            divider = v.findViewById(R.id.dividerPublicacion);
         }
     }
 
@@ -116,11 +127,6 @@ public class AdaptadorPublicaciones extends RecyclerView.Adapter<AdaptadorPublic
          * */
         holder.fecha.setText(listaPublicaciones.get(position).getFecha());
         /*
-         * Establece el número de likes de la publicación en el TextView likes del ViewHolder
-         * utilizando el método size() de la lista de likes de la publicación en la posición dada.
-         * */
-        holder.likes.setText(String.valueOf(listaPublicaciones.get(position).getnLikes().size()));
-        /*
          * Verifica si la publicación en la posición dada tiene una URL de imagen de publicación no
          * vacía.
          */
@@ -133,10 +139,23 @@ public class AdaptadorPublicaciones extends RecyclerView.Adapter<AdaptadorPublic
         } else {
             /*
              * Si la publicación no tiene una URL de imagen de publicación, establece la visibilidad
-             * del ImageView imgPublicacion en GONE (no visible).
+             * del recuadro de imagen y de la línea divisora en GONE (no visible).
              */
+            holder.divider.setVisibility(View.GONE);
             holder.imgPublicacion.setVisibility(View.GONE);
         }
+
+        if (listaPublicaciones.get(position).getTexto().equals("")) {
+            holder.texto.setVisibility(View.GONE);
+            holder.divider.setVisibility(View.GONE);
+        }
+        /**
+         * Listener de like
+         */
+
+        /**
+         * Listener que te envía al perfil del usuario cuando clickeas sobre la foto de perfil
+         */
         holder.imgPerfil.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), PerfilUsuario.class);
             intent.putExtra("UidUsuario", listaPublicaciones.get(position).getAutorUid());
@@ -152,16 +171,5 @@ public class AdaptadorPublicaciones extends RecyclerView.Adapter<AdaptadorPublic
     @Override
     public int getItemCount() {
         return listaPublicaciones.size();
-    }
-
-    /**
-     * Método para refrescar datos desde otra clase
-     *
-     * @param data la nueva lista
-     */
-    public void setData(List<Publicacion> data) {
-        listaPublicaciones.clear();
-        listaPublicaciones.addAll(data);
-        notifyDataSetChanged();
     }
 }

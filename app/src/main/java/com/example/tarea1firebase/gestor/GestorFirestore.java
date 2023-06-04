@@ -7,6 +7,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import com.example.tarea1firebase.Registro;
+import com.example.tarea1firebase.entidades.Publicacion;
 import com.example.tarea1firebase.entidades.Resena;
 import com.example.tarea1firebase.entidades.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GestorFirestore {
     private StorageReference storageRef;
@@ -164,7 +166,6 @@ public class GestorFirestore {
             callback.onSuccess("Actualizado");
         });
     }
-
     /**
      * Este método elimina un valor de un campo de tipo array en el documento de un usuario en la base de datos.
      *
@@ -261,16 +262,17 @@ public class GestorFirestore {
 
     /**
      * Esta es una interfaz genérica para manejar el resultado de una operación asíncrona.
+     *
      * @param <T> El tipo de dato del resultado de la operación.
      */
     public interface Callback<T> {
         /**
          * Este método se llama cuando la operación asíncrona es exitosa.
+         *
          * @param result El resultado de la operación.
          */
         void onSuccess(T result);
     }
-
 
 
 }

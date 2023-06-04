@@ -10,8 +10,6 @@ import java.util.List;
  */
 public class Publicacion implements Serializable {
     private String autorUid, texto, fecha, urlImagenPublicacion;
-
-    private List<String> nLikes;
     /**
      * Constructor vacío de la clase Publicacion.
      */
@@ -30,7 +28,6 @@ public class Publicacion implements Serializable {
         this.texto = texto;
         this.fecha = fecha;
         this.urlImagenPublicacion = urlImagenPublicacion;
-        this.nLikes = Collections.emptyList();
     }
     /**
      * Obtiene el UID del autor de la publicación.
@@ -79,22 +76,6 @@ public class Publicacion implements Serializable {
      */
     public void setFecha(String fecha) {
         this.fecha = fecha;
-    }
-    /**
-     * Obtiene la lista de likes de la publicación.
-     *
-     * @return La lista de likes de la publicación.
-     */
-    public List<String> getnLikes() {
-        return nLikes;
-    }
-    /**
-     * Establece la lista de likes de la publicación.
-     *
-     * @param nLikes La lista de likes de la publicación.
-     */
-    public void setnLikes(List<String> nLikes) {
-        this.nLikes = nLikes;
     }
     /**
      * Obtiene la URL de la imagen de la publicación.

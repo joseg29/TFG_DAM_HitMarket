@@ -7,8 +7,7 @@
     android:layout_marginStart="15dp"
     android:layout_marginEnd="15dp"
     android:layout_marginBottom="40dp"
-    android:background="#FFFFFF"
-    android:backgroundTint="#DCDCDC"
+    android:background="@android:color/transparent"
     app:cardCornerRadius="15dp">
 
     <LinearLayout
@@ -71,30 +70,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/txtLikes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/gotham_bold"
-                    android:text="0"
-                    android:textColor="#FFFFFF" />
-
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="31dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:backgroundTint="#FFFFFF"
-                    android:foregroundTint="#FFFFFF"
-                    android:tint="#FFFFFF"
-                    app:srcCompat="@drawable/icon_me_gusta" />
-
-            </LinearLayout>
+                android:orientation="horizontal"/>
 
         </LinearLayout>
 
@@ -110,7 +86,7 @@
             android:textColor="#FFFFFF" />
 
         <View
-            android:id="@+id/divider"
+            android:id="@+id/dividerPublicacion"
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_marginStart="15dp"
