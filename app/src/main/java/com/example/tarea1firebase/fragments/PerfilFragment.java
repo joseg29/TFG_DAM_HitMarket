@@ -111,7 +111,7 @@ public class PerfilFragment extends Fragment {
         inicializarVistas();
 
         // Añadir listeners a los botones.
-        añadirListenerBotones();
+        anadirListenerBotones();
 
         // Ocultar vistas ajenas.
         esconderVistasAjenas();
@@ -135,7 +135,7 @@ public class PerfilFragment extends Fragment {
     /**
      * Método utilizado para añadir listeners a los botones.
      */
-    private void añadirListenerBotones() {
+    private void anadirListenerBotones() {
         // Listener para el botón de añadir canción.
         btnAnadirCancion.setOnClickListener(new View.OnClickListener() {
             @Override

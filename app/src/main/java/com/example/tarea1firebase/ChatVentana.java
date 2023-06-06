@@ -239,7 +239,7 @@ public class ChatVentana extends AppCompatActivity {
 
 
         //Añadimos el mensaje al objeto de chat que lo contiene
-        chat.añadirMensaje(msj);
+        chat.anadirMensaje(msj);
         //Seteamos la fecha del último mensaje enviado en el chat, con la fecha del mensaje recién enviado
         chat.setFechaUltimoMsj(msj.getFechaYHora());
 

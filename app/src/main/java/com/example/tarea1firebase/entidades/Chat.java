@@ -130,7 +130,7 @@ public class Chat {
      *
      * @param msj El mensaje a añadir al chat.
      */
-    public void añadirMensaje(Mensaje msj) {
+    public void anadirMensaje(Mensaje msj) {
         this.listaMensajes.add(msj);
     }
 }
