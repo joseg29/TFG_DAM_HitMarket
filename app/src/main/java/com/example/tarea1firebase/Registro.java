@@ -340,7 +340,6 @@ public class Registro extends AppCompatActivity {
                             db.collection(COLECCION).document(idUsuario).set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(Registro.this, "User creado" + user.getListaGeneros().toString(), Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(Registro.this, MarcoMenu.class);
                                     intent.putExtra("UidUsuario", user.getId());
                                     startActivity(intent);
