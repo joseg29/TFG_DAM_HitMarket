@@ -113,7 +113,7 @@ public class EditarPerfil extends AppCompatActivity {
          * Configurar el listener para mostrar/ocultar el texto de ayuda
          * */
         btnMostrarTextoAyuda.setOnClickListener(v -> {
-            if (tvAyuda.getVisibility() == View.INVISIBLE) {
+            if (tvAyuda.getVisibility() == View.GONE) {
                 tvAyuda.setVisibility(View.VISIBLE);
             } else {
                 tvAyuda.setVisibility(View.INVISIBLE);
@@ -198,6 +198,7 @@ public class EditarPerfil extends AppCompatActivity {
                             });
                 });
             } else {
+                refUsuarios.document(uid).set(usuarioEditando);
                 cerrar();
             }
         });

@@ -305,7 +305,7 @@
                 android:background="@drawable/descripcion_editar_perfil"
                 android:text="@string/tvAyuda"
                 android:textSize="16sp"
-                android:visibility="invisible" />
+                android:visibility="gone" />
 
 
             <TextView
@@ -346,7 +346,7 @@
                 android:alpha=".8"
                 android:background="@drawable/edit_text_redondo"
                 android:drawableStart="@drawable/logo_youtube_editar_perfil"
-                android:hint="\http://ejemplo.com"
+                android:hint="&quot;@nombre_de_usuario&quot;"
                 android:inputType="textPersonName"
                 android:padding="5dp"
                 android:textAlignment="center" />
@@ -390,8 +390,8 @@
                 android:alpha=".8"
                 android:background="@drawable/edit_text_redondo"
                 android:drawableStart="@drawable/logo_spotify_editar_perfil"
-                android:inputType="textPersonName"
                 android:hint="\http://ejemplo.com"
+                android:inputType="textPersonName"
                 android:padding="5dp"
                 android:textAlignment="center" />
 
@@ -412,8 +412,8 @@
                 android:alpha=".8"
                 android:background="@drawable/edit_text_redondo"
                 android:drawableStart="@drawable/logo_soundcloud_editar_perfil"
-                android:inputType="textPersonName"
                 android:hint="\http://ejemplo.com"
+                android:inputType="textPersonName"
                 android:padding="5dp"
                 android:textAlignment="center" />
 
