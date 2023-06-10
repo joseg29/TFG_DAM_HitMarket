@@ -385,6 +385,7 @@ public class EditarPerfil extends AppCompatActivity {
                         etYoutube.setText(usuario.getYoutube());
                         etSoundCloud.setText(usuario.getSoundCloud());
                         etTikTok.setText(usuario.getTiktTok());
+                        selectedGeneros.addAll(usuario.getListaGeneros());
                         /*
                          * Obtener el adaptador del spinner de ciudad y seleccionar la ciudad del usuario
                          * */
