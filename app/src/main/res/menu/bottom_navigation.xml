@@ -3,11 +3,11 @@
     <item
         android:id="@+id/menu_publicaciones"
         android:icon="@drawable/icon_menu_post"
-        android:title="Post" />
+        android:title="Publicaciones" />
     <item
         android:id="@+id/menu_noticias"
         android:icon="@drawable/icon_lista_fav"
-        android:title="Favs" />
+        android:title="Favoritos" />
     <item
         android:id="@+id/menu_explora"
         android:icon="@drawable/icon_menu_explora"
@@ -19,5 +19,5 @@
     <item
         android:id="@+id/menu_perfil"
         android:icon="@drawable/icon_menu_perfil"
-        android:title="Tu"/>
+        android:title="Tú" />
 </menu>
