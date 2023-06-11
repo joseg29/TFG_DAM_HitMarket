@@ -88,7 +88,7 @@ public class ActivityNuevaPublicacion extends AppCompatActivity {
             /*
              * Obtiene la fecha y hora actual en el formato especificado
              * */
-            String fechaYHora = new SimpleDateFormat("yyyy/MM/dd/HH:mm").format(Calendar.getInstance().getTime());
+            String fechaYHora = new SimpleDateFormat("MM/dd/HH:mm").format(Calendar.getInstance().getTime());
 
             //Si la publicación es con imagen
             if (imageUri != null) {
