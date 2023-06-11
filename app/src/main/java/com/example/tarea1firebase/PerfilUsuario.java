@@ -245,7 +245,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
         ArrayList<String> arrayPrueba = new ArrayList<>();
 
-        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba, false);
+        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba, false , progressBar);
         recyclerCanciones.setAdapter(adaptadorCanciones);
 
 
@@ -301,7 +301,7 @@ public class PerfilUsuario extends AppCompatActivity {
                 lblDescripcion.setText(usuario.getDescripcion());
                 lblCiudad.setText(usuario.getCiudad());
 
-                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones, false);
+                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones, false, progressBar);
                 recyclerCanciones.setAdapter(adaptadorCanciones);
 
                 adaptadorResenas = new AdaptadorResenas(resenas);

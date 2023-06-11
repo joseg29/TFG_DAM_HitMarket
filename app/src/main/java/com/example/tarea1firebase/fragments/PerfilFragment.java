@@ -228,7 +228,7 @@ public class PerfilFragment extends Fragment {
 
         ArrayList<String> arrayPrueba = new ArrayList<>();
 
-        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba, true);
+        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba, true, progressBar);
         recyclerCanciones.setAdapter(adaptadorCanciones);
 
         recyclerResenas = getView().findViewById(R.id.RecyclerResenas);
@@ -292,7 +292,7 @@ public class PerfilFragment extends Fragment {
                 lblDescripcion.setText(usuario.getDescripcion());
                 lblCiudad.setText(usuario.getCiudad());
 
-                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones, true);
+                adaptadorCanciones = new AdaptadorCancionesRecycler(canciones, true, progressBar);
                 recyclerCanciones.setAdapter(adaptadorCanciones);
 
                 adaptadorResenas = new AdaptadorResenas(resenas);
@@ -476,6 +476,7 @@ public class PerfilFragment extends Fragment {
         if (data != null) {
 
             if (requestCode == PICK_AUDIO_REQUEST && resultCode == RESULT_OK) {
+                progressBar.setVisibility(View.VISIBLE);
                 Uri uri = data.getData();
                 try {
                     String[] pathSegments = uri.getPath().split("/");
@@ -495,6 +496,7 @@ public class PerfilFragment extends Fragment {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 gestorFirebase.subirAudio(uri, mAuth.getCurrentUser().getUid(), new GestorFirestore.Callback<String>() {
@@ -502,6 +504,7 @@ public class PerfilFragment extends Fragment {
                     public void onSuccess(String url) {
                         Toast.makeText(getContext(), "Subido correctamente", Toast.LENGTH_SHORT).show();
                         obtenerDatosUsuario();
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
             }

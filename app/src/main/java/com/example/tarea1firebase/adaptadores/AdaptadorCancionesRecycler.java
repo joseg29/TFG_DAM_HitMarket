@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import androidx.appcompat.app.AlertDialog;
@@ -28,6 +29,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tarea1firebase.R;
 import com.example.tarea1firebase.gestor.GestorFirestore;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.FadingCircle;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
@@ -43,18 +46,20 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
     private GestorFirestore gestorFirebase;
     private FirebaseAuth mAuth;
     private boolean soyAutor;
+    private ProgressBar progressBar;
 
     /**
      * Constructor para el adaptador. Recibe una lista de URLs de las canciones.
      *
      * @param listaCanciones Lista de URLs de las canciones.
      */
-    public AdaptadorCancionesRecycler(List<String> listaCanciones, boolean soyAutor) {
+    public AdaptadorCancionesRecycler(List<String> listaCanciones, boolean soyAutor, ProgressBar progressBar) {
         this.listaUrls = listaCanciones;
         this.storage = FirebaseStorage.getInstance();
         this.gestorFirebase = new GestorFirestore();
         this.mAuth = FirebaseAuth.getInstance();
         this.soyAutor = soyAutor;
+        this.progressBar = progressBar;
     }
 
     /**
@@ -65,6 +70,7 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
         private ImageButton btnPlay, btnBorrarCancion;
         private MediaPlayer mediaPlayer;
         private SeekBar seekBar;
+        private ProgressBar progressBar;
 
         /**
          * Constructor del ViewHolder. Toma una vista y busca los elementos necesarios para reproducir la canción.
@@ -77,6 +83,10 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
             seekBar = v.findViewById(R.id.seekBar);
             mediaPlayer = new MediaPlayer();
             btnBorrarCancion = v.findViewById(R.id.btnBorrarCancion);
+            progressBar = v.findViewById(R.id.spin_kit); // Cambio realizado aquí
+            Sprite doubleBounce = new FadingCircle();
+            progressBar.setIndeterminateDrawable(doubleBounce);
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -283,6 +293,7 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
      * @param url    la url de la canción a eliminar
      */
     public void crearDialogoConfirmacion(ViewHolder holder, String url) {
+        progressBar.setVisibility(View.VISIBLE);
         /*
         Creamos la referencia a la canción a partir de una url de descarga obtenida de la lista pasada anteriormente al adapter.
          */
@@ -309,6 +320,7 @@ public class AdaptadorCancionesRecycler extends RecyclerView.Adapter<AdaptadorCa
                         gestorFirebase.borrarValorArray(mAuth.getCurrentUser().getUid(), "arrayCanciones", url, new GestorFirestore.Callback<String>() {
                             @Override
                             public void onSuccess(String result) {
+                                progressBar.setVisibility(View.GONE);
                                 listaUrls.remove(url);
                                 notifyDataSetChanged();
                             }
