@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -23,6 +24,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -122,7 +124,7 @@ public class GestorFirestore {
      */
     public void subirAudio(Uri uri, String idUsuario, Callback<String> callback) {
         /** Crear una referencia al storage en la base de datos en la ruta "audios" y asignarle el nombre del archivo de audio*/
-        StorageReference storagePath = storageRef.child("audios").child(uri.getLastPathSegment());
+        StorageReference storagePath = storageRef.child("audios").child(uri.getLastPathSegment() + Timestamp.now());
 
         /**Subir el archivo a la base de datos (Storage)*/
         storagePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -166,6 +168,7 @@ public class GestorFirestore {
             callback.onSuccess("Actualizado");
         });
     }
+
     /**
      * Este método elimina un valor de un campo de tipo array en el documento de un usuario en la base de datos.
      *
