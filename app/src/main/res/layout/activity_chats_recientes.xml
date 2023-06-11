@@ -22,9 +22,11 @@
             android:layout_marginTop="35dp"
             android:backgroundTint="#FFFFFF"
             android:fontFamily="@font/gotham_bold"
+            android:shadowColor="#FFFFFF"
+            android:shadowRadius="8"
             android:text="Mensajes"
             android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:textSize="35sp" />
 
         <View
             android:id="@+id/divider2"

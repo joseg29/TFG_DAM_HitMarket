@@ -64,9 +64,14 @@ public class PerfilUsuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.perfil_usuario);
 
+        /** Inicializar el gestor de Firebase y obtener la instancia de FirebaseAuth.*/
         gestorFirebase = new GestorFirestore();
         mAuth = FirebaseAuth.getInstance();
+
+        /**Obtenemos el uid del usuario al que estamos visitando*/
         uidUsuarioMostrandose = getIntent().getStringExtra("UidUsuario");
+
+        /**Obtenemos el uid propio (sesión actual)*/
         uidUsuarioActual = mAuth.getCurrentUser().getUid();
 
         inicializarUsuario();
@@ -84,6 +89,10 @@ public class PerfilUsuario extends AppCompatActivity {
         anadirVisitaAlPerfil();
     }
 
+    /**
+     * Método que verifica si ya hemos visitado este perfil anteriormente, y de no ser así,
+     * añade nuestro uid a la lista de visitantes de ese usuario
+     */
     private void anadirVisitaAlPerfil() {
         gestorFirebase.obtenerUsuarioPorId(uidUsuarioMostrandose, new GestorFirestore.Callback<Usuario>() {
             @Override
@@ -93,31 +102,45 @@ public class PerfilUsuario extends AppCompatActivity {
                     gestorFirebase.anadirVisitaAlPerfil(uidUsuarioMostrandose, uidUsuarioActual);
                     listaVisitas.add(uidUsuarioActual);
                 }
-                System.out.println(listaVisitas.size());
-                System.out.println(listaVisitas);
             }
         }, Usuario.class);
     }
 
 
     public void setListenerBotones() {
+        /**
+         * Botón para abrir el diálogo de reseña
+         */
         lblMediaEstrellas.setOnClickListener(v -> {
             crearDialogoResena();
             dialog.show();
         });
     }
 
+    /**
+     * Método que configura el diálogo que se abrirá al hacer una reseña
+     */
     private void crearDialogoResena() {
+        //Creación del alert dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_resena, null);
         builder.setView(dialogView);
 
+        /**
+         * Declaración rating bar (Barra de estrellas) y el edittex del comentario
+         */
         EditText etTextoResena = dialogView.findViewById(R.id.edit_text_texto);
         RatingBar ratingBar = dialogView.findViewById(R.id.ratingBarResena);
 
+        /**
+         * Listener en caso de que se presione "subir" o confirmar
+         */
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                /**
+                 * Obtenemos las estrelkas, el texto y la fecha
+                 */
                 String textoResena = etTextoResena.getText().toString();
                 int rating = (int) ratingBar.getRating();
                 String fechaActual = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
@@ -128,13 +151,22 @@ public class PerfilUsuario extends AppCompatActivity {
                 List<String> listaAutores = new ArrayList<>();
                 Resena miResenaExistente = null;
 
+                /**
+                 * Obtenemos el uid de todas las personas que le han hecho una reseña a este usuario
+                 */
                 for (int x = 0; x < listaResenas.size(); x++) {
                     listaAutores.add(listaResenas.get(x).getUidAutor());
+                    /**
+                     * Si nuestro uid se encuentra en esa lista, es porque ya hemos hecho una reseña
+                     */
                     if (listaResenas.get(x).getUidAutor().equals(uidUsuarioActual)) {
                         miResenaExistente = listaResenas.get(x);
                     }
                 }
 
+                /**
+                 * Si ya hemos hecho una reseña, no añadimos una nueva, sino que la actualizamos
+                 */
                 if (miResenaExistente == null) {
                     gestorFirebase.anadirValorArray(usuario.getId(), "listaResenas", resena, new GestorFirestore.Callback<String>() {
                         @Override
@@ -156,6 +188,9 @@ public class PerfilUsuario extends AppCompatActivity {
             }
         });
 
+        /**
+         * Listener para cancelar
+         */
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -167,6 +202,10 @@ public class PerfilUsuario extends AppCompatActivity {
     }
 
     public void inicializarBotonesRedesSociales() {
+        /**
+         * Botón que abre la ventana de chat con este usuario. Envíamos en un extra el id de
+         * ambos para que se pueda iniciar el chat.
+         */
         btnChat.setOnClickListener(v -> {
             Intent intent = new Intent(PerfilUsuario.this, ChatVentana.class);
             intent.putExtra("UsuarioActual", mAuth.getCurrentUser().getUid());
@@ -199,6 +238,10 @@ public class PerfilUsuario extends AppCompatActivity {
     }
 
     public void esconderBotonesUsuarioPropio() {
+        /**
+         * Si el perfil que estamos visitando es nuestro propio perfil, escondemos o mostramos
+         * funcionalidades según veamos convenientes
+         */
         if (!uidUsuarioMostrandose.equals(mAuth.getCurrentUser().getUid())) {
             btnAnadirCancion.setVisibility(View.GONE);
             tvEditar.setVisibility(View.GONE);
@@ -245,7 +288,7 @@ public class PerfilUsuario extends AppCompatActivity {
 
         ArrayList<String> arrayPrueba = new ArrayList<>();
 
-        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba, false , progressBar);
+        adaptadorCanciones = new AdaptadorCancionesRecycler(arrayPrueba, false, progressBar);
         recyclerCanciones.setAdapter(adaptadorCanciones);
 
 
@@ -270,7 +313,9 @@ public class PerfilUsuario extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Obtenemos todos los datos del usuario
+     */
     public void inicializarUsuario() {
         gestorFirebase.obtenerUsuarioPorId(uidUsuarioMostrandose, new GestorFirestore.Callback<Usuario>() {
             @Override
@@ -282,7 +327,9 @@ public class PerfilUsuario extends AppCompatActivity {
         }, Usuario.class);
     }
 
-    //Busca las canciones de un usuario en la base de datos y asigna los audios a los mediaPlayer
+    /**
+     * Busca las canciones de un usuario en la base de datos y asigna los audios a los mediaPlayer
+     */
     public void obtenerDatosUsuario() {
         progressBar.setVisibility(View.VISIBLE);
         gestorFirebase.obtenerUsuarioPorId(uidUsuarioMostrandose, new GestorFirestore.Callback<Usuario>() {
@@ -290,13 +337,17 @@ public class PerfilUsuario extends AppCompatActivity {
             public void onSuccess(Usuario usuarioDevuelto) {
                 usuario = usuarioDevuelto;
 
-                //Canciones que obtenemos de la base de datos.
+                /**Obtenemos de la base de datos todas las canciones del usuario.*/
                 List<String> canciones;
                 canciones = usuario.getArrayCanciones();
 
+                /**Obtenemos de la base de datos todas las reseñas del usuario.*/
                 List<Resena> resenas;
                 resenas = usuario.getListaResenas();
 
+                /**
+                 * Mostramos el nombre, la descripción y la ciudad del usuario
+                 */
                 lblUsername.setText(usuario.getNombre());
                 lblDescripcion.setText(usuario.getDescripcion());
                 lblCiudad.setText(usuario.getCiudad());
@@ -308,6 +359,7 @@ public class PerfilUsuario extends AppCompatActivity {
                 recyclerResenas.setAdapter(adaptadorResenas);
 
 
+                /**Obtenemos de la base de datos todos los géneros del usuario.*/
                 List<String> generos = usuario.getListaGeneros();
                 adaptadorGeneros = new AdaptadorGenerosRecycler(generos);
                 recyclerGeneros.setAdapter(adaptadorGeneros);
@@ -319,6 +371,10 @@ public class PerfilUsuario extends AppCompatActivity {
                 } catch (Exception e) {
 
                 }
+                /**
+                 * Verificamos si alguno de los adaptadores no tiene items para
+                 * avisarle al usuario de que ese campo de datos está vacío
+                 */
                 if (adaptadorCanciones.getItemCount() > 0) {
                     imgRecyclerVacio.setVisibility(View.GONE);
                     lblRecyclerVacio.setVisibility(View.GONE);
@@ -355,13 +411,18 @@ public class PerfilUsuario extends AppCompatActivity {
     }
 
 
-    //Método que abre el file explorer
+    /**
+     * Método que abre el file explorer para seleccionar una canción en local
+     */
     public void seleccionarAudio(View v) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("audio/mpeg");
         startActivityForResult(intent, PICK_AUDIO_REQUEST);
     }
 
+    /**
+     * Verificamos las redes sociales que tiene el usuario. Si no tiene alguna, ese botón se desactiva.
+     */
     public void setRedesSociales() {
         //Revisa si tiene instagram
         if (usuario.getInstagram() != "") {
@@ -411,6 +472,9 @@ public class PerfilUsuario extends AppCompatActivity {
 
     }
 
+    /**
+     * Abre un intent al perfil del usuario en la app de Youtube, y en caso de no tenerla, abre el explorador
+     */
     public void abrirYoutube() {
         String username = usuario.getYoutube(); // Nombre de usuario del canal
         String channelUrl = "https://www.youtube.com/user/" + username;
@@ -420,12 +484,12 @@ public class PerfilUsuario extends AppCompatActivity {
         startActivity(intent); // Abre el canal en el navegador predeterminado
     }
 
+    /**
+     * Abre un intent al perfil del usuario en la app de Instagram, y en caso de no tenerla, abre el explorador
+     */
     private void abrirInstagram() {
-
         String url = "https://www.instagram.com/" + usuario.getInstagram();
-
         Intent intent;
-
         // Verificar si la aplicación de Instagram está instalada
         try {
             // Si la aplicación de Instagram está instalada, abrir la aplicación
@@ -440,6 +504,9 @@ public class PerfilUsuario extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Abre un intent al perfil del usuario en la app de TikTok, y en caso de no tenerla, abre el explorador
+     */
     public void abrirTikTok() {
         String username = usuario.getTiktTok();
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tiktok.com/@" + username));
@@ -451,19 +518,21 @@ public class PerfilUsuario extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Abre un intent al perfil del usuario en Spotify
+     */
     public void abrirSpotify() {
-
         String channelUrl = usuario.getSpotify();
-
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(channelUrl));
         intent.setPackage(null);
         startActivity(intent);
     }
 
+    /**
+     * Abre un intent al perfil del usuario en Spotify
+     */
     public void abrirSoundCloud() {
-
         String channelUrl = usuario.getSoundCloud();
-
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(channelUrl));
         intent.setPackage(null);
         startActivity(intent);

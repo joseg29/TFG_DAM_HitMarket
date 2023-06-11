@@ -22,9 +22,9 @@
             android:gravity="top"
             android:shadowColor="#FFFFFF"
             android:shadowRadius="8"
-            android:text="¡PUBLICA!"
+            android:text="Novedades"
             android:textColor="@color/white"
-            android:textSize="35sp" />
+            android:textSize="32sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_publicaciones"
