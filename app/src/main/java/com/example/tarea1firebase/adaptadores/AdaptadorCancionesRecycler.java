@@ -8,7 +8,7 @@
  * @author Jose Gregorio
  */
 package com.example.tarea1firebase.adaptadores;
-//alex
+
 import static com.example.tarea1firebase.Registro.COLECCION;
 
 import android.app.Activity;
